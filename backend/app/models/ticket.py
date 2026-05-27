@@ -1,7 +1,7 @@
 import enum
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Enum as SAEnum, ForeignKey, String, Text
+from sqlalchemy import DateTime, Enum as SAEnum, Float, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
@@ -43,6 +43,14 @@ class Ticket(Base):
     priority_id: Mapped[int | None] = mapped_column(
         ForeignKey("priorities.id"), nullable=True
     )
+    classification_confidence: Mapped[float | None] = mapped_column(
+        Float, nullable=True
+    )
+    priority_confidence: Mapped[float | None] = mapped_column(
+        Float, nullable=True
+    )
+    classification_explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
+    priority_explanation: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         default=lambda: datetime.now(timezone.utc),

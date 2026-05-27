@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import categories, health, priorities, tickets
+from app.api.routes import ai, categories, health, knowledge, priorities, tickets
 from app.core.config import settings
 
 app = FastAPI(
@@ -20,6 +20,8 @@ app.add_middleware(
 
 app.include_router(health.router, tags=["system"])
 app.include_router(tickets.router, tags=["tickets"])
+app.include_router(ai.router, tags=["ai"])
 app.include_router(categories.router, tags=["categories"])
 app.include_router(priorities.router, tags=["priorities"])
+app.include_router(knowledge.router, tags=["knowledge"])
 

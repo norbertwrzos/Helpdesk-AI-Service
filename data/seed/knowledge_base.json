@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Problemy z połączeniem VPN",
+    "content": "Jeśli klient VPN nie może się połączyć, wykonaj następujące kroki:\n1. Sprawdź połączenie internetowe — bez dostępu do internetu VPN nie zadziała.\n2. Zrestartuj klienta VPN i spróbuj ponownie.\n3. Zweryfikuj poprawność nazwy użytkownika i hasła.\n4. Sprawdź, czy certyfikaty VPN są ważne.\n5. Spróbuj połączyć się z innej sieci (np. LTE), aby wykluczyć blokadę na poziomie sieci lokalnej.\n6. Jeśli problem nadal występuje, skontaktuj się z administratorem sieci podając dokładny komunikat błędu.",
+    "category_name": "Sieć i VPN",
+    "tags": "vpn,sieć,połączenie,klient vpn"
+  },
+  {
+    "title": "Jak zresetować hasło użytkownika w Active Directory",
+    "content": "Procedura resetu hasła użytkownika:\n1. Zaloguj się do narzędzia ADUC (Active Directory Users and Computers) z konta administratora.\n2. Odszukaj konto użytkownika.\n3. Kliknij prawym przyciskiem myszy → Reset Password.\n4. Wprowadź nowe hasło tymczasowe zgodne z polityką bezpieczeństwa (min. 8 znaków, duże/małe litery, cyfra, znak specjalny).\n5. Zaznacz opcję 'User must change password at next logon'.\n6. Poinformuj użytkownika o tymczasowym haśle bezpiecznym kanałem (np. telefon).\n\nUwaga: Nie wysyłaj haseł e-mailem.",
+    "category_name": "Konto i dostęp",
+    "tags": "hasło,reset,active directory,konto,dostęp"
+  },
+  {
+    "title": "Konto użytkownika zablokowane — procedura odblokowania",
+    "content": "Konto w Active Directory może zostać zablokowane po kilkukrotnym błędnym wpisaniu hasła.\n\nKroki odblokowania:\n1. Otwórz ADUC i znajdź konto użytkownika.\n2. Sprawdź zakładkę 'Account' — jeśli konto jest zablokowane, zaznaczone będzie pole 'Account is locked out'.\n3. Odznacz to pole i kliknij OK.\n4. Opcjonalnie zresetuj hasło, jeśli użytkownik go nie pamięta.\n5. Poinformuj użytkownika, że konto jest odblokowane.\n\nJeśli konto blokuje się cyklicznie, sprawdź czy nie istnieje zapamiętane błędne hasło (np. w zadaniach zaplanowanych, usługach, aplikacjach mobilnych).",
+    "category_name": "Konto i dostęp",
+    "tags": "konto,zablokowane,active directory,odblokowanie"
+  },
+  {
+    "title": "Brak dostępu do systemu CRM — diagnostyka",
+    "content": "Gdy użytkownik zgłasza brak dostępu do systemu CRM, sprawdź:\n1. Czy serwer CRM działa (sprawdź status usługi na serwerze).\n2. Czy użytkownik ma aktywne konto w systemie CRM (nie mylić z kontem domenowym).\n3. Czy przypisano właściwe role i uprawnienia w CRM.\n4. Czy przeglądarka jest aktualna (niektóre wersje CRM wymagają konkretnych przeglądarek).\n5. Wyczyść cache przeglądarki i spróbuj ponownie.\n6. Sprawdź logi aplikacji CRM pod kątem komunikatów o błędach autoryzacji.",
+    "category_name": "Aplikacje biznesowe",
+    "tags": "crm,dostęp,aplikacja,uprawnienia"
+  },
+  {
+    "title": "Podejrzana wiadomość e-mail — procedura postępowania",
+    "content": "Jeśli użytkownik otrzymał podejrzaną wiadomość e-mail (potencjalny phishing):\n\nCo należy zrobić NATYCHMIAST:\n1. NIE klikać w żadne linki w wiadomości.\n2. NIE otwierać załączników.\n3. NIE odpowiadać na wiadomość.\n4. Zgłosić incydent do działu bezpieczeństwa IT.\n\nJak zgłosić:\n- Prześlij wiadomość jako załącznik (nie forward) na adres security@firma.pl.\n- Podaj datę i godzinę otrzymania wiadomości.\n\nJeśli użytkownik kliknął w link lub otworzył załącznik:\n1. Natychmiast odłącz urządzenie od sieci.\n2. Zadzwoń do helpdesk — nie korzystaj z poczty na tym urządzeniu.\n3. Technik IT przeprowadzi skanowanie i dalsze kroki.",
+    "category_name": "Bezpieczeństwo",
+    "tags": "phishing,bezpieczeństwo,e-mail,podejrzana wiadomość,incydent"
+  },
+  {
+    "title": "Problem z drukarką sieciową — diagnostyka",
+    "content": "Gdy drukarka sieciowa nie działa:\n1. Sprawdź, czy drukarka jest włączona i ma papier oraz toner.\n2. Zweryfikuj, czy drukarka jest podłączona do sieci (lampka sieciowa powinna świecić).\n3. Spróbuj wydrukować stronę testową bezpośrednio z drukarki.\n4. Na komputerze użytkownika: Urządzenia i drukarki → sprawdź status kolejki wydruku.\n5. Wyczyść kolejkę wydruku (zatrzymaj serwis Spooler, usuń pliki z C:\\Windows\\System32\\spool\\PRINTERS, uruchom Spooler).\n6. Jeśli problem dotyczy tylko jednego komputera, usuń i dodaj drukarkę ponownie.\n7. Upewnij się, że sterowniki są aktualne.",
+    "category_name": "Sprzęt komputerowy",
+    "tags": "drukarka,sieciowa,wydruk,sprzęt"
+  },
+  {
+    "title": "Błąd niebieski ekran (BSOD) po aktualizacji Windows",
+    "content": "Niebieski ekran (BSOD) po aktualizacji Windows może być spowodowany:\n- Niekompatybilnymi sterownikami.\n- Uszkodzonymi plikami systemowymi.\n- Problemem z pamięcią RAM.\n\nKroki diagnostyki:\n1. Uruchom komputer w trybie awaryjnym (F8 podczas startu lub Shift+Restart).\n2. Odinstaluj ostatnią aktualizację Windows: Ustawienia → Windows Update → Historia aktualizacji → Odinstaluj aktualizacje.\n3. Zaktualizuj lub wycofaj sterowniki karty graficznej i chipsetu.\n4. Uruchom sfc /scannow w wierszu poleceń (administrator).\n5. Sprawdź logi błędów w Podglądzie zdarzeń (Event Viewer).\n\nJeśli problem nadal występuje, może być konieczne przywrócenie systemu do punktu przywracania sprzed aktualizacji.",
+    "category_name": "System operacyjny",
+    "tags": "windows,bsod,aktualizacja,niebieski ekran,system"
+  },
+  {
+    "title": "Outlook nie synchronizuje poczty — diagnostyka",
+    "content": "Gdy Outlook nie pobiera nowych wiadomości:\n1. Sprawdź połączenie internetowe.\n2. Sprawdź, czy Outlook nie pracuje w trybie offline (Wyślij/Odbierz → Pracuj offline).\n3. Uruchom Outlooka ponownie.\n4. Sprawdź status serwera Exchange/O365 na stronie status.office.com.\n5. Usuń i ponownie dodaj konto pocztowe w Outlooku.\n6. Uruchom narzędzie diagnostyczne Microsoft Support and Recovery Assistant (SaRA).\n7. Sprawdź, czy antywirusowy skaner poczty nie blokuje połączenia.",
+    "category_name": "Poczta e-mail",
+    "tags": "outlook,poczta,synchronizacja,e-mail,exchange"
+  }
+]

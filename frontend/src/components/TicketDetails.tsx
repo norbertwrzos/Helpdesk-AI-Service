@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { updateTicket } from '../api/tickets'
+import { analyzeTicket } from '../api/analysis'
 import type { Ticket, TicketStatus, TicketUpdate } from '../types/ticket'
 import type { Category } from '../types/category'
 import type { Priority } from '../types/priority'
+import type { AnalysisResult } from '../types/analysis'
 import TicketStatusBadge from './TicketStatusBadge'
 import TicketSourceBadge from './TicketSourceBadge'
 
@@ -36,8 +38,36 @@ export default function TicketDetails({ ticket, categories, priorities, onUpdate
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
+  const [analyzing, setAnalyzing] = useState(false)
+  const [analysisError, setAnalysisError] = useState<string | null>(null)
+
   const categoryMap = Object.fromEntries(categories.map(c => [c.id, c.name]))
   const priorityMap = Object.fromEntries(priorities.map(p => [p.id, p.name]))
+
+  async function handleAnalyze() {
+    setAnalysisError(null)
+    setAnalyzing(true)
+    try {
+      const result = await analyzeTicket(ticket.id)
+      setAnalysisResult(result)
+      // Odśwież ticket, żeby pokazać zaktualizowany status i kategorię
+      onUpdated({
+        ...ticket,
+        status: 'answered',
+        category_id: result.classification.category_id,
+        priority_id: result.priority.priority_id,
+        classification_confidence: result.classification.confidence,
+        priority_confidence: result.priority.confidence,
+        classification_explanation: result.classification.explanation,
+        priority_explanation: result.priority.explanation,
+      })
+    } catch (err) {
+      setAnalysisError(err instanceof Error ? err.message : 'Błąd podczas analizy.')
+    } finally {
+      setAnalyzing(false)
+    }
+  }
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault()
@@ -99,9 +129,88 @@ export default function TicketDetails({ ticket, categories, priorities, onUpdate
         <p className="ticket-details__description-text">{ticket.description}</p>
       </div>
 
-      <div className="ticket-details__ai-placeholder">
-        <span className="ticket-details__ai-icon">🤖</span>
-        <span>Analiza AI zostanie dodana w kolejnym etapie.</span>
+      <div className="ticket-details__ai-section">
+        <div className="ticket-details__ai-header">
+          <h2 className="ticket-details__section-title">Analiza AI</h2>
+          <button
+            className="btn btn--primary"
+            onClick={handleAnalyze}
+            disabled={analyzing}
+          >
+            {analyzing ? 'Analizowanie…' : '🤖 Analizuj zgłoszenie'}
+          </button>
+        </div>
+
+        {analysisError && (
+          <div className="alert alert--error" style={{ marginTop: '12px' }}>
+            Błąd analizy: {analysisError}
+          </div>
+        )}
+
+        {analyzing && (
+          <div className="ticket-details__ai-loading">
+            Trwa analiza zgłoszenia, proszę czekać…
+          </div>
+        )}
+
+        {analysisResult && !analyzing && (
+          <div className="ticket-details__ai-result">
+            <div className="ai-result__grid">
+              <div className="ai-result__card">
+                <div className="ai-result__label">Kategoria AI</div>
+                <div className="ai-result__value">{analysisResult.classification.category_name}</div>
+                <div className="ai-result__confidence">
+                  Pewność: {Math.round(analysisResult.classification.confidence * 100)}%
+                </div>
+                <div className="ai-result__explanation">{analysisResult.classification.explanation}</div>
+              </div>
+
+              <div className="ai-result__card">
+                <div className="ai-result__label">Priorytet AI</div>
+                <div className="ai-result__value">{analysisResult.priority.priority_name}</div>
+                <div className="ai-result__confidence">
+                  Pewność: {Math.round(analysisResult.priority.confidence * 100)}%
+                </div>
+                <div className="ai-result__explanation">{analysisResult.priority.explanation}</div>
+              </div>
+            </div>
+
+            {analysisResult.similar_articles.length > 0 && (
+              <div className="ai-result__section">
+                <h3 className="ai-result__section-title">Podobne artykuły w bazie wiedzy</h3>
+                <ul className="ai-result__articles">
+                  {analysisResult.similar_articles.map(article => (
+                    <li key={article.id} className="ai-result__article-item">
+                      <strong>{article.title}</strong>
+                      <span className="ai-result__article-score">
+                        {' '}(dopasowanie: {Math.round(article.score * 100)}%)
+                      </span>
+                      <p className="ai-result__article-excerpt">{article.excerpt}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="ai-result__section">
+              <h3 className="ai-result__section-title">Propozycja rozwiązania</h3>
+              <div className="ai-result__response-text">
+                {analysisResult.ai_response.response_text.split('\n').map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+              <div className="ai-result__meta">
+                Model: {analysisResult.ai_response.model_name} | Provider: {analysisResult.ai_response.provider_name}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {!analysisResult && !analyzing && !analysisError && (
+          <p className="ticket-details__ai-hint">
+            Kliknij „Analizuj zgłoszenie", aby uruchomić automatyczną klasyfikację i wygenerować propozycję rozwiązania.
+          </p>
+        )}
       </div>
 
       <form className="ticket-form" onSubmit={handleSave} noValidate>

@@ -172,19 +172,89 @@ pytest
 
 ---
 
-## Dostępne endpointy (Etap 1)
+## Dostępne endpointy (Etap 1 + Etap 3)
 
-| Metoda | Ścieżka                   | Opis                              |
-|--------|---------------------------|-----------------------------------|
-| GET    | /health                   | Weryfikacja dostępności serwisu   |
-| GET    | /tickets                  | Lista zgłoszeń                    |
-| POST   | /tickets                  | Utwórz zgłoszenie                 |
-| GET    | /tickets/{id}             | Szczegóły zgłoszenia              |
-| PATCH  | /tickets/{id}             | Aktualizacja zgłoszenia           |
-| GET    | /categories               | Lista kategorii                   |
-| POST   | /categories               | Utwórz kategorię                  |
-| GET    | /priorities               | Lista priorytetów                 |
-| POST   | /priorities               | Utwórz priorytet                  |
+| Metoda | Ścieżka                              | Opis                              |
+|--------|--------------------------------------|-----------------------------------|
+| GET    | /health                              | Weryfikacja dostępności serwisu   |
+| GET    | /tickets                             | Lista zgłoszeń                    |
+| POST   | /tickets                             | Utwórz zgłoszenie                 |
+| GET    | /tickets/{id}                        | Szczegóły zgłoszenia              |
+| PATCH  | /tickets/{id}                        | Aktualizacja zgłoszenia           |
+| POST   | /tickets/{id}/analyze                | **[Etap 3]** Uruchom analizę AI   |
+| GET    | /tickets/{id}/ai-responses           | **[Etap 3]** Odpowiedzi AI        |
+| GET    | /categories                          | Lista kategorii                   |
+| POST   | /categories                          | Utwórz kategorię                  |
+| GET    | /priorities                          | Lista priorytetów                 |
+| POST   | /priorities                          | Utwórz priorytet                  |
+| GET    | /knowledge                           | **[Etap 3]** Lista artykułów      |
+| POST   | /knowledge                           | **[Etap 3]** Dodaj artykuł        |
+| GET    | /knowledge/{id}                      | **[Etap 3]** Szczegóły artykułu   |
+| PATCH  | /knowledge/{id}                      | **[Etap 3]** Aktualizuj artykuł   |
+| DELETE | /knowledge/{id}                      | **[Etap 3]** Usuń artykuł         |
+
+---
+
+## Seedowanie danych (Etap 3)
+
+Załadowanie kategorii, priorytetów i artykułów bazy wiedzy:
+
+```bash
+cd backend
+source .venv/bin/activate
+python scripts/seed_data.py
+```
+
+Skrypt jest idempotentny — nie tworzy duplikatów przy ponownym uruchomieniu.
+
+---
+
+## Etap 3 — AnalysisPipeline (mock AI/NLP)
+
+### Opis
+
+Etap 3 dodaje pełen przepływ analizy zgłoszenia:
+
+```
+Zgłoszenie → Klasyfikacja → Priorytetyzacja → Podobne artykuły → Odpowiedź AI → Zapis
+```
+
+### Komponenty
+
+| Komponent | Plik | Opis |
+|---|---|---|
+| `AnalysisPipeline` | `services/analysis_pipeline.py` | Koordynator analizy |
+| `ClassificationService` | `services/classification_service.py` | Klasyfikacja do kategorii (reguły słów kluczowych) |
+| `PriorityAnalysisService` | `services/priority_analysis_service.py` | Nadanie priorytetu (reguły słów kluczowych) |
+| `SimilarityService` | `services/similarity_service.py` | Wyszukiwanie podobnych artykułów (bag-of-words) |
+| `MockAIGenerator` | `services/ai_generator.py` | Generowanie odpowiedzi AI (szablon po polsku) |
+
+### Uwaga
+
+Aktualny moduł AI jest **mock/rule-based** — używa reguł słów kluczowych zamiast prawdziwego modelu AI/NLP.
+Architektura jest zaprojektowana tak, aby w przyszłości można było łatwo zastąpić każdy komponent
+prawdziwą implementacją (np. klasyfikator ML, embeddingi, OpenAI API) bez zmian w reszcie systemu.
+
+Szczegóły decyzji architektonicznych: [docs/decisions/0001-mock-analysis-pipeline.md](docs/decisions/0001-mock-analysis-pipeline.md)
+
+---
+
+## Scenariusz testowy (Etap 3)
+
+1. Uruchom PostgreSQL: `docker compose up -d`
+2. Uruchom migracje: `cd backend && alembic upgrade head`
+3. Załaduj dane seed: `python scripts/seed_data.py`
+4. Uruchom backend: `uvicorn app.main:app --reload`
+5. Uruchom frontend: `cd frontend && npm run dev`
+6. Otwórz http://localhost:5173
+7. Przejdź do `/tickets` → dodaj zgłoszenie z tytułem **„Nie działa VPN"**
+8. Kliknij „Szczegóły" zgłoszenia
+9. Kliknij przycisk **„Analizuj zgłoszenie"**
+10. Sprawdź, że wyświetla się:
+    - kategoria: **Sieć i VPN** (confidence ≥ 85%)
+    - priorytet z uzasadnieniem
+    - podobne artykuły z bazy wiedzy
+    - wygenerowana propozycja rozwiązania
 
 ---
 
@@ -227,7 +297,6 @@ npm run build
 8. Kliknij „Szczegóły" → zmień status → zapisz zmiany
 9. Sprawdź, że zmiany są widoczne po odświeżeniu
 
----
 
 ## Endpoint `/health`
 

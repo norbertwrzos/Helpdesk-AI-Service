@@ -9,6 +9,10 @@ export interface Ticket {
   source: TicketSource
   category_id: number | null
   priority_id: number | null
+  classification_confidence: number | null
+  priority_confidence: number | null
+  classification_explanation: string | null
+  priority_explanation: string | null
   created_at: string
   updated_at: string
 }

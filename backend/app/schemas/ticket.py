@@ -32,6 +32,10 @@ class TicketResponse(BaseModel):
     source: TicketSource
     category_id: int | None
     priority_id: int | None
+    classification_confidence: float | None
+    priority_confidence: float | None
+    classification_explanation: str | None
+    priority_explanation: str | None
     created_at: datetime
     updated_at: datetime
 
