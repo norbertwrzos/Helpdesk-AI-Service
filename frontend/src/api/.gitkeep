@@ -1,0 +1,6 @@
+// HTTP client configuration.
+// Placeholder — API clients are added in the next development phase.
+//
+// Planned:
+//   - ticketsApi.ts  — CRUD for tickets
+//   - healthApi.ts   — backend health check

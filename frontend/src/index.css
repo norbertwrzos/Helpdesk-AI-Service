@@ -1,0 +1,36 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-hover: #22263a;
+  --color-border: #2e3250;
+  --color-primary: #6366f1;
+  --color-primary-light: #818cf8;
+  --color-accent: #22d3ee;
+  --color-text: #e2e8f0;
+  --color-text-muted: #8892a4;
+  --color-success: #34d399;
+  --radius-card: 14px;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

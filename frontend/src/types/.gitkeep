@@ -1,0 +1,6 @@
+// Shared TypeScript types and interfaces.
+// Placeholder — types are added in the next development phase.
+//
+// Planned:
+//   - ticket.ts     — Ticket, TicketStatus, Priority
+//   - api.ts        — API response wrappers
