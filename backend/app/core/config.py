@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     BACKEND_HOST: str = "0.0.0.0"
     BACKEND_PORT: int = 8000
 
+    # CORS
+    CORS_ORIGINS: list[str] = ["http://localhost:5173", "http://localhost:3000"]
+
     # Database
     POSTGRES_DB: str = "helpdesk_ai"
     POSTGRES_USER: str = "helpdesk"

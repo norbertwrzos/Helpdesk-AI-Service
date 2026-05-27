@@ -9,10 +9,11 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Import models here when they are created, e.g.:
-# from app.models import Base
-# target_metadata = Base.metadata
-target_metadata = None
+# Import Base and all models so that Alembic detects the schema
+from app.db.base import Base  # noqa: E402
+import app.models  # noqa: E402, F401 — registers all models on Base.metadata
+
+target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
