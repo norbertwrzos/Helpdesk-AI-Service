@@ -1,0 +1,6 @@
+[
+  { "name": "Niski",    "level": 1, "description": "Zgłoszenie może poczekać; nie blokuje pracy użytkownika." },
+  { "name": "Średni",   "level": 2, "description": "Zgłoszenie utrudnia pracę, ale istnieje obejście." },
+  { "name": "Wysoki",   "level": 3, "description": "Zgłoszenie blokuje pracę użytkownika lub zespołu." },
+  { "name": "Krytyczny","level": 4, "description": "Awaria krytyczna wpływająca na ciągłość działania firmy." }
+]

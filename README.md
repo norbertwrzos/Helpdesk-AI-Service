@@ -147,6 +147,9 @@ source .venv/bin/activate
 # Zainstaluj zależności
 pip install -r requirements.txt
 
+# Wykonaj migracje (wymaga uruchomionego PostgreSQL)
+alembic upgrade head
+
 # Uruchom serwer deweloperski
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
@@ -157,19 +160,72 @@ Dokumentacja Swagger UI: http://localhost:8000/docs
 
 ---
 
+## Uruchomienie testów
+
+Testy używają bazy SQLite w pamięci — **nie wymagają uruchomionego PostgreSQL**.
+
+```bash
+cd backend
+source .venv/bin/activate
+pytest
+```
+
+---
+
+## Dostępne endpointy (Etap 1)
+
+| Metoda | Ścieżka                   | Opis                              |
+|--------|---------------------------|-----------------------------------|
+| GET    | /health                   | Weryfikacja dostępności serwisu   |
+| GET    | /tickets                  | Lista zgłoszeń                    |
+| POST   | /tickets                  | Utwórz zgłoszenie                 |
+| GET    | /tickets/{id}             | Szczegóły zgłoszenia              |
+| PATCH  | /tickets/{id}             | Aktualizacja zgłoszenia           |
+| GET    | /categories               | Lista kategorii                   |
+| POST   | /categories               | Utwórz kategorię                  |
+| GET    | /priorities               | Lista priorytetów                 |
+| POST   | /priorities               | Utwórz priorytet                  |
+
+---
+
 ## Uruchomienie frontendu
 
 ```bash
 cd frontend
-
-# Zainstaluj zależności
 npm install
-
-# Uruchom serwer deweloperski
 npm run dev
 ```
 
 Frontend dostępny pod: http://localhost:5173
+
+Zmienna środowiskowa (opcjonalna):
+```bash
+cp frontend/.env.example frontend/.env
+# VITE_API_BASE_URL=http://localhost:8000  (domyślna wartość)
+```
+
+---
+
+## Weryfikacja buildu frontendu
+
+```bash
+cd frontend
+npm run build
+```
+
+---
+
+## Scenariusz testowy (Etap 2)
+
+1. Uruchom PostgreSQL: `docker compose up -d`
+2. Uruchom migracje: `cd backend && alembic upgrade head`
+3. Uruchom backend: `uvicorn app.main:app --reload`
+4. Uruchom frontend: `cd frontend && npm run dev`
+5. Otwórz http://localhost:5173
+6. Przejdź do `/tickets` → dodaj zgłoszenie przez formularz
+7. Sprawdź, że zgłoszenie pojawia się na liście
+8. Kliknij „Szczegóły" → zmień status → zapisz zmiany
+9. Sprawdź, że zmiany są widoczne po odświeżeniu
 
 ---
 

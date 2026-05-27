@@ -1,0 +1,10 @@
+[
+  { "name": "Konto i dostęp", "description": "Problemy z kontami użytkowników, hasłami i uprawnieniami dostępu." },
+  { "name": "Sieć i VPN", "description": "Problemy z połączeniem sieciowym, Wi-Fi oraz VPN." },
+  { "name": "Aplikacje biznesowe", "description": "Awarie i błędy w systemach ERP, CRM oraz innych aplikacjach firmowych." },
+  { "name": "Sprzęt komputerowy", "description": "Usterki fizyczne komputerów, monitorów, drukarek i urządzeń peryferyjnych." },
+  { "name": "Poczta e-mail", "description": "Problemy z wysyłaniem i odbieraniem poczty elektronicznej." },
+  { "name": "Bezpieczeństwo", "description": "Incydenty bezpieczeństwa, podejrzana aktywność, wirusy i phishing." },
+  { "name": "System operacyjny", "description": "Problemy z systemem Windows, Linux lub macOS." },
+  { "name": "Inne", "description": "Zgłoszenia nieprzypisane do konkretnej kategorii." }
+]
