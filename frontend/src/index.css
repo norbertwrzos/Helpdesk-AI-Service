@@ -1,3 +1,7 @@
+/* ===== Tailwind utilities (no preflight – handled by existing reset below) ===== */
+@tailwind components;
+@tailwind utilities;
+
 /* ===== Reset & Base ===== */
 *, *::before, *::after {
   box-sizing: border-box;

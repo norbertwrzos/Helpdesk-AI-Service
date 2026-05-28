@@ -8,12 +8,13 @@ interface Props {
   categories: Category[]
   priorities: Priority[]
   onSuccess: () => void
+  defaultRequesterEmail?: string
 }
 
-export default function TicketForm({ categories, priorities, onSuccess }: Props) {
+export default function TicketForm({ categories, priorities, onSuccess, defaultRequesterEmail }: Props) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-  const [requesterEmail, setRequesterEmail] = useState('')
+  const [requesterEmail, setRequesterEmail] = useState(defaultRequesterEmail ?? '')
   const [categoryId, setCategoryId] = useState<string>('')
   const [priorityId, setPriorityId] = useState<string>('')
   const [submitting, setSubmitting] = useState(false)

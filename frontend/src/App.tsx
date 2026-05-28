@@ -1,48 +1,63 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './auth/AuthContext'
+import { AuthProvider, useAuth } from './auth/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
-import Layout from './components/Layout'
+import AppShell from './components/AppShell'
 import LoginPage from './pages/LoginPage'
-import HomePage from './pages/HomePage'
+import DashboardPage from './pages/DashboardPage'
 import TicketsPage from './pages/TicketsPage'
 import TicketDetailsPage from './pages/TicketDetailsPage'
 import EmailImportPage from './pages/EmailImportPage'
-import QualityPage from './pages/QualityPage'
-import UserPortalPage from './pages/UserPortalPage'
+import KnowledgePage from './pages/KnowledgePage'
+import AIPage from './pages/AIPage'
+import SettingsPage from './pages/SettingsPage'
+import PortalTicketsPage from './pages/portal/PortalTicketsPage'
+import PortalTicketDetailsPage from './pages/portal/PortalTicketDetailsPage'
 import './App.css'
+
+/** Redirect / based on role */
+function HomeRedirect() {
+  const { role } = useAuth()
+  if (role === 'end_user') return <Navigate to="/portal/tickets" replace />
+  return <Navigate to="/dashboard" replace />
+}
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Public */}
           <Route path="/login" element={<LoginPage />} />
 
-          {/* Portal użytkownika końcowego */}
-          <Route
-            path="/portal"
-            element={
-              <ProtectedRoute allowedRoles={['end_user']} redirectTo="/">
-                <UserPortalPage />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Główny panel — admin i agent */}
+          {/* All authenticated users → AppShell */}
           <Route
             path="/*"
             element={
-              <ProtectedRoute allowedRoles={['admin', 'agent']} redirectTo="/portal">
-                <Layout>
+              <ProtectedRoute>
+                <AppShell>
                   <Routes>
-                    <Route path="/" element={<HomePage />} />
+                    <Route path="/" element={<HomeRedirect />} />
+
+                    {/* Admin / Agent panel */}
+                    <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/tickets" element={<TicketsPage />} />
                     <Route path="/tickets/:id" element={<TicketDetailsPage />} />
+                    <Route path="/knowledge" element={<KnowledgePage />} />
+                    <Route path="/ai" element={<AIPage />} />
+                    <Route path="/settings" element={<SettingsPage />} />
+                    {/* Keep old route for backward compatibility */}
+                    <Route path="/quality" element={<AIPage />} />
                     <Route path="/email-import" element={<EmailImportPage />} />
-                    <Route path="/quality" element={<QualityPage />} />
-                    <Route path="*" element={<Navigate to="/" replace />} />
+
+                    {/* End-user portal */}
+                    <Route path="/portal" element={<Navigate to="/portal/tickets" replace />} />
+                    <Route path="/portal/tickets" element={<PortalTicketsPage />} />
+                    <Route path="/portal/tickets/:id" element={<PortalTicketDetailsPage />} />
+
+                    {/* Fallback */}
+                    <Route path="*" element={<HomeRedirect />} />
                   </Routes>
-                </Layout>
+                </AppShell>
               </ProtectedRoute>
             }
           />

@@ -31,7 +31,7 @@ Celem pracy inżynierskiej jest zaprojektowanie i zaimplementowanie prototypu se
 | Warstwa      | Technologia                         |
 |--------------|-------------------------------------|
 | Backend      | Python 3.12, FastAPI                |
-| Frontend     | React, TypeScript, Vite             |
+| Frontend     | React 18, TypeScript, Vite, Tailwind CSS v3 |
 | Baza danych  | PostgreSQL 16                       |
 | ORM          | SQLAlchemy                          |
 | Migracje     | Alembic                             |
@@ -455,6 +455,68 @@ Migracja: `alembic/versions/005_service_desk_fields.py`.
 5. Wyloguj się i zaloguj jako **Jan — user@company.local (Użytkownik końcowy)**.
 6. Użytkownik końcowy powinien trafić na portal `/portal`.
 7. Zaloguj się jako **Administrator** i sprawdź dostęp do wszystkich sekcji.
+
+---
+
+## Etap 8 — Nowy layout aplikacji (sidebar, topbar, dark mode)
+
+### Opis
+
+Etap 8 wprowadza nowy układ UI inspirowany komercyjnymi systemami service desk.
+Logika AI, backend i kontrakt danych pozostają bez zmian.
+
+### Nowa architektura UI
+
+```
+AppShell
+├── Sidebar (lewy, stały, w-64)
+│   ├── Logo "H" + nazwa aplikacji
+│   ├── RoleBasedNavigation
+│   │   ├── admin/agent: Dashboard, Zgłoszenia, Baza wiedzy, AI, Ustawienia, Import e-mail
+│   │   └── end_user: Moje zgłoszenia, Baza wiedzy
+│   └── Stopka z numerem wersji
+├── Topbar (górny, stały, h-16)
+│   ├── Tytuł aplikacji
+│   ├── Pole wyszukiwania
+│   ├── Przycisk "Nowe zgłoszenie" (role-aware)
+│   └── UserMenu (avatar, rola, wylogowanie)
+└── Obszar treści (ml-64, mt-16)
+```
+
+### Technologia
+
+| Element | Technologia |
+|---|---|
+| CSS utility-first | Tailwind CSS v3 |
+| Tryb kolorystyczny | Dark mode (domyślny) |
+| Akcent kolorystyczny | Violet (`#6366f1`) |
+| Tło sidebara | `#13151f` |
+| Tło powierzchni | `#1a1d27` |
+
+### Nowe strony
+
+| Ścieżka | Komponent | Dostęp |
+|---|---|---|
+| `/` | `HomeRedirect` → rola decyduje | wszyscy |
+| `/dashboard` | `DashboardPage` | admin, agent |
+| `/tickets` | `TicketsPage` | admin, agent |
+| `/tickets/:id` | `TicketDetailsPage` | wszyscy |
+| `/knowledge` | `KnowledgePage` | wszyscy |
+| `/ai` | `AIPage` | admin, agent |
+| `/settings` | `SettingsPage` | admin, agent |
+| `/email-import` | `EmailImportPage` | admin, agent |
+| `/portal/tickets` | `PortalTicketsPage` | end_user |
+| `/portal/tickets/:id` | `PortalTicketDetailsPage` | end_user |
+
+### Scenariusz testowy (Etap 8)
+
+1. Uruchom backend i frontend: `cd frontend && npm run dev`
+2. Otwórz http://localhost:5173 → przekierowanie na `/login`
+3. Zaloguj się jako **Adam (agent)** → widoczny sidebar z nawigacją agenta, topbar z przyciskiem „Nowe zgłoszenie"
+4. Kliknij kolejno: Dashboard, Zgłoszenia, Baza wiedzy, AI, Ustawienia
+5. Wyloguj się → zaloguj jako **Jan (end_user)** → sidebar z opcjami portalu, przycisk topbara prowadzi do `/portal/tickets`
+6. Sprawdź, że `/dashboard` po zalogowaniu jako end_user przekierowuje do `/portal/tickets`
+7. Zweryfikuj build: `npm run build` — powinien przejść bez błędów
 
 ---
 

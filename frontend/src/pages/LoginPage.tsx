@@ -20,9 +20,9 @@ export default function LoginPage() {
     login(selectedUserId)
     const user = MOCK_USERS.find(u => u.id === selectedUserId)
     if (user?.role === 'end_user') {
-      navigate('/portal')
+      navigate('/portal/tickets')
     } else {
-      navigate('/')
+      navigate('/dashboard')
     }
   }
 
