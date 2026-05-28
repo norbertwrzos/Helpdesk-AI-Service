@@ -28,6 +28,9 @@ export default function Layout({ children }: LayoutProps) {
             <NavLink to="/email-import" className={({ isActive }) => 'layout__nav-link' + (isActive ? ' active' : '')}>
               Import e-mail
             </NavLink>
+            <NavLink to="/quality" className={({ isActive }) => 'layout__nav-link' + (isActive ? ' active' : '')}>
+              Jakość AI
+            </NavLink>
           </nav>
         </div>
       </header>

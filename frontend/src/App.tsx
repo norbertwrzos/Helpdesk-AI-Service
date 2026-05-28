@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage'
 import TicketsPage from './pages/TicketsPage'
 import TicketDetailsPage from './pages/TicketDetailsPage'
 import EmailImportPage from './pages/EmailImportPage'
+import QualityPage from './pages/QualityPage'
 import './App.css'
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/tickets/:id" element={<TicketDetailsPage />} />
           <Route path="/email-import" element={<EmailImportPage />} />
+          <Route path="/quality" element={<QualityPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

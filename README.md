@@ -439,3 +439,79 @@ Używany przez Docker healthcheck, monitoring i testy integracyjne.
 ## Autor
 
 Norbert Wrzos — Praca inżynierska, 2025/2026
+
+---
+
+## Etap 5 — Ocena odpowiedzi AI i metryki jakości
+
+### Cel etapu
+
+- zbieranie ocen odpowiedzi AI od użytkowników (skala 1–5),
+- historia odpowiedzi AI dla każdego zgłoszenia,
+- podstawowe metryki jakości w dedykowanej sekcji aplikacji.
+
+### Nowe endpointy
+
+| Metoda | Ścieżka | Opis |
+|--------|---------|------|
+| `POST` | `/tickets/{ticket_id}/feedback` | Tworzy lub aktualizuje ocenę odpowiedzi AI |
+| `GET`  | `/tickets/{ticket_id}/feedback` | Zwraca wszystkie oceny dla zgłoszenia |
+| `GET`  | `/ai-responses/{ai_response_id}/feedback` | Zwraca ocenę konkretnej odpowiedzi AI |
+| `GET`  | `/tickets/{ticket_id}/ai-responses` | Historia odpowiedzi AI z feedbackiem |
+| `GET`  | `/quality/ai-responses` | Podstawowe metryki jakości odpowiedzi AI |
+
+### Uruchomienie migracji
+
+```bash
+cd backend
+source .venv/bin/activate
+alembic upgrade head
+```
+
+### Uruchomienie backendu
+
+```bash
+cd backend
+source .venv/bin/activate
+uvicorn app.main:app --reload
+```
+
+### Uruchomienie frontendu
+
+```bash
+cd frontend
+npm run dev
+```
+
+### Uruchomienie testów
+
+```bash
+cd backend
+source .venv/bin/activate
+python3.12 -m pytest app/tests/ -v
+```
+
+### Weryfikacja buildu frontendu
+
+```bash
+cd frontend
+npm run build
+```
+
+### Przykładowy scenariusz
+
+1. Dodaj zgłoszenie na `/tickets`.
+2. Otwórz szczegóły zgłoszenia i kliknij „Analizuj zgłoszenie".
+3. Przejdź do sekcji „Historia odpowiedzi AI" — pojawi się wygenerowana odpowiedź.
+4. Kliknij „+ Dodaj ocenę", wybierz ocenę 1–5, zaznacz pomocność i dodaj komentarz.
+5. Kliknij „Zapisz ocenę" — feedback zostanie zapisany.
+6. Przejdź do `/quality` (zakładka „Jakość AI") i sprawdź metryki.
+
+### Ograniczenia
+
+- Feedback nie służy jeszcze do automatycznego uczenia modelu.
+- Metryki mają charakter podstawowy — brak wykresów.
+- Brak autoryzacji użytkowników — każdy może ocenić odpowiedź.
+- Ocena ma charakter ekspercki/manualny.
+
+Szczegóły decyzji architektonicznych: [docs/decisions/0003-ai-feedback-and-quality-metrics.md](docs/decisions/0003-ai-feedback-and-quality-metrics.md)

@@ -8,6 +8,7 @@ import type { Priority } from '../types/priority'
 import type { AnalysisResult } from '../types/analysis'
 import TicketStatusBadge from './TicketStatusBadge'
 import TicketSourceBadge from './TicketSourceBadge'
+import AIResponseHistory from './AIResponseHistory'
 
 interface Props {
   ticket: Ticket
@@ -41,6 +42,7 @@ export default function TicketDetails({ ticket, categories, priorities, onUpdate
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
+  const [aiHistoryKey, setAiHistoryKey] = useState(0)
 
   const categoryMap = Object.fromEntries(categories.map(c => [c.id, c.name]))
   const priorityMap = Object.fromEntries(priorities.map(p => [p.id, p.name]))
@@ -62,6 +64,8 @@ export default function TicketDetails({ ticket, categories, priorities, onUpdate
         classification_explanation: result.classification.explanation,
         priority_explanation: result.priority.explanation,
       })
+      // Odśwież historię odpowiedzi AI
+      setAiHistoryKey(k => k + 1)
     } catch (err) {
       setAnalysisError(err instanceof Error ? err.message : 'Błąd podczas analizy.')
     } finally {
@@ -211,6 +215,11 @@ export default function TicketDetails({ ticket, categories, priorities, onUpdate
             Kliknij „Analizuj zgłoszenie", aby uruchomić automatyczną klasyfikację i wygenerować propozycję rozwiązania.
           </p>
         )}
+      </div>
+
+      <div className="ticket-details__ai-section">
+        <h2 className="ticket-details__section-title">Historia odpowiedzi AI</h2>
+        <AIResponseHistory ticketId={ticket.id} refreshKey={aiHistoryKey} />
       </div>
 
       <form className="ticket-form" onSubmit={handleSave} noValidate>
