@@ -1,0 +1,578 @@
+[
+  {
+    "id": "T001",
+    "title": "Prośba o reset hasła",
+    "description": "Nie pamiętam aktualnego hasła do systemu. Proszę o zresetowanie hasła do konta.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "reset hasła; konto użytkownika; weryfikacja tożsamości; polityka haseł",
+    "notes": "Prosta prośba o reset hasła — niski priorytet"
+  },
+  {
+    "id": "T002",
+    "title": "Konto zablokowane po błędnych próbach logowania",
+    "description": "Konto zostało zablokowane po wielokrotnym wpisaniu błędnego hasła. Użytkownik nie może się zalogować do systemu.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "odblokowanie konta; Active Directory; błąd logowania; IT Support",
+    "notes": "Klasyczna blokada konta — średni priorytet"
+  },
+  {
+    "id": "T003",
+    "title": "Brak uprawnień do folderu sieciowego",
+    "description": "Użytkownik nie ma dostępu do współdzielonego folderu na serwerze plików mimo że powinien mieć nadane uprawnienia.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "uprawnienia; folder sieciowy; Active Directory; administrator",
+    "notes": "Typowe zgłoszenie uprawnień — niski priorytet"
+  },
+  {
+    "id": "T004",
+    "title": "Założenie konta dla nowego pracownika",
+    "description": "Proszę o założenie konta domenowego dla nowego pracownika działu HR. Pracownik zaczyna pracę w poniedziałek.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "nowe konto; Active Directory; e-mail; onboarding; uprawnienia",
+    "notes": "Standardowe zgłoszenie onboardingu — niski priorytet"
+  },
+  {
+    "id": "T005",
+    "title": "Nie mogę się zalogować do systemu",
+    "description": "Nie mogę się zalogować do systemu — pojawia się komunikat o nieprawidłowych danych logowania.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "weryfikacja konta; reset hasła; błąd logowania; IT Support",
+    "notes": "Prosty problem z logowaniem — średni priorytet"
+  },
+  {
+    "id": "T006",
+    "title": "Konto pracownika nieaktywne po urlopie macierzystym",
+    "description": "Po powrocie z długiego urlopu macierzystego konto pracownika zostało dezaktywowane i wymaga reaktywacji.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "reaktywacja konta; Active Directory; HR; administrator",
+    "notes": "Dezaktywacja konta po urlopie — średni priorytet"
+  },
+  {
+    "id": "T007",
+    "title": "Nie mogę pracować — brak dostępu do systemu kadrowego",
+    "description": "Nie mogę pracować — brak dostępu do systemu kadrowego HRMS całkowicie blokuje mi realizację obowiązków zawodowych.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "dostęp; system kadrowy; uprawnienia; IT Support; pilne",
+    "notes": "Brak dostępu blokuje pracę — wysoki priorytet"
+  },
+  {
+    "id": "T008",
+    "title": "Cały dział IT bez dostępu do repozytorium kodu",
+    "description": "Awaria krytyczna — cały dział IT nie ma dostępu do repozytorium kodu od godziny 8 rano.",
+    "expected_category": "Konto i dostęp",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "repozytorium; dostęp; awaria; administrator; uprawnienia",
+    "notes": "Krytyczne — dotyczy całego działu IT"
+  },
+  {
+    "id": "T009",
+    "title": "VPN nie łączy się z siecią firmową",
+    "description": "Klient VPN zwraca błąd podczas próby połączenia z siecią firmową. Próbowałem ponownie uruchomić aplikację.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "klient VPN; połączenie internetowe; dane logowania; administrator sieci",
+    "notes": "Klasyczny problem VPN — jeden użytkownik"
+  },
+  {
+    "id": "T010",
+    "title": "Brak połączenia z internetem na stacji roboczej",
+    "description": "Na stacji roboczej brak połączenia z internetem. Kabel sieciowy jest podłączony i wskaźnik świeci.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "połączenie sieciowe; kabel; DHCP; restart; administrator sieci",
+    "notes": "Podstawowy problem z siecią — jeden użytkownik"
+  },
+  {
+    "id": "T011",
+    "title": "Sieć bezprzewodowa działa bardzo wolno",
+    "description": "Wi-Fi w biurze jest bardzo wolne — strony ładują się po kilka minut. Problem zaczął się dziś rano.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "Wi-Fi; router; przepustowość; administrator sieci; restart",
+    "notes": "Wolna sieć bezprzewodowa — mniej jednoznaczny priorytet"
+  },
+  {
+    "id": "T012",
+    "title": "Brak sieci po przeniesieniu stanowiska pracy",
+    "description": "Po przeniesieniu biurka komputer nie ma dostępu do sieci lokalnej. Kabel sieciowy podłączony.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "sieć lokalna; kabel; port sieciowy; konfiguracja; VLAN",
+    "notes": "Problem fizyczny po przeprowadzce stanowiska"
+  },
+  {
+    "id": "T013",
+    "title": "Pilne — VPN niedostępny dla całego działu sprzedaży",
+    "description": "Pilne — wszyscy pracownicy działu sprzedaży nie mogą połączyć się przez VPN z systemem od rana.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "VPN; serwer VPN; cały dział; administrator sieci; restart",
+    "notes": "Krytyczny — VPN niedostępny dla całego działu"
+  },
+  {
+    "id": "T014",
+    "title": "Awaria routera głównego — wszyscy bez sieci",
+    "description": "Router główny nie odpowiada na polecenia. Awaria dotyczy wszystkich pracowników biura.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "router; awaria krytyczna; infrastruktura; restart; administrator sieci",
+    "notes": "Krytyczna awaria routera — wszyscy bez sieci"
+  },
+  {
+    "id": "T015",
+    "title": "Brak możliwości połączenia VPN z sieci mobilnej",
+    "description": "Pracownik zdalny nie może połączyć się przez klienta VPN kiedy korzysta z sieci 4G.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "VPN; sieć mobilna; firewall; port; dane logowania",
+    "notes": "Problem VPN na sieci mobilnej — jeden użytkownik"
+  },
+  {
+    "id": "T016",
+    "title": "Prośba o konfigurację routera w sali konferencyjnej",
+    "description": "Proszę o konfigurację nowego routera dostarczonego do sali konferencyjnej.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "router; konfiguracja; sieć Wi-Fi; administrator sieci",
+    "notes": "Prośba o konfigurację — niski priorytet"
+  },
+  {
+    "id": "T017",
+    "title": "CRM zwraca błąd po aktualizacji",
+    "description": "Po wczorajszej aktualizacji systemu CRM aplikacja zwraca błąd 500. Awaria blokuje pracę działu sprzedaży.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "CRM; błąd; aktualizacja; serwer; logi aplikacji; administrator",
+    "notes": "Awaria CRM po aktualizacji — wysoki priorytet"
+  },
+  {
+    "id": "T018",
+    "title": "System ERP działa bardzo wolno",
+    "description": "System ERP reaguje z dużym opóźnieniem. Czas odpowiedzi wynosi kilkanaście sekund na każdą operację.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "ERP; wydajność; baza danych; serwer; administrator",
+    "notes": "Wolna aplikacja ERP — trudny do sklasyfikowania priorytet"
+  },
+  {
+    "id": "T019",
+    "title": "Cały dział bez dostępu do systemu sprzedażowego",
+    "description": "System niedostępny — cały dział sprzedaży nie może zalogować się do systemu sprzedażowego od 2 godzin.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "system sprzedażowy; dostęp; serwer; administrator; awaria krytyczna",
+    "notes": "Krytyczne — cały dział bez dostępu do kluczowego systemu"
+  },
+  {
+    "id": "T020",
+    "title": "Błąd eksportu danych z ERP do Excela",
+    "description": "Podczas eksportu raportu sprzedażowego z systemu ERP do pliku Excel pojawia się błąd i eksport się przerywa.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "ERP; eksport; Excel; raport; błąd aplikacji; obejście",
+    "notes": "Drobny błąd eksportu — niski priorytet"
+  },
+  {
+    "id": "T021",
+    "title": "Aplikacja projektowa regularnie się zawiesza",
+    "description": "Aplikacja do zarządzania projektami regularnie się zawiesza i wymaga ponownego uruchomienia co godzinę.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "aplikacja; restart; błąd; zarządzanie projektami; logi",
+    "notes": "Regularne zawieszanie aplikacji — średni priorytet"
+  },
+  {
+    "id": "T022",
+    "title": "System magazynowy blokuje się przy inwentaryzacji",
+    "description": "Podczas inwentaryzacji system magazynowy wyświetla błędy i nie zapisuje danych. Awaria blokuje cały proces.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "system magazynowy; błąd; inwentaryzacja; baza danych; administrator",
+    "notes": "Awaria systemu magazynowego podczas inwentaryzacji"
+  },
+  {
+    "id": "T023",
+    "title": "Prośba o dostęp do modułu raportowania w CRM",
+    "description": "Proszę o nadanie dostępu do modułu raportowania w systemie CRM dla nowego managera sprzedaży.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "CRM; dostęp; uprawnienia; moduł raportowania; administrator",
+    "notes": "Prośba o dostęp — może być błędnie sklasyfikowane jako Konto i dostęp"
+  },
+  {
+    "id": "T024",
+    "title": "Integracja CRM z systemem fakturowania nie działa",
+    "description": "Automatyczna synchronizacja faktur między systemem CRM a systemem fakturowania nie działa od wczoraj.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "CRM; integracja; fakturowanie; API; administrator",
+    "notes": "Problem z integracją między systemami"
+  },
+  {
+    "id": "T025",
+    "title": "Prośba o konfigurację drukarki sieciowej",
+    "description": "Proszę o pomoc w konfiguracji drukarki sieciowej w pokoju 204. Drukarka jest nowa.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "drukarka; konfiguracja; sterownik; sieć; kolejka wydruku",
+    "notes": "Klasyczne zgłoszenie niskiego priorytetu — konfiguracja drukarki"
+  },
+  {
+    "id": "T026",
+    "title": "Monitor nie wyświetla obrazu",
+    "description": "Monitor pracownika nie wyświetla żadnego obrazu mimo że komputer jest włączony i reaguje na klawiaturę.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "monitor; kabel; zasilanie; karta graficzna; wymiana",
+    "notes": "Typowy problem z monitorem — średni priorytet"
+  },
+  {
+    "id": "T027",
+    "title": "Laptop nie ładuje się",
+    "description": "Bateria laptopa nie ładuje się mimo podłączonej ładowarki. Problem pojawił się wczoraj bez wyraźnej przyczyny.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "laptop; bateria; ładowarka; serwis sprzętu; wymiana",
+    "notes": "Problem z ładowaniem laptopa — średni priorytet"
+  },
+  {
+    "id": "T028",
+    "title": "Klawiatura bezprzewodowa nie działa",
+    "description": "Klawiatura bezprzewodowa przestała odpowiadać. Problem jednego użytkownika. Sprawdzono baterie w klawiaturze.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "klawiatura; sterownik; baterie; port USB; wymiana",
+    "notes": "Niedziałająca klawiatura — problem jednego użytkownika"
+  },
+  {
+    "id": "T029",
+    "title": "Stacja dokująca nie ładuje laptopa",
+    "description": "Po podłączeniu do stacji dokującej laptop nie jest rozpoznawany i bateria nie ładuje się.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "stacja dokująca; laptop; USB-C; sterownik; serwis",
+    "notes": "Problem ze stacją dokującą — niski priorytet"
+  },
+  {
+    "id": "T030",
+    "title": "Drukarka regularnie zacina papier",
+    "description": "Drukarka sieciowa w biurze zacina papier co kilka wydruków i wymaga ciągłej interwencji pracownika.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "drukarka; zacięcie papieru; serwis; kolejka wydruku; wymiana",
+    "notes": "Regularne problemy z drukarką — niski priorytet"
+  },
+  {
+    "id": "T031",
+    "title": "Mysz komputerowa nie reaguje na ruch",
+    "description": "Mysz optyczna przestała reagować na ruch. Podłączono inną mysz USB i problem nadal pozostaje.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "mysz; port USB; sterownik; wymiana urządzenia",
+    "notes": "Drobny problem z myszą — niski priorytet"
+  },
+  {
+    "id": "T032",
+    "title": "Komputer nie uruchamia się — nie mogę pracować",
+    "description": "Nie mogę pracować — komputer pracownika w ogóle się nie uruchamia. Brak sygnału wideo na monitorze.",
+    "expected_category": "Sprzęt komputerowy",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "komputer; zasilanie; diagnoza; serwis sprzętu; zamiana",
+    "notes": "Komputer nie startuje — blokuje pracę użytkownika"
+  },
+  {
+    "id": "T033",
+    "title": "Nie można wysłać wiadomości e-mail przez Outlook",
+    "description": "Outlook zwraca błąd podczas próby wysłania wiadomości. Problem dotyczy konta służbowego.",
+    "expected_category": "Poczta e-mail",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "Outlook; SMTP; konfiguracja; serwer pocztowy; administrator poczty",
+    "notes": "Problem z wysyłaniem poczty — średni priorytet"
+  },
+  {
+    "id": "T034",
+    "title": "Skrzynka pocztowa jest pełna",
+    "description": "Skrzynka odbiorcza jest pełna i blokuje odbieranie nowych wiadomości e-mail. Przekroczono limit.",
+    "expected_category": "Poczta e-mail",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "skrzynka pocztowa; limit; archiwizacja; administrator poczty",
+    "notes": "Zapełniona skrzynka pocztowa — niski priorytet"
+  },
+  {
+    "id": "T035",
+    "title": "Poczta nie synchronizuje się na telefonie służbowym",
+    "description": "Poczta służbowa nie synchronizuje się na telefonie. Nowe wiadomości nie pojawiają się w aplikacji mail.",
+    "expected_category": "Poczta e-mail",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "synchronizacja; telefon; Exchange; konfiguracja; mail",
+    "notes": "Problem z synchronizacją poczty mobilnej"
+  },
+  {
+    "id": "T036",
+    "title": "Nie można otworzyć załącznika w e-mailu",
+    "description": "Próba otwarcia załącznika PDF z wiadomości e-mail kończy się komunikatem błędu aplikacji.",
+    "expected_category": "Poczta e-mail",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "załącznik; PDF; Outlook; przeglądarka; zapis pliku",
+    "notes": "Problem z otwieraniem załączników — niski priorytet"
+  },
+  {
+    "id": "T037",
+    "title": "Outlook nie uruchamia się po aktualizacji Office",
+    "description": "Po automatycznej aktualizacji pakietu Microsoft Office aplikacja Outlook nie chce się uruchomić.",
+    "expected_category": "Poczta e-mail",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "Outlook; aktualizacja; Office; naprawa; reinstalacja",
+    "notes": "Outlook zepsuty po aktualizacji — średni priorytet"
+  },
+  {
+    "id": "T038",
+    "title": "Cały dział marketingu nie odbiera poczty e-mail",
+    "description": "Awaria krytyczna — cały dział marketingu nie odbiera żadnych wiadomości e-mail od kilku godzin.",
+    "expected_category": "Poczta e-mail",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "serwer poczty; awaria; administrator; MX; backup",
+    "notes": "Krytyczna awaria serwera pocztowego"
+  },
+  {
+    "id": "T039",
+    "title": "Skrzynka zalewana setkami wiadomości spam",
+    "description": "Skrzynka odbiorcza jest zalewana setkami wiadomości spam dziennie. Filtr antyspamowy nie blokuje poczty.",
+    "expected_category": "Poczta e-mail",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "filtr antyspamowy; spam; konfiguracja; poczta; administrator",
+    "notes": "Uciążliwy spam — niski priorytet ale wymaga uwagi"
+  },
+  {
+    "id": "T040",
+    "title": "Podejrzany e-mail z prośbą o dane logowania",
+    "description": "Otrzymałem wiadomość wyglądającą jak phishing — prosi o podanie hasła do konta firmowego.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "phishing; nie podawać danych; zgłosić bezpieczeństwo; zmiana hasła; skanowanie",
+    "notes": "Klasyczny atak phishing — wysoki priorytet"
+  },
+  {
+    "id": "T041",
+    "title": "Podejrzany link w wiadomości od współpracownika",
+    "description": "Kolega przesłał mi wiadomość z podejrzanym linkiem. Nie klikałem. Link wygląda jak phishing.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "podejrzany link; phishing; bezpieczeństwo IT; skanowanie",
+    "notes": "Podejrzany link — wysoki priorytet"
+  },
+  {
+    "id": "T042",
+    "title": "Antywirus wykrył wirusa na stacji roboczej",
+    "description": "Program antywirusowy wykrył wirusa na stacji roboczej pracownika i poddał plik kwarantannie.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "wirus; antywirus; kwarantanna; skanowanie; incydent bezpieczeństwa",
+    "notes": "Wykryty wirus — incydent bezpieczeństwa"
+  },
+  {
+    "id": "T043",
+    "title": "Podejrzana aktywność na koncie użytkownika",
+    "description": "Wykryto podejrzane logowania na konto z nieznanych adresów IP w nocy.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "incydent; bezpieczeństwo; zmiana hasła; blokada konta; analiza logów",
+    "notes": "Podejrzana aktywność na koncie — wysoki priorytet"
+  },
+  {
+    "id": "T044",
+    "title": "Ransomware zablokował pliki na dysku sieciowym",
+    "description": "Incydent krytyczny — malware zablokował pliki na dysku sieciowym. Pojawia się żądanie okupu.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "malware; ransomware; izolacja; backup; incydent bezpieczeństwa; dział IT",
+    "notes": "Krytyczny incydent bezpieczeństwa — ransomware"
+  },
+  {
+    "id": "T045",
+    "title": "Nieautoryzowany dostęp do systemu produkcyjnego",
+    "description": "Wykryto nieautoryzowany dostęp do systemu produkcyjnego. Incydent bezpieczeństwa wymaga natychmiastowej reakcji.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "incydent; bezpieczeństwo; izolacja; analiza logów; SIEM; dział IT",
+    "notes": "Krytyczny incydent — nieautoryzowany dostęp"
+  },
+  {
+    "id": "T046",
+    "title": "Pracownik kliknął podejrzany link w e-mailu",
+    "description": "Pracownik kliknął podejrzany link w wiadomości e-mail i strona prosiła o dane logowania.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "podejrzany link; phishing; zmiana hasła; skanowanie; bezpieczeństwo IT",
+    "notes": "Phishing — pracownik kliknął link"
+  },
+  {
+    "id": "T047",
+    "title": "Prośba o szkolenie z bezpieczeństwa IT",
+    "description": "Proszę o informację na temat dostępnych szkoleń z zakresu bezpieczeństwa i ochrony przed phishingiem.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "phishing; szkolenie; bezpieczeństwo IT; świadomość; polityka bezpieczeństwa",
+    "notes": "Prośba o szkolenie — klasyfikacja poprawna ale priorytet będzie zawyżony przez system"
+  },
+  {
+    "id": "T048",
+    "title": "Windows nie uruchamia się — blue screen",
+    "description": "Komputer wyświetla blue screen przy uruchamianiu systemu Windows i nie może załadować systemu operacyjnego.",
+    "expected_category": "System operacyjny",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "blue screen; Windows; diagnoza; punkt przywracania; serwis",
+    "notes": "Blue screen — poważny problem z systemem operacyjnym"
+  },
+  {
+    "id": "T049",
+    "title": "Aktualizacja Windows zablokowała system",
+    "description": "Po wymuszonym uruchomieniu aktualizacji systemu operacyjnego Windows nie możemy pracować — system stanął.",
+    "expected_category": "System operacyjny",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "aktualizacja; Windows; przywracanie; punkt przywracania; administrator",
+    "notes": "Aktualizacja zepsuła system — nie mogę pracować"
+  },
+  {
+    "id": "T050",
+    "title": "Sterownik karty graficznej nie działa po aktualizacji",
+    "description": "Po aktualizacji sterownik karty graficznej powoduje błędy wyświetlania i ekran jest zniekształcony.",
+    "expected_category": "System operacyjny",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "sterownik; karta graficzna; aktualizacja; rollback; Windows",
+    "notes": "Problem ze sterownikiem po aktualizacji systemu"
+  },
+  {
+    "id": "T051",
+    "title": "System operacyjny działa bardzo wolno po aktualizacji",
+    "description": "Komputer jest bardzo wolny po ostatniej aktualizacji systemu Windows. Uruchamianie aplikacji zajmuje minuty.",
+    "expected_category": "System operacyjny",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "system operacyjny; wydajność; aktualizacja; skanowanie; czyszczenie",
+    "notes": "Wolny system po aktualizacji — mniej jednoznaczny priorytet"
+  },
+  {
+    "id": "T052",
+    "title": "Windows wymaga aktywacji i blokuje pracę",
+    "description": "Nie mogę pracować — system Windows przestał być aktywowany i wyświetla ciągłe powiadomienia blokujące pracę.",
+    "expected_category": "System operacyjny",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "Windows; aktywacja; licencja; administrator systemów; klucz produktu",
+    "notes": "Brak aktywacji Windows — blokuje pracę użytkownika"
+  },
+  {
+    "id": "T053",
+    "title": "Prośba o reinstalację systemu operacyjnego",
+    "description": "Proszę o reinstalację systemu operacyjnego na nowym laptopie przydzielonym pracownikowi.",
+    "expected_category": "System operacyjny",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "reinstalacja; Windows; konfiguracja; administrator systemów; backup danych",
+    "notes": "Prośba o reinstalację — niski priorytet"
+  },
+  {
+    "id": "T054",
+    "title": "Awaria systemu u wszystkich po zbiorowej aktualizacji",
+    "description": "Awaria krytyczna — po zbiorowej aktualizacji systemu operacyjnego wszyscy pracownicy biura mają niedziałający system.",
+    "expected_category": "System operacyjny",
+    "expected_priority": "Krytyczny",
+    "expected_solution_keywords": "aktualizacja; Windows; rollback; administrator; przywracanie systemu",
+    "notes": "Krytyczna awaria po zbiorowej aktualizacji"
+  },
+  {
+    "id": "T055",
+    "title": "Pytanie o wybór laptopa dla pracownika działu grafiki",
+    "description": "Proszę o informację jaki laptop wybrać dla nowego pracownika zajmującego się projektowaniem graficznym.",
+    "expected_category": "Inne",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "dobór sprzętu; laptop; specyfikacja; budżet; zamówienie",
+    "notes": "Pytanie o sprzęt — nie pasuje do żadnej kategorii dobrze"
+  },
+  {
+    "id": "T056",
+    "title": "Jak sprawdzić swoje uprawnienia w sieci",
+    "description": "Pytanie: jak mogę sprawdzić do jakich zasobów sieciowych mam dostęp jako użytkownik?",
+    "expected_category": "Inne",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "uprawnienia; sieć; Active Directory; sprawdzenie; administrator",
+    "notes": "Pytanie informacyjne — mniej jednoznaczna kategoria"
+  },
+  {
+    "id": "T057",
+    "title": "Zainstalowana aplikacja zewnętrzna przestała działać",
+    "description": "Zainstalowana aplikacja zewnętrzna od zewnętrznego dostawcy przestała działać po aktualizacji innego oprogramowania.",
+    "expected_category": "Inne",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "aplikacja zewnętrzna; dostawca; reinstalacja; wsparcie producenta",
+    "notes": "Aplikacja zewnętrzna — trudna klasyfikacja"
+  },
+  {
+    "id": "T058",
+    "title": "Coś nie działa na komputerze — ogólny problem techniczny",
+    "description": "Coś nie działa na moim komputerze ale nie wiem co dokładnie. System zachowuje się dziwnie od wczoraj.",
+    "expected_category": "Inne",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "diagnoza; IT Support; opis problemu; zdalny dostęp",
+    "notes": "Bardzo ogólne zgłoszenie — niska jakość opisu"
+  },
+  {
+    "id": "T059",
+    "title": "Prośba o backup danych przed wymianą sprzętu",
+    "description": "Proszę o wykonanie kopii zapasowej danych przed wymianą służbowego laptopa na nowy.",
+    "expected_category": "Inne",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "backup; kopia zapasowa; dane; laptop; wymiana sprzętu",
+    "notes": "Backup danych — nie pasuje do standardowych kategorii"
+  },
+  {
+    "id": "T060",
+    "title": "Pomoc w konfiguracji narzędzia Slack na nowym komputerze",
+    "description": "Proszę o pomoc w konfiguracji narzędzia komunikacyjnego Slack na nowym komputerze służbowym.",
+    "expected_category": "Inne",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "konfiguracja; Slack; komputer; instalacja; IT Support",
+    "notes": "Konfiguracja aplikacji komunikacyjnej — mało specjalistyczne"
+  },
+  {
+    "id": "T061",
+    "title": "Problemy z drukowaniem dokumentów z aplikacji ERP",
+    "description": "Drukowanie dokumentów z aplikacji ERP nie działa — brak wyjścia na drukarkę sieciową.",
+    "expected_category": "Inne",
+    "expected_priority": "Niski",
+    "expected_solution_keywords": "drukarka; ERP; sterownik; konfiguracja; kolejka wydruku",
+    "notes": "Ambiguous — zawiera słowa kluczowe z dwóch kategorii (ERP i drukarka)"
+  },
+  {
+    "id": "T062",
+    "title": "Wygasły certyfikat SSL blokuje dostęp do portalu",
+    "description": "Pilne — wygasł certyfikat SSL na serwerze webowym. Incydent bezpieczeństwa blokuje dostęp użytkowników.",
+    "expected_category": "Bezpieczeństwo",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "certyfikat SSL; serwer webowy; bezpieczeństwo; odnowienie; administrator",
+    "notes": "Wygasły certyfikat — incydent bezpieczeństwa"
+  },
+  {
+    "id": "T063",
+    "title": "Brak możliwości drukowania przez VPN w biurze zdalnym",
+    "description": "Pracownicy biura zdalnego nie mogą drukować dokumentów przez VPN na drukarkę biurową.",
+    "expected_category": "Sieć i VPN",
+    "expected_priority": "Średni",
+    "expected_solution_keywords": "VPN; drukowanie; sieć; konfiguracja; sterownik",
+    "notes": "Drukowanie przez VPN — ambiguous między Sieć i Sprzęt"
+  },
+  {
+    "id": "T064",
+    "title": "Aplikacja Microsoft 365 wymaga odnowienia licencji",
+    "description": "Aplikacja Microsoft 365 wyświetla komunikat o wygasłej licencji i nie uruchamia pakietu biurowego.",
+    "expected_category": "Aplikacje biznesowe",
+    "expected_priority": "Wysoki",
+    "expected_solution_keywords": "licencja; Microsoft 365; aplikacja; klucz aktywacyjny; administrator",
+    "notes": "Wygasła licencja aplikacji biurowej — blokuje pracę"
+  }
+]

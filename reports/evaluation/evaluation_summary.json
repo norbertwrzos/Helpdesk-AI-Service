@@ -1,0 +1,208 @@
+{
+  "generated_at": "2026-05-28T17:13:52.591251+00:00",
+  "total_cases": 64,
+  "classification_accuracy": 0.703125,
+  "classification_macro_f1": 0.6742,
+  "classification_weighted_f1": 0.6913,
+  "priority_accuracy": 0.65625,
+  "priority_macro_f1": 0.6945,
+  "priority_weighted_f1": 0.6551,
+  "average_answer_quality_score": 4.1562,
+  "average_response_length": 541.3,
+  "classification_report": [
+    {
+      "label": "Konto i dostęp",
+      "precision": 0.5,
+      "recall": 0.625,
+      "f1_score": 0.5556,
+      "support": 8
+    },
+    {
+      "label": "Sieć i VPN",
+      "precision": 1.0,
+      "recall": 0.8889,
+      "f1_score": 0.9412,
+      "support": 9
+    },
+    {
+      "label": "Aplikacje biznesowe",
+      "precision": 0.7,
+      "recall": 0.7778,
+      "f1_score": 0.7368,
+      "support": 9
+    },
+    {
+      "label": "Sprzęt komputerowy",
+      "precision": 0.5333,
+      "recall": 1.0,
+      "f1_score": 0.6957,
+      "support": 8
+    },
+    {
+      "label": "Poczta e-mail",
+      "precision": 1.0,
+      "recall": 0.8571,
+      "f1_score": 0.9231,
+      "support": 7
+    },
+    {
+      "label": "Bezpieczeństwo",
+      "precision": 1.0,
+      "recall": 0.8889,
+      "f1_score": 0.9412,
+      "support": 9
+    },
+    {
+      "label": "System operacyjny",
+      "precision": 1.0,
+      "recall": 0.4286,
+      "f1_score": 0.6,
+      "support": 7
+    },
+    {
+      "label": "Inne",
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1_score": 0.0,
+      "support": 7
+    }
+  ],
+  "priority_report": [
+    {
+      "label": "Niski",
+      "precision": 1.0,
+      "recall": 0.4,
+      "f1_score": 0.5714,
+      "support": 25
+    },
+    {
+      "label": "Średni",
+      "precision": 0.4595,
+      "recall": 1.0,
+      "f1_score": 0.6296,
+      "support": 17
+    },
+    {
+      "label": "Wysoki",
+      "precision": 0.8182,
+      "recall": 0.6429,
+      "f1_score": 0.72,
+      "support": 14
+    },
+    {
+      "label": "Krytyczny",
+      "precision": 1.0,
+      "recall": 0.75,
+      "f1_score": 0.8571,
+      "support": 8
+    }
+  ],
+  "classification_confusion_matrix": {
+    "Konto i dostęp": {
+      "Konto i dostęp": 5,
+      "Sieć i VPN": 0,
+      "Aplikacje biznesowe": 0,
+      "Sprzęt komputerowy": 0,
+      "Poczta e-mail": 0,
+      "Bezpieczeństwo": 0,
+      "System operacyjny": 0,
+      "Inne": 3
+    },
+    "Sieć i VPN": {
+      "Konto i dostęp": 1,
+      "Sieć i VPN": 8,
+      "Aplikacje biznesowe": 0,
+      "Sprzęt komputerowy": 0,
+      "Poczta e-mail": 0,
+      "Bezpieczeństwo": 0,
+      "System operacyjny": 0,
+      "Inne": 0
+    },
+    "Aplikacje biznesowe": {
+      "Konto i dostęp": 2,
+      "Sieć i VPN": 0,
+      "Aplikacje biznesowe": 7,
+      "Sprzęt komputerowy": 0,
+      "Poczta e-mail": 0,
+      "Bezpieczeństwo": 0,
+      "System operacyjny": 0,
+      "Inne": 0
+    },
+    "Sprzęt komputerowy": {
+      "Konto i dostęp": 0,
+      "Sieć i VPN": 0,
+      "Aplikacje biznesowe": 0,
+      "Sprzęt komputerowy": 8,
+      "Poczta e-mail": 0,
+      "Bezpieczeństwo": 0,
+      "System operacyjny": 0,
+      "Inne": 0
+    },
+    "Poczta e-mail": {
+      "Konto i dostęp": 0,
+      "Sieć i VPN": 0,
+      "Aplikacje biznesowe": 1,
+      "Sprzęt komputerowy": 0,
+      "Poczta e-mail": 6,
+      "Bezpieczeństwo": 0,
+      "System operacyjny": 0,
+      "Inne": 0
+    },
+    "Bezpieczeństwo": {
+      "Konto i dostęp": 1,
+      "Sieć i VPN": 0,
+      "Aplikacje biznesowe": 0,
+      "Sprzęt komputerowy": 0,
+      "Poczta e-mail": 0,
+      "Bezpieczeństwo": 8,
+      "System operacyjny": 0,
+      "Inne": 0
+    },
+    "System operacyjny": {
+      "Konto i dostęp": 0,
+      "Sieć i VPN": 0,
+      "Aplikacje biznesowe": 0,
+      "Sprzęt komputerowy": 3,
+      "Poczta e-mail": 0,
+      "Bezpieczeństwo": 0,
+      "System operacyjny": 3,
+      "Inne": 1
+    },
+    "Inne": {
+      "Konto i dostęp": 1,
+      "Sieć i VPN": 0,
+      "Aplikacje biznesowe": 2,
+      "Sprzęt komputerowy": 4,
+      "Poczta e-mail": 0,
+      "Bezpieczeństwo": 0,
+      "System operacyjny": 0,
+      "Inne": 0
+    }
+  },
+  "priority_confusion_matrix": {
+    "Niski": {
+      "Niski": 10,
+      "Średni": 15,
+      "Wysoki": 0,
+      "Krytyczny": 0
+    },
+    "Średni": {
+      "Niski": 0,
+      "Średni": 17,
+      "Wysoki": 0,
+      "Krytyczny": 0
+    },
+    "Wysoki": {
+      "Niski": 0,
+      "Średni": 5,
+      "Wysoki": 9,
+      "Krytyczny": 0
+    },
+    "Krytyczny": {
+      "Niski": 0,
+      "Średni": 0,
+      "Wysoki": 2,
+      "Krytyczny": 6
+    }
+  }
+}

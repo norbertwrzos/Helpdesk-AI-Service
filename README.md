@@ -436,6 +436,91 @@ Używany przez Docker healthcheck, monitoring i testy integracyjne.
 
 ---
 
+---
+
+## Etap 6 — Ewaluacja klasyfikacji, priorytetyzacji i odpowiedzi AI
+
+### Cel etapu
+
+Przeprowadzenie ewaluacji batchowej prototypowego pipeline'u analizy zgłoszeń:
+- klasyfikacja kategorii i priorytetyzacja na 64 syntetycznych zgłoszeniach,
+- porównanie przewidywań systemu z etykietami referencyjnymi,
+- obliczenie metryk jakości (accuracy, precision, recall, F1),
+- heurystyczna ocena jakości generowanych odpowiedzi AI,
+- wygenerowanie raportu gotowego do wykorzystania w pracy inżynierskiej.
+
+### Dane testowe
+
+Plik: `data/test_cases/evaluation_tickets.csv`
+
+- 64 syntetyczne zgłoszenia techniczne po polsku,
+- każde zgłoszenie zawiera `expected_category` i `expected_priority` (etykiety referencyjne),
+- dane wolne od danych osobowych i firmowych, bezpieczne do publikacji.
+
+### Uruchomienie ewaluacji
+
+```bash
+cd backend
+source .venv/bin/activate
+python scripts/run_evaluation.py
+```
+
+Opcjonalne argumenty:
+
+```bash
+python scripts/run_evaluation.py \
+  --input ../../data/test_cases/evaluation_tickets.csv \
+  --output ../../reports/evaluation
+```
+
+### Wygenerowane raporty
+
+Pliki zapisywane w `reports/evaluation/`:
+
+| Plik | Opis |
+|------|------|
+| `evaluation_summary.json` | Metryki zbiorcze i macierze pomyłek (JSON) |
+| `evaluation_results.csv` | Wyniki dla każdego zgłoszenia (CSV) |
+| `evaluation_report.md` | Raport po polsku do pracy inżynierskiej |
+
+### Eksport raportu do docs/testing
+
+```bash
+cd backend
+python scripts/export_test_report.py
+```
+
+Kopiuje najnowszy `evaluation_report.md` do `docs/testing/latest_evaluation_report.md`.
+
+### Interpretacja metryk
+
+| Metryka | Opis |
+|---------|------|
+| **Accuracy** | Odsetek poprawnych klasyfikacji (poprawne / wszystkie) |
+| **Precision** | TP / (TP + FP) — jak wiele przewidzianych etykiet jest poprawnych |
+| **Recall** | TP / (TP + FN) — jak wiele rzeczywistych etykiet zostało wykrytych |
+| **F1-score** | Harmoniczna średnia precision i recall |
+| **Macro F1** | Średnia F1 ze wszystkich klas (równe wagi) |
+| **Weighted F1** | Średnia F1 ważona liczebnością klas |
+| **Ocena odpowiedzi (0–5)** | Heurystyczna ocena jakości odpowiedzi AI |
+
+### Ograniczenia ewaluacji
+
+- Dane testowe są **syntetyczne** — nie pochodzą z rzeczywistego systemu helpdesk.
+- Aktualny moduł analizy jest **mock/rule-based** — wyniki stanowią baseline przed wdrożeniem AI/NLP.
+- Ocena odpowiedzi ma charakter **heurystyczny** (nie ekspercki).
+- Wyniki służą jako **punkt odniesienia** dla dalszej rozbudowy systemu.
+
+### Dokumentacja testów
+
+| Plik | Opis |
+|------|------|
+| [`docs/testing/test_plan.md`](docs/testing/test_plan.md) | Plan testów |
+| [`docs/testing/test_scenarios.md`](docs/testing/test_scenarios.md) | Scenariusze testowe |
+| [`docs/testing/evaluation_methodology.md`](docs/testing/evaluation_methodology.md) | Metodyka ewaluacji |
+
+---
+
 ## Autor
 
 Norbert Wrzos — Praca inżynierska, 2025/2026
