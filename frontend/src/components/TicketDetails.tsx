@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { updateTicket } from '../api/tickets'
 import { analyzeTicket } from '../api/analysis'
 import type { Ticket, TicketStatus, TicketUpdate } from '../types/ticket'
+import { TICKET_STATUS_LABELS } from '../types/ticket'
 import type { Category } from '../types/category'
 import type { Priority } from '../types/priority'
 import type { AnalysisResult } from '../types/analysis'
@@ -17,13 +18,9 @@ interface Props {
   onUpdated: (updated: Ticket) => void
 }
 
-const STATUS_OPTIONS: { value: TicketStatus; label: string }[] = [
-  { value: 'new', label: 'Nowe' },
-  { value: 'in_analysis', label: 'W analizie' },
-  { value: 'answered', label: 'Odpowiedziane' },
-  { value: 'resolved', label: 'Rozwiązane' },
-  { value: 'rejected', label: 'Odrzucone' },
-]
+const STATUS_OPTIONS: { value: TicketStatus; label: string }[] = (
+  Object.entries(TICKET_STATUS_LABELS) as [TicketStatus, string][]
+).map(([value, label]) => ({ value, label }))
 
 function formatDate(iso: string) {
   return new Date(iso).toLocaleString('pl-PL', { dateStyle: 'medium', timeStyle: 'short' })
@@ -56,7 +53,7 @@ export default function TicketDetails({ ticket, categories, priorities, onUpdate
       // Odśwież ticket, żeby pokazać zaktualizowany status i kategorię
       onUpdated({
         ...ticket,
-        status: 'answered',
+        status: 'ai_reviewed',
         category_id: result.classification.category_id,
         priority_id: result.priority.priority_id,
         classification_confidence: result.classification.confidence,

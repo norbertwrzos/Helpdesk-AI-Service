@@ -8,9 +8,9 @@ from app.db.base import Base
 
 
 class TicketStatus(str, enum.Enum):
-    new = "new"
-    in_analysis = "in_analysis"
-    answered = "answered"
+    open = "open"
+    ai_reviewed = "ai_reviewed"
+    pending = "pending"
     resolved = "resolved"
     rejected = "rejected"
 
@@ -29,7 +29,7 @@ class Ticket(Base):
     description: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[TicketStatus] = mapped_column(
         SAEnum(TicketStatus, name="ticketstatus"),
-        default=TicketStatus.new,
+        default=TicketStatus.open,
         nullable=False,
     )
     source: Mapped[TicketSource] = mapped_column(
@@ -43,6 +43,10 @@ class Ticket(Base):
     priority_id: Mapped[int | None] = mapped_column(
         ForeignKey("priorities.id"), nullable=True
     )
+    requester_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    requester_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    assigned_agent_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    agent_response: Mapped[str | None] = mapped_column(Text, nullable=True)
     classification_confidence: Mapped[float | None] = mapped_column(
         Float, nullable=True
     )

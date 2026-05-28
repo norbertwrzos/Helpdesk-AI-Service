@@ -416,6 +416,48 @@ Szczegóły decyzji architektonicznych: [docs/decisions/0002-email-import.md](do
 
 ---
 
+## Etap 7 — Kontrakt danych i mock autentykacja (role)
+
+### Logowanie mockowe
+
+Logowanie w aplikacji jest **mockowe** i służy wyłącznie do demonstracji ról użytkowników w prototypie.
+**Nie ma prawdziwego JWT, haseł ani sesji backendowej.** Wybór użytkownika zapisywany jest w `localStorage`.
+
+Dostępne konta demonstracyjne:
+
+| Użytkownik | E-mail | Rola | Dostęp |
+|---|---|---|---|
+| Administrator | `admin@helpdesk.local` | `admin` | Główny panel (dashboard, zgłoszenia, import) |
+| Agent IT | `agent@helpdesk.local` | `agent` | Główny panel (dashboard, zgłoszenia, import) |
+| Jan (użytkownik) | `user@company.local` | `end_user` | Portal użytkownika (`/portal`) |
+
+### Nowe statusy zgłoszeń
+
+| Wartość | Polska etykieta | Mapowanie ze starego |
+|---|---|---|
+| `open` | Otwarte | ← `new` |
+| `ai_reviewed` | Zweryfikowane przez AI | ← `in_analysis` / `answered` |
+| `pending` | Oczekujące | ← `answered` |
+| `resolved` | Rozwiązane | bez zmian |
+| `rejected` | Odrzucone | bez zmian |
+
+### Nowe pola Ticket
+
+Dodano: `requester_email`, `requester_name`, `assigned_agent_name`, `agent_response`.
+Migracja: `alembic/versions/005_service_desk_fields.py`.
+
+### Scenariusz testowy (Etap 7)
+
+1. Uruchom backend i frontend jak zwykle.
+2. Otwórz http://localhost:5173 — zostaniesz przekierowany na `/login`.
+3. Wybierz **Adam — agent@helpdesk.local (Agent IT Support)** i kliknij „Zaloguj się".
+4. Główny panel powinien być dostępny.
+5. Wyloguj się i zaloguj jako **Jan — user@company.local (Użytkownik końcowy)**.
+6. Użytkownik końcowy powinien trafić na portal `/portal`.
+7. Zaloguj się jako **Administrator** i sprawdź dostęp do wszystkich sekcji.
+
+---
+
 ## Endpoint `/health`
 
 Służy do weryfikacji dostępności serwisu.

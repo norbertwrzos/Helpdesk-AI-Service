@@ -23,10 +23,12 @@ def create_ticket(db: Session, data: TicketCreate) -> Ticket:
     ticket = Ticket(
         title=data.title,
         description=data.description,
-        status=TicketStatus.new,
+        status=TicketStatus.open,
         source=data.source,
         category_id=data.category_id,
         priority_id=data.priority_id,
+        requester_email=data.requester_email,
+        requester_name=data.requester_name,
     )
     db.add(ticket)
     db.commit()

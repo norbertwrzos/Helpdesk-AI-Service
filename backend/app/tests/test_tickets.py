@@ -9,7 +9,7 @@ def test_create_ticket(client: TestClient) -> None:
     assert response.status_code == 201
     data = response.json()
     assert data["title"] == "Brak dostępu do VPN"
-    assert data["status"] == "new"
+    assert data["status"] == "open"
     assert data["source"] == "manual"
     assert "id" in data
 
@@ -52,10 +52,10 @@ def test_update_ticket(client: TestClient) -> None:
 
     response = client.patch(
         f"/tickets/{ticket_id}",
-        json={"status": "in_analysis"},
+        json={"status": "pending"},
     )
     assert response.status_code == 200
-    assert response.json()["status"] == "in_analysis"
+    assert response.json()["status"] == "pending"
 
 
 def test_create_ticket_with_email_source(client: TestClient) -> None:

@@ -61,8 +61,7 @@ class AnalysisPipeline:
                 detail=f"Zgłoszenie o ID {ticket_id} nie zostało znalezione.",
             )
 
-        # 2. Ustaw status in_analysis
-        ticket.status = TicketStatus.in_analysis
+        # 2. Statusu nie zmieniamy do czasu zakończenia analizy
         db.flush()
 
         # 3. Pobierz dane pomocnicze
@@ -120,8 +119,8 @@ class AnalysisPipeline:
         db.add(ai_response)
         db.flush()
 
-        # 10. Status answered
-        ticket.status = TicketStatus.answered
+        # 10. Status ai_reviewed
+        ticket.status = TicketStatus.ai_reviewed
 
         # 11. Zatwierdź zmiany
         db.commit()

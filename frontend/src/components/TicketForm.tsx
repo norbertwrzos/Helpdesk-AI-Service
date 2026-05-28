@@ -13,6 +13,7 @@ interface Props {
 export default function TicketForm({ categories, priorities, onSuccess }: Props) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+  const [requesterEmail, setRequesterEmail] = useState('')
   const [categoryId, setCategoryId] = useState<string>('')
   const [priorityId, setPriorityId] = useState<string>('')
   const [submitting, setSubmitting] = useState(false)
@@ -32,10 +33,15 @@ export default function TicketForm({ categories, priorities, onSuccess }: Props)
       setError('Opis jest wymagany.')
       return
     }
+    if (!requesterEmail.trim()) {
+      setError('Adres e-mail zgłaszającego jest wymagany.')
+      return
+    }
 
     const payload: TicketCreate = {
       title: title.trim(),
       description: description.trim(),
+      requester_email: requesterEmail.trim(),
       source: 'manual',
       category_id: categoryId ? Number(categoryId) : null,
       priority_id: priorityId ? Number(priorityId) : null,
@@ -46,6 +52,7 @@ export default function TicketForm({ categories, priorities, onSuccess }: Props)
       await createTicket(payload)
       setTitle('')
       setDescription('')
+      setRequesterEmail('')
       setCategoryId('')
       setPriorityId('')
       setSuccess(true)
@@ -63,6 +70,21 @@ export default function TicketForm({ categories, priorities, onSuccess }: Props)
 
       {error && <div className="alert alert--error">{error}</div>}
       {success && <div className="alert alert--success">Zgłoszenie zostało dodane.</div>}
+
+      <div className="form-group">
+        <label className="form-label" htmlFor="requester-email">
+          E-mail zgłaszającego <span className="form-required">*</span>
+        </label>
+        <input
+          id="requester-email"
+          className="form-input"
+          type="email"
+          value={requesterEmail}
+          onChange={e => setRequesterEmail(e.target.value)}
+          placeholder="jan.kowalski@firma.pl"
+          maxLength={255}
+        />
+      </div>
 
       <div className="form-group">
         <label className="form-label" htmlFor="title">

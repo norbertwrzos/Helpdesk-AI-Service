@@ -1,17 +1,10 @@
 import type { TicketStatus } from '../types/ticket'
-
-const LABELS: Record<TicketStatus, string> = {
-  new: 'Nowe',
-  in_analysis: 'W analizie',
-  answered: 'Odpowiedziane',
-  resolved: 'Rozwiązane',
-  rejected: 'Odrzucone',
-}
+import { TICKET_STATUS_LABELS } from '../types/ticket'
 
 const COLOR_CLASS: Record<TicketStatus, string> = {
-  new: 'badge--new',
-  in_analysis: 'badge--in-analysis',
-  answered: 'badge--answered',
+  open: 'badge--new',
+  ai_reviewed: 'badge--in-analysis',
+  pending: 'badge--answered',
   resolved: 'badge--resolved',
   rejected: 'badge--rejected',
 }
@@ -23,7 +16,7 @@ interface Props {
 export default function TicketStatusBadge({ status }: Props) {
   return (
     <span className={`badge ${COLOR_CLASS[status]}`}>
-      {LABELS[status] ?? status}
+      {TICKET_STATUS_LABELS[status] ?? status}
     </span>
   )
 }

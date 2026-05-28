@@ -10,7 +10,7 @@ def _make_ticket() -> Ticket:
     t.id = 1
     t.title = "Nie działa VPN"
     t.description = "Klient VPN nie może się połączyć z siecią firmową."
-    t.status = TicketStatus.in_analysis
+    t.status = TicketStatus.open
     t.source = TicketSource.manual
     return t
 

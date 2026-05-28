@@ -22,7 +22,7 @@ def _create_ticket(db: Session, title: str = "Nie działa VPN") -> Ticket:
     ticket = Ticket(
         title=title,
         description="Klient VPN nie łączy się z siecią firmową.",
-        status=TicketStatus.new,
+        status=TicketStatus.open,
         source=TicketSource.manual,
     )
     db.add(ticket)
@@ -59,13 +59,13 @@ class TestAnalysisPipelineIntegration:
         data = response.json()
         assert data["ai_response"]["response_text"]
 
-    def test_analyze_sets_status_answered(self, client: TestClient, db: Session):
+    def test_analyze_sets_status_ai_reviewed(self, client: TestClient, db: Session):
         _seed_base_data(db)
         ticket = _create_ticket(db)
 
         client.post(f"/tickets/{ticket.id}/analyze")
         db.refresh(ticket)
-        assert ticket.status == TicketStatus.answered
+        assert ticket.status == TicketStatus.ai_reviewed
 
     def test_analyze_saves_ai_response_to_db(self, client: TestClient, db: Session):
         _seed_base_data(db)
