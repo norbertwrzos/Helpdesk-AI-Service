@@ -3,6 +3,7 @@ import Layout from './components/Layout'
 import HomePage from './pages/HomePage'
 import TicketsPage from './pages/TicketsPage'
 import TicketDetailsPage from './pages/TicketDetailsPage'
+import EmailImportPage from './pages/EmailImportPage'
 import './App.css'
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/tickets/:id" element={<TicketDetailsPage />} />
+          <Route path="/email-import" element={<EmailImportPage />} />
         </Routes>
       </Layout>
     </BrowserRouter>

@@ -41,14 +41,23 @@ class Settings(BaseSettings):
     AI_PROVIDER: str = "mock"
     OPENAI_API_KEY: str = ""
 
-    # Email
+    # Email – IMAP (import)
     EMAIL_IMPORT_ENABLED: bool = True
     EMAIL_IMAP_HOST: str = "localhost"
     EMAIL_IMAP_PORT: int = 3143
     EMAIL_IMAP_USE_SSL: bool = False
-    EMAIL_IMAP_USERNAME: str = "test@localhost"
+    EMAIL_IMAP_USERNAME: str = "test"
     EMAIL_IMAP_PASSWORD: str = "test"
     EMAIL_FOLDER: str = "INBOX"
+    EMAIL_POLL_INTERVAL_SECONDS: int = 60
+    EMAIL_AUTO_ANALYZE_IMPORTED: bool = True
+
+    # Email – SMTP (wysyłanie testowych wiadomości)
+    EMAIL_SMTP_HOST: str = "localhost"
+    EMAIL_SMTP_PORT: int = 3025
+    EMAIL_SMTP_USERNAME: str = "test@localhost"
+    EMAIL_SMTP_PASSWORD: str = "test"
+    EMAIL_SMTP_USE_TLS: bool = False
 
 
 settings = Settings()

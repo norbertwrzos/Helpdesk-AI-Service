@@ -25,6 +25,9 @@ export default function Layout({ children }: LayoutProps) {
             <NavLink to="/tickets" className={({ isActive }) => 'layout__nav-link' + (isActive ? ' active' : '')}>
               Zgłoszenia
             </NavLink>
+            <NavLink to="/email-import" className={({ isActive }) => 'layout__nav-link' + (isActive ? ' active' : '')}>
+              Import e-mail
+            </NavLink>
           </nav>
         </div>
       </header>

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import ai, categories, health, knowledge, priorities, tickets
+from app.api.routes import ai, categories, email_import, health, knowledge, priorities, tickets
 from app.core.config import settings
 
 app = FastAPI(
@@ -24,4 +24,5 @@ app.include_router(ai.router, tags=["ai"])
 app.include_router(categories.router, tags=["categories"])
 app.include_router(priorities.router, tags=["priorities"])
 app.include_router(knowledge.router, tags=["knowledge"])
+app.include_router(email_import.router, tags=["email-import"])
 

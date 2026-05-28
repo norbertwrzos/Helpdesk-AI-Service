@@ -298,6 +298,124 @@ npm run build
 9. Sprawdź, że zmiany są widoczne po odświeżeniu
 
 
+---
+
+## Etap 4 — Import zgłoszeń z e-maila
+
+### Opis
+
+Etap 4 dodaje jednokierunkowy import wiadomości przychodzących z testowej skrzynki IMAP (GreenMail)
+jako zgłoszenia techniczne w systemie.
+
+```
+Wiadomość e-mail → IMAP Importer → EmailParser → Ticket (source=email) → EmailImportLog → AnalysisPipeline
+```
+
+### Uruchomienie
+
+**1. Uruchom Docker Compose** (PostgreSQL + GreenMail):
+```bash
+docker compose up -d
+```
+
+**2. Wykonaj migracje Alembic:**
+```bash
+cd backend
+alembic upgrade head
+```
+
+**3. Załaduj dane seed (potrzebne do analizy AI):**
+```bash
+python scripts/seed_data.py
+```
+
+**4. Uruchom backend:**
+```bash
+uvicorn app.main:app --reload
+```
+
+**5. Uruchom frontend:**
+```bash
+cd frontend
+npm run dev
+```
+
+**6. Wyślij testową wiadomość do GreenMail:**
+```bash
+cd backend
+python scripts/send_test_email.py
+# Lub z parametrami:
+python scripts/send_test_email.py --subject "Problem z drukarką" --body "Drukarka nie drukuje od rana."
+```
+
+**7. Uruchom import przez frontend:**
+
+Otwórz http://localhost:5173/email-import, ustaw limit i kliknij „Uruchom import".
+
+**8. Uruchom import przez Swagger UI:**
+```
+POST http://localhost:8000/email/import/run
+Body: { "limit": 10, "analyze_imported": true }
+```
+
+**9. Sprawdź logi importu:**
+```
+GET http://localhost:8000/email/import/logs
+```
+
+### Nowe endpointy (Etap 4)
+
+| Metoda | Ścieżka                        | Opis                                   |
+|--------|--------------------------------|----------------------------------------|
+| POST   | /email/import/run              | Uruchom import wiadomości z IMAP       |
+| GET    | /email/import/logs             | Lista logów importu                    |
+| GET    | /email/import/logs/{id}        | Szczegóły pojedynczego logu importu    |
+
+### Przykładowy scenariusz testowy (Etap 4)
+
+1. Uruchom `docker compose up -d`
+2. Uruchom migracje: `alembic upgrade head`
+3. Załaduj seed: `python scripts/seed_data.py`
+4. Uruchom backend: `uvicorn app.main:app --reload`
+5. Uruchom frontend: `cd frontend && npm run dev`
+6. Wyślij testowy e-mail: `python scripts/send_test_email.py`
+7. Przejdź do http://localhost:5173/email-import
+8. Kliknij „Uruchom import" (z zaznaczoną opcją analizy)
+9. Sprawdź podsumowanie: `imported_count=1, analyzed_count=1`
+10. Kliknij link do zgłoszenia w tabeli logów
+11. Sprawdź, że zgłoszenie ma `source=email`, wypełnione pola `email_sender`, `email_subject`
+12. Sprawdź, że AnalysisPipeline uruchomił się automatycznie
+
+### Uruchomienie testów (Etap 4)
+
+```bash
+cd backend
+pytest app/tests/test_email_parser.py
+pytest app/tests/test_email_importer.py
+pytest app/tests/test_email_import_api.py
+# Lub wszystkie testy naraz:
+pytest
+```
+
+### Weryfikacja buildu frontendu
+
+```bash
+cd frontend
+npm run build
+```
+
+### Ograniczenia (MVP)
+
+- System importuje **wyłącznie wiadomości przychodzące** — nie wysyła odpowiedzi e-mail.
+- System nie obsługuje wątków korespondencji.
+- Załączniki nie są analizowane przez AI.
+- Import e-mail jest testowany na GreenMail (nie na produkcyjnym serwerze SMTP/IMAP).
+- Brak schedulera — import uruchamiany jest ręcznie (przez frontend lub API).
+
+Szczegóły decyzji architektonicznych: [docs/decisions/0002-email-import.md](docs/decisions/0002-email-import.md)
+
+---
+
 ## Endpoint `/health`
 
 Służy do weryfikacji dostępności serwisu.

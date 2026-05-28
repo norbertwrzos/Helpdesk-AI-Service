@@ -805,3 +805,165 @@
   margin-top: 8px;
   text-align: right;
 }
+
+/* ===== Card (shared) ===== */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* ===== Stats grid (Email Import summary) ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+}
+
+.stat-card {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-card__value {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 4px;
+}
+
+.stat-card--success .stat-card__value { color: var(--color-success); }
+.stat-card--warning .stat-card__value { color: #fcd34d; }
+.stat-card--error .stat-card__value   { color: #fca5a5; }
+.stat-card--info .stat-card__value    { color: var(--color-primary-light); }
+
+/* ===== Data table (Email Import logs) ===== */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.data-table th,
+.data-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.data-table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.data-table td {
+  color: var(--color-text);
+  vertical-align: top;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.data-table td.error-cell {
+  color: #fca5a5;
+  font-size: 0.8rem;
+}
+
+.data-table a {
+  color: var(--color-primary-light);
+  text-decoration: none;
+}
+
+.data-table a:hover {
+  text-decoration: underline;
+}
+
+/* Badge variants for email import status */
+.badge--success {
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--color-success);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.badge--warning {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fcd34d;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+.badge--error {
+  background: rgba(248, 113, 113, 0.12);
+  color: #fca5a5;
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+/* ===== Page layout ===== */
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.page__description {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* form-input short variant */
+.form-input--short {
+  max-width: 120px;
+}
+
+/* checkbox row */
+.form-group--checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
