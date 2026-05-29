@@ -48,7 +48,14 @@ function App() {
                     <Route path="/knowledge" element={<KnowledgePage />} />
                     <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />
                     <Route path="/ai" element={<AIPage />} />
-                    <Route path="/settings" element={<SettingsPage />} />
+                    <Route
+                      path="/settings"
+                      element={
+                        <ProtectedRoute allowedRoles={['admin', 'agent']}>
+                          <SettingsPage />
+                        </ProtectedRoute>
+                      }
+                    />
                     {/* Keep old route for backward compatibility */}
                     <Route path="/quality" element={<AIPage />} />
                     <Route path="/email-import" element={<EmailImportPage />} />
