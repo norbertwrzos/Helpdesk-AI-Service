@@ -75,7 +75,9 @@ class EmailImporter:
 
             _, message_numbers = imap.search(None, "ALL")
             ids = message_numbers[0].split()
-            ids = ids[:limit]
+            # IMAP returns sequence numbers oldest -> newest; import the newest
+            # messages first so fresh test emails are not starved by old mail.
+            ids = ids[-limit:]
             logger.info(
                 "Znaleziono %d wiadomości w skrzynce %s (limit: %d).",
                 len(ids),
