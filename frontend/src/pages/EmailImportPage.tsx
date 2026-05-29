@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { getEmailImportLogs, runEmailImport } from '../api/emailImport'
+import { useEffect, useState } from 'react'
+import { getEmailImportLogs, getSchedulerStatus, runEmailImport } from '../api/emailImport'
 import EmailImportLogsTable from '../components/EmailImportLogsTable'
-import type { EmailImportLog, EmailImportRunResponse } from '../types/emailImport'
+import type { EmailImportLog, EmailImportRunResponse, EmailImportSchedulerStatus } from '../types/emailImport'
 
 export default function EmailImportPage() {
   const [limit, setLimit] = useState<number>(10)
@@ -12,6 +12,13 @@ export default function EmailImportPage() {
   const [logs, setLogs] = useState<EmailImportLog[]>([])
   const [error, setError] = useState<string | null>(null)
   const [logsLoaded, setLogsLoaded] = useState(false)
+  const [schedulerStatus, setSchedulerStatus] = useState<EmailImportSchedulerStatus | null>(null)
+
+  useEffect(() => {
+    getSchedulerStatus()
+      .then(setSchedulerStatus)
+      .catch(() => setSchedulerStatus(null))
+  }, [])
 
   async function handleRunImport() {
     setIsRunning(true)
@@ -51,6 +58,30 @@ export default function EmailImportPage() {
         podstawie zgłoszenia techniczne. Każda wiadomość jest importowana tylko raz — system
         wykrywa i pomija duplikaty.
       </p>
+
+      {/* Status schedulera */}
+      {schedulerStatus && (
+        <div className={`rounded-xl border p-4 mb-2 flex items-center gap-3 text-sm ${
+          schedulerStatus.running
+            ? 'border-green-500/30 bg-green-500/5'
+            : 'border-gray-700 bg-gray-900/40'
+        }`}>
+          <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+            schedulerStatus.running ? 'bg-green-400 animate-pulse' : 'bg-gray-600'
+          }`} />
+          <div className="flex-1">
+            <span className={schedulerStatus.running ? 'text-green-300 font-medium' : 'text-gray-500'}>
+              Scheduler {schedulerStatus.running ? 'aktywny' : 'nieaktywny'}
+            </span>
+            {schedulerStatus.running && (
+              <span className="text-gray-500 ml-2">
+                — importuje co {schedulerStatus.interval_seconds}s
+                {schedulerStatus.auto_analyze && ', z automatyczną analizą AI'}
+              </span>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Formularz importu */}
       <div className="card">

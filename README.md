@@ -410,7 +410,7 @@ npm run build
 - System nie obsługuje wątków korespondencji.
 - Załączniki nie są analizowane przez AI.
 - Import e-mail jest testowany na GreenMail (nie na produkcyjnym serwerze SMTP/IMAP).
-- Brak schedulera — import uruchamiany jest ręcznie (przez frontend lub API).
+- Brak schedulera — import uruchamiany jest ręcznie (panel `/email-import` dla admina lub endpoint Swagger `POST /api/email/import`).
 
 Szczegóły decyzji architektonicznych: [docs/decisions/0002-email-import.md](docs/decisions/0002-email-import.md)
 
@@ -472,7 +472,7 @@ AppShell
 ├── Sidebar (lewy, stały, w-64)
 │   ├── Logo "H" + nazwa aplikacji
 │   ├── RoleBasedNavigation
-│   │   ├── admin/agent: Dashboard, Zgłoszenia, Baza wiedzy, AI, Ustawienia, Import e-mail
+│   │   ├── admin/agent: Dashboard, Zgłoszenia, Baza wiedzy, AI, Ustawienia
 │   │   └── end_user: Moje zgłoszenia, Baza wiedzy
 │   └── Stopka z numerem wersji
 ├── Topbar (górny, stały, h-16)

@@ -21,3 +21,10 @@ export interface EmailImportRunRequest {
   limit?: number
   analyze_imported?: boolean
 }
+
+export interface EmailImportSchedulerStatus {
+  enabled: boolean
+  running: boolean
+  interval_seconds: number
+  auto_analyze: boolean
+}

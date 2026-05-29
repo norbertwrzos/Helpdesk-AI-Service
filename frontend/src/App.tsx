@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from './auth/AuthContext'
+import { ToastProvider } from './context/ToastContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import AppShell from './components/AppShell'
 import LoginPage from './pages/LoginPage'
@@ -8,6 +9,7 @@ import TicketsPage from './pages/TicketsPage'
 import TicketDetailsPage from './pages/TicketDetailsPage'
 import EmailImportPage from './pages/EmailImportPage'
 import KnowledgePage from './pages/KnowledgePage'
+import KnowledgeArticlePage from './pages/KnowledgeArticlePage'
 import AIPage from './pages/AIPage'
 import SettingsPage from './pages/SettingsPage'
 import PortalTicketsPage from './pages/portal/PortalTicketsPage'
@@ -25,6 +27,7 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ToastProvider>
         <Routes>
           {/* Public */}
           <Route path="/login" element={<LoginPage />} />
@@ -43,6 +46,7 @@ function App() {
                     <Route path="/tickets" element={<TicketsPage />} />
                     <Route path="/tickets/:id" element={<TicketDetailsPage />} />
                     <Route path="/knowledge" element={<KnowledgePage />} />
+                    <Route path="/knowledge/:id" element={<KnowledgeArticlePage />} />
                     <Route path="/ai" element={<AIPage />} />
                     <Route path="/settings" element={<SettingsPage />} />
                     {/* Keep old route for backward compatibility */}
@@ -62,6 +66,7 @@ function App() {
             }
           />
         </Routes>
+        </ToastProvider>
       </BrowserRouter>
     </AuthProvider>
   )

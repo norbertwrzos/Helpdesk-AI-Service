@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
+from app.core.scheduler import scheduler_status
 from app.models.email_import_log import EmailImportLog
 from app.schemas.email_import import (
     EmailImportLogResponse,
@@ -11,6 +12,15 @@ from app.schemas.email_import import (
 from app.services.email_importer import EmailImporter
 
 router = APIRouter()
+
+
+@router.get(
+    "/email/import/scheduler",
+    summary="Stan schedulera importu e-mail",
+    description="Zwraca czy scheduler działa, interwał oraz ustawienia automatycznej analizy.",
+)
+def get_scheduler_status() -> dict:
+    return scheduler_status()
 
 
 @router.post(

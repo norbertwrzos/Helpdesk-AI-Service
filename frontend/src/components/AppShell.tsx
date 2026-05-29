@@ -1,12 +1,15 @@
 import type { ReactNode } from 'react'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
+import { useEmailImportPoller } from '../hooks/useEmailImportPoller'
 
 interface Props {
   children: ReactNode
 }
 
 export default function AppShell({ children }: Props) {
+  useEmailImportPoller()
+
   return (
     <div className="flex h-screen overflow-hidden" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
       <Sidebar />
