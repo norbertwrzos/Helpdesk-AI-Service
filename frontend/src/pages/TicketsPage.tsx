@@ -49,7 +49,6 @@ export default function TicketsPage() {
     ai_reviewed: tickets.filter(t => t.status === 'ai_reviewed').length,
     pending: tickets.filter(t => t.status === 'pending').length,
     resolved: tickets.filter(t => t.status === 'resolved').length,
-    email: tickets.filter(t => t.source === 'email').length,
   }), [tickets])
 
   // Apply quick view first, then filters
@@ -106,7 +105,7 @@ export default function TicketsPage() {
         onChange={view => {
           setQuickView(view)
           // reset status filter when switching to a status quick view
-          if (view !== 'all' && view !== 'email') {
+          if (view !== 'all') {
             setFilters(f => ({ ...f, status: '' }))
           }
         }}

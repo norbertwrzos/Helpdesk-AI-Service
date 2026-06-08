@@ -25,8 +25,8 @@ export default function QuickActions() {
           to={action.to}
           className={
             action.variant === 'primary'
-              ? 'px-4 py-2 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium transition-colors'
-              : 'px-4 py-2 rounded-lg border border-gray-700 hover:border-violet-500/60 hover:bg-gray-800/60 text-gray-300 hover:text-gray-100 text-sm font-medium transition-colors'
+              ? 'inline-flex items-center rounded-lg border border-violet-400/20 bg-violet-500 px-4 py-2 text-sm font-medium text-white shadow-[0_10px_22px_rgba(15,23,42,0.16)] transition-all hover:-translate-y-px hover:bg-violet-400'
+              : 'inline-flex items-center rounded-lg border border-gray-700 bg-white/[0.02] px-4 py-2 text-sm font-medium text-gray-300 transition-colors hover:border-violet-500/40 hover:bg-gray-800/60 hover:text-gray-100'
           }
         >
           {action.label}

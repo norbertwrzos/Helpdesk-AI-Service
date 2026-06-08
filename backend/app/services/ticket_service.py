@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.models.ticket import Ticket, TicketStatus
+from app.models.ticket import Ticket, TicketSource, TicketStatus
 from app.schemas.ticket import TicketCreate, TicketUpdate
 
 
@@ -24,7 +24,7 @@ def create_ticket(db: Session, data: TicketCreate) -> Ticket:
         title=data.title,
         description=data.description,
         status=TicketStatus.open,
-        source=data.source,
+        source=TicketSource.manual,
         category_id=data.category_id,
         priority_id=data.priority_id,
         requester_email=data.requester_email,

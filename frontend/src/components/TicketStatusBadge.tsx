@@ -2,9 +2,9 @@ import type { TicketStatus } from '../types/ticket'
 import { TICKET_STATUS_LABELS } from '../types/ticket'
 
 const COLOR_CLASS: Record<TicketStatus, string> = {
-  open: 'badge--new',
-  ai_reviewed: 'badge--in-analysis',
-  pending: 'badge--answered',
+  open: 'badge--open',
+  ai_reviewed: 'badge--ai-reviewed',
+  pending: 'badge--pending',
   resolved: 'badge--resolved',
   rejected: 'badge--rejected',
 }

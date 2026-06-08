@@ -13,7 +13,6 @@ function buildEvents(ticket: Ticket, aiResponses: AIResponse[]): TimelineEvent[]
   const createdAt = new Date(ticket.created_at)
   const updatedAt = new Date(ticket.updated_at)
 
-  // 1. Ticket created
   events.push({
     id: 'created',
     label: 'Zgłoszenie utworzone',
@@ -26,25 +25,6 @@ function buildEvents(ticket: Ticket, aiResponses: AIResponse[]): TimelineEvent[]
     iconType: 'ticket',
   })
 
-  // 2. Email import (if source=email)
-  if (ticket.source === 'email') {
-    const emailDate = ticket.email_received_at
-      ? new Date(ticket.email_received_at)
-      : createdAt
-    events.push({
-      id: 'email',
-      label: 'Zaimportowane z e-maila',
-      sublabel: ticket.email_sender
-        ? `Od: ${ticket.email_sender}`
-        : ticket.email_subject
-        ? `Temat: ${ticket.email_subject}`
-        : undefined,
-      date: emailDate,
-      iconType: 'email',
-    })
-  }
-
-  // 3. Status open (at creation)
   events.push({
     id: 'open',
     label: 'Status ustawiony: Otwarte',
@@ -52,7 +32,6 @@ function buildEvents(ticket: Ticket, aiResponses: AIResponse[]): TimelineEvent[]
     iconType: 'open',
   })
 
-  // 4-6. Events from AI responses (sorted by date)
   const sortedResponses = [...aiResponses].sort(
     (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
   )

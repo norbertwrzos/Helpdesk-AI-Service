@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
-from app.schemas.priority import PriorityCreate, PriorityResponse
+from app.schemas.priority import PriorityCreate, PriorityResponse, PriorityUpdate
 from app.services import priority_service
 
 router = APIRouter()
@@ -18,3 +18,10 @@ def create_priority(
     data: PriorityCreate, db: Session = Depends(get_db)
 ) -> PriorityResponse:
     return priority_service.create_priority(db, data)
+
+
+@router.patch("/priorities/{priority_id}", response_model=PriorityResponse)
+def update_priority(
+    priority_id: int, data: PriorityUpdate, db: Session = Depends(get_db)
+) -> PriorityResponse:
+    return priority_service.update_priority(db, priority_id, data)

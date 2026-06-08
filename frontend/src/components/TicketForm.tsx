@@ -43,7 +43,6 @@ export default function TicketForm({ categories, priorities, onSuccess, defaultR
       title: title.trim(),
       description: description.trim(),
       requester_email: requesterEmail.trim(),
-      source: 'manual',
       category_id: categoryId ? Number(categoryId) : null,
       priority_id: priorityId ? Number(priorityId) : null,
     }

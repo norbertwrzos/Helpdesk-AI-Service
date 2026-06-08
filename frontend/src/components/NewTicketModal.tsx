@@ -4,6 +4,7 @@ import { createTicket } from '../api/tickets'
 import { getCategories } from '../api/categories'
 import { getPriorities } from '../api/priorities'
 import { useAuth } from '../auth/AuthContext'
+import { useToast } from '../context/ToastContext'
 import type { Category } from '../types/category'
 import type { Priority } from '../types/priority'
 import type { TicketCreate } from '../types/ticket'
@@ -15,6 +16,7 @@ interface Props {
 
 export default function NewTicketModal({ isOpen, onClose }: Props) {
   const { currentUser, role } = useAuth()
+  const { showToast } = useToast()
   const navigate = useNavigate()
 
   const [title, setTitle] = useState('')
@@ -88,7 +90,6 @@ export default function NewTicketModal({ isOpen, onClose }: Props) {
       description: description.trim(),
       requester_email: requesterEmail.trim(),
       requester_name: requesterName.trim() || null,
-      source: 'manual',
       category_id: categoryId ? Number(categoryId) : null,
       priority_id: priorityId ? Number(priorityId) : null,
     }
@@ -98,6 +99,7 @@ export default function NewTicketModal({ isOpen, onClose }: Props) {
       const created = await createTicket(payload)
       resetForm()
       onClose()
+      showToast(`Utworzono zgłoszenie #${created.id}.`, 'success')
       // Navigate to the new ticket detail
       const detailPath = role === 'end_user'
         ? `/portal/tickets/${created.id}`
@@ -131,9 +133,9 @@ export default function NewTicketModal({ isOpen, onClose }: Props) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       onClick={handleBackdropClick}
     >
-      <div className="w-full max-w-xl bg-[#1a1d27] rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+      <div className="w-full max-w-xl bg-[#1a1d27] rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-h-[95dvh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/8">
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-white/8 shrink-0">
           <h2 className="text-base font-semibold text-gray-100">Nowe zgłoszenie</h2>
           <button
             onClick={handleClose}
@@ -148,8 +150,8 @@ export default function NewTicketModal({ isOpen, onClose }: Props) {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} noValidate>
-          <div className="px-6 py-5 space-y-4 max-h-[70vh] overflow-y-auto">
+        <form onSubmit={handleSubmit} noValidate className="flex flex-col flex-1 min-h-0">
+          <div className="px-4 sm:px-6 py-5 space-y-4 overflow-y-auto flex-1">
             {error && (
               <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 text-sm text-red-400">
                 {error}
@@ -187,7 +189,7 @@ export default function NewTicketModal({ isOpen, onClose }: Props) {
             </div>
 
             {/* Requester email + name */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-gray-400 block">
                   E-mail zgłaszającego <span className="text-red-400">*</span>
@@ -216,7 +218,7 @@ export default function NewTicketModal({ isOpen, onClose }: Props) {
             </div>
 
             {/* Category + Priority */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <label className="text-xs font-medium text-gray-400 block">Kategoria</label>
                 <select
@@ -249,7 +251,7 @@ export default function NewTicketModal({ isOpen, onClose }: Props) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/8 bg-[#0f1117]/50">
+          <div className="flex items-center justify-end gap-3 px-4 sm:px-6 py-4 border-t border-white/8 bg-[#0f1117]/50 shrink-0">
             <button
               type="button"
               onClick={handleClose}

@@ -58,14 +58,14 @@ def test_update_ticket(client: TestClient) -> None:
     assert response.json()["status"] == "pending"
 
 
-def test_create_ticket_with_email_source(client: TestClient) -> None:
+def test_create_ticket_ignores_unsupported_source_field(client: TestClient) -> None:
     response = client.post(
         "/tickets",
         json={
-            "title": "Problem z pocztą",
-            "description": "Nie dostaję e-maili.",
-            "source": "email",
+            "title": "Problem z drukarką",
+            "description": "Drukarka przestała drukować.",
+            "source": "external",
         },
     )
     assert response.status_code == 201
-    assert response.json()["source"] == "email"
+    assert response.json()["source"] == "manual"

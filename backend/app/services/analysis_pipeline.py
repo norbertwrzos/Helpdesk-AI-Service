@@ -3,15 +3,15 @@ AnalysisPipeline — koordynuje pełny proces analizy zgłoszenia.
 
 Kolejność kroków:
 1. Pobierz zgłoszenie (404 jeśli nie istnieje).
-2. Ustaw status na in_analysis.
-3. Pobierz kategorie i priorytety.
-4. Uruchom ClassificationService.
-5. Uruchom PriorityAnalysisService.
-6. Zaktualizuj zgłoszenie o wyniki klasyfikacji.
-7. Uruchom SimilarityService.
-8. Uruchom MockAIGenerator.
-9. Zapisz AIResponse w bazie.
-10. Ustaw status zgłoszenia na answered.
+2. Pobierz kategorie, priorytety i artykuły bazy wiedzy.
+3. Uruchom ClassificationService.
+4. Uruchom PriorityAnalysisService.
+5. Zaktualizuj zgłoszenie o wyniki klasyfikacji.
+6. Uruchom SimilarityService.
+7. Uruchom MockAIGenerator.
+8. Zapisz AIResponse w bazie.
+9. Ustaw status zgłoszenia na ai_reviewed.
+10. Zatwierdź wszystkie zmiany.
 11. Zapisz wszystkie zmiany.
 12. Zwróć AnalysisResult.
 """
@@ -38,6 +38,8 @@ class AnalysisPipeline:
     Każdy komponent (ClassificationService, PriorityAnalysisService,
     SimilarityService, MockAIGenerator) jest wstrzykiwany przez konstruktor,
     co ułatwia testy jednostkowe i wymianę na właściwe implementacje AI/NLP.
+
+    Po zapisaniu wyniku analizy zgłoszenie otrzymuje status `ai_reviewed`.
     """
 
     def __init__(

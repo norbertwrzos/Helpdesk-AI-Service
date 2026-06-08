@@ -21,9 +21,9 @@ export default function PortalTicketsPage() {
     setLoading(true)
     try {
       const all = await getTickets()
+      const currentEmail = currentUser?.email.toLowerCase()
       const mine = all.filter(
-        t => !t.requester_email ||
-          t.requester_email.toLowerCase() === currentUser?.email.toLowerCase(),
+        (ticket) => !ticket.requester_email || ticket.requester_email.toLowerCase() === currentEmail,
       )
       setTickets(mine)
     } catch (err) {
@@ -34,44 +34,33 @@ export default function PortalTicketsPage() {
   }
 
   useEffect(() => {
-    loadTickets()
-  }, [])
+    void loadTickets()
+  }, [currentUser?.email])
 
   return (
     <PortalLayout>
-      <div className="page space-y-6">
-        {/* Header */}
-        <div className="flex items-center justify-between gap-4">
+      <div className="page">
+        <div className="page__header">
           <div>
-            <h1 className="text-xl font-semibold text-gray-100">Moje zgłoszenia</h1>
-            <p className="text-sm text-gray-500 mt-0.5">Historia Twoich zgłoszeń technicznych.</p>
+            <h1 className="page__title">Moje zgłoszenia</h1>
+            <p className="page__subtitle">Historia Twoich zgłoszeń technicznych.</p>
           </div>
-          <button
-            onClick={() => setModalOpen(true)}
-            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-4 h-4">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            Nowe zgłoszenie
-          </button>
         </div>
 
         {loading && <LoadingState label="Pobieranie zgłoszeń…" />}
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400">
+          <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-4 text-sm text-red-300">
             {error}
           </div>
         )}
 
         {!loading && !error && tickets.length === 0 && (
-          <div className="bg-surface rounded-xl border border-white/8 p-10 text-center space-y-3">
-            <p className="text-gray-500 text-sm">Nie masz jeszcze żadnych zgłoszeń.</p>
+          <div className="surface-card surface-card--padded space-y-3 text-center">
+            <p className="text-sm text-gray-500">Nie masz jeszcze żadnych zgłoszeń.</p>
             <button
               onClick={() => setModalOpen(true)}
-              className="text-violet-400 text-sm hover:text-violet-300 transition-colors"
+              className="text-sm text-violet-400 transition-colors hover:text-violet-300"
             >
               Dodaj pierwsze zgłoszenie →
             </button>
@@ -79,30 +68,30 @@ export default function PortalTicketsPage() {
         )}
 
         {!loading && !error && tickets.length > 0 && (
-          <div className="space-y-2">
-            {tickets.map(ticket => (
+          <div className="space-y-3">
+            {tickets.map((ticket) => (
               <div
                 key={ticket.id}
                 onClick={() => navigate(`/portal/tickets/${ticket.id}`)}
-                className="flex items-center justify-between gap-4 p-4 rounded-xl border border-white/8 bg-surface hover:bg-white/5 cursor-pointer transition-colors group"
+                className="surface-card surface-card--interactive group flex cursor-pointer items-center justify-between gap-4 p-4"
               >
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2 mb-0.5">
+                  <div className="mb-0.5 flex items-center gap-2">
                     <span className="text-xs font-mono text-gray-600">#{ticket.id}</span>
-                    <span className="text-sm font-medium text-gray-200 truncate group-hover:text-white transition-colors">
+                    <span className="truncate text-sm font-medium text-gray-200 transition-colors group-hover:text-white">
                       {ticket.title}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500 truncate">
+                  <p className="truncate text-xs text-gray-500">
                     {ticket.description.slice(0, 100)}{ticket.description.length > 100 ? '…' : ''}
                   </p>
                 </div>
-                <div className="flex items-center gap-3 flex-shrink-0">
+                <div className="flex flex-shrink-0 items-center gap-3">
                   <StatusBadge status={ticket.status} />
-                  <span className="text-xs text-gray-600">
+                  <span className="text-xs text-gray-500">
                     {new Date(ticket.created_at).toLocaleDateString('pl-PL')}
                   </span>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-4 h-4 text-gray-700 group-hover:text-gray-500 transition-colors">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4 text-gray-700 transition-colors group-hover:text-gray-500">
                     <polyline points="9 18 15 12 9 6" />
                   </svg>
                 </div>

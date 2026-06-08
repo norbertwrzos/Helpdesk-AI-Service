@@ -8,6 +8,11 @@ class CategoryCreate(BaseModel):
     description: str | None = None
 
 
+class CategoryUpdate(BaseModel):
+    name: str | None = None
+    description: str | None = None
+
+
 class CategoryResponse(BaseModel):
     id: int
     name: str

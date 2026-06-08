@@ -11,3 +11,9 @@ export interface PriorityCreate {
   level: number
   description?: string | null
 }
+
+export interface PriorityUpdate {
+  name?: string
+  level?: number
+  description?: string | null
+}

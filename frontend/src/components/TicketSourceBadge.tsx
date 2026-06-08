@@ -2,7 +2,6 @@ import type { TicketSource } from '../types/ticket'
 
 const LABELS: Record<TicketSource, string> = {
   manual: 'Ręczne',
-  email: 'E-mail',
   csv: 'CSV',
 }
 

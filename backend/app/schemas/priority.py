@@ -1,11 +1,17 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class PriorityCreate(BaseModel):
     name: str
-    level: int
+    level: int = Field(ge=1, le=4)
+    description: str | None = None
+
+
+class PriorityUpdate(BaseModel):
+    name: str | None = None
+    level: int | None = Field(default=None, ge=1, le=4)
     description: str | None = None
 
 

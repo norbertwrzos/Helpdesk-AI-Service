@@ -46,12 +46,12 @@ export default function DashboardPage() {
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="rounded-xl border border-gray-800 bg-gray-900/60 p-5 animate-pulse h-24"
+              className="surface-card h-24 animate-pulse"
             />
           ))}
         </div>
       ) : error ? (
-        <div className="mt-6 rounded-xl border border-red-800/50 bg-red-900/20 p-4 text-red-400 text-sm">
+        <div className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">
           {error}
         </div>
       ) : (
@@ -84,8 +84,8 @@ export default function DashboardPage() {
       )}
 
       {/* Recent tickets */}
-      <div className="mt-8 rounded-xl border border-gray-800 bg-gray-900/60 p-6">
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+      <div className="surface-card surface-card--padded mt-8">
+        <h2 className="section-heading mb-4">
           Ostatnie zgłoszenia
         </h2>
         {loading ? (
@@ -102,8 +102,8 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <div className="mt-6 rounded-xl border border-gray-800 bg-gray-900/60 p-6">
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+      <div className="surface-card surface-card--padded mt-6">
+        <h2 className="section-heading mb-4">
           Szybkie akcje
         </h2>
         <QuickActions />

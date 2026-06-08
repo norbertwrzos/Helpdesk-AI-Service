@@ -77,16 +77,16 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
-      {/* Toast container — bottom-right, above everything */}
-      <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 items-end pointer-events-none">
+      {/* Toast container — top-center, below the fixed header */}
+      <div className="pointer-events-none fixed left-1/2 top-20 z-50 flex w-[min(calc(100vw-2rem),34rem)] -translate-x-1/2 flex-col gap-2 items-center">
         {toasts.map((toast) => {
           const v = VARIANTS[toast.variant]
           return (
             <div
               key={toast.id}
               className={[
-                'pointer-events-auto flex items-start gap-3 rounded-xl border px-4 py-3 shadow-xl',
-                'max-w-sm w-full transition-all duration-300',
+                'pointer-events-auto flex w-full items-start gap-3 rounded-full border px-4 py-3 shadow-xl backdrop-blur-xl',
+                'transition-all duration-300',
                 v.bg, v.border,
                 toast.onClick ? 'cursor-pointer hover:brightness-110 active:scale-[0.98]' : '',
               ].join(' ')}

@@ -13,7 +13,6 @@ class TicketBase(BaseModel):
 class TicketCreate(TicketBase):
     category_id: int | None = None
     priority_id: int | None = None
-    source: TicketSource = TicketSource.manual
     requester_email: str | None = None
     requester_name: str | None = None
 
@@ -44,10 +43,6 @@ class TicketResponse(BaseModel):
     priority_confidence: float | None
     classification_explanation: str | None
     priority_explanation: str | None
-    email_sender: str | None
-    email_subject: str | None
-    email_message_id: str | None
-    email_received_at: datetime | None
     created_at: datetime
     updated_at: datetime
 

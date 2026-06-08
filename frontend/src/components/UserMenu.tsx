@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
+import type { UserRole } from '../types/auth'
 
-const ROLE_LABELS: Record<string, string> = {
-  admin: 'Administrator',
+const ROLE_LABELS: Record<UserRole, string> = {
   agent: 'Agent IT',
   end_user: 'Użytkownik',
 }
@@ -26,22 +26,22 @@ export default function UserMenu() {
   }
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="text-right hidden sm:block">
-        <div className="text-sm font-medium text-gray-200 leading-none">{currentUser.name}</div>
-        <div className="text-xs text-gray-500 mt-0.5">
+    <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] py-1 pl-2 pr-1">
+      <div className="hidden text-right sm:block">
+        <div className="text-sm font-medium leading-none text-slate-100">{currentUser.name}</div>
+        <div className="mt-0.5 text-xs text-slate-500">
           {ROLE_LABELS[currentUser.role] ?? currentUser.role}
         </div>
       </div>
 
-      <div className="w-8 h-8 rounded-full bg-violet-600 flex items-center justify-center text-xs font-bold text-white flex-shrink-0">
+      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 text-xs font-bold text-white shadow-[0_12px_24px_rgba(99,102,241,0.3)]">
         {initials}
       </div>
 
       <button
         onClick={handleLogout}
         title="Wyloguj się"
-        className="p-1.5 text-gray-500 hover:text-gray-200 hover:bg-gray-800 rounded-lg transition-colors"
+        className="rounded-full p-2 text-slate-500 transition-colors hover:bg-white/5 hover:text-slate-100"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="w-5 h-5">
           <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" />

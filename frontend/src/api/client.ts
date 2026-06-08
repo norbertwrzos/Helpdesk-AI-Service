@@ -1,4 +1,5 @@
-const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8000'
+const configuredBaseUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim()
+const BASE_URL = configuredBaseUrl ? configuredBaseUrl.replace(/\/$/, '') : '/api'
 
 export class ApiError extends Error {
   constructor(
@@ -27,6 +28,15 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new ApiError(response.status, detail)
   }
 
+  if (response.status === 204) {
+    return undefined as T
+  }
+
+  const contentType = response.headers.get('content-type')
+  if (!contentType?.includes('application/json')) {
+    return undefined as T
+  }
+
   return response.json() as Promise<T>
 }
 
@@ -36,4 +46,5 @@ export const apiClient = {
     request<T>(path, { method: 'POST', body: body !== undefined ? JSON.stringify(body) : undefined }),
   patch: <T>(path: string, body: unknown) =>
     request<T>(path, { method: 'PATCH', body: JSON.stringify(body) }),
+  delete: (path: string) => request<void>(path, { method: 'DELETE' }),
 }

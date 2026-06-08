@@ -1,13 +1,11 @@
-import type { MockUser } from '../../types/auth'
+import type { MockUser, UserRole } from '../../types/auth'
 
-const ROLE_LABELS: Record<string, string> = {
-  admin: 'Administrator',
+const ROLE_LABELS: Record<UserRole, string> = {
   agent: 'Agent',
   end_user: 'Użytkownik',
 }
 
-const ROLE_COLORS: Record<string, string> = {
-  admin: 'text-purple-400 border-purple-700',
+const ROLE_COLORS: Record<UserRole, string> = {
   agent: 'text-cyan-400 border-cyan-700',
   end_user: 'text-gray-400 border-gray-700',
 }
@@ -18,7 +16,7 @@ interface Props {
 }
 
 export default function MockUserSettings({ user, onLogout }: Props) {
-  const roleColor = ROLE_COLORS[user.role] ?? ROLE_COLORS['end_user']
+  const roleColor = ROLE_COLORS[user.role]
 
   return (
     <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-5 space-y-5">

@@ -154,13 +154,6 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
           </div>
         )}
 
-        {ticket.source === 'email' && ticket.email_sender && (
-          <div className="flex justify-between items-start gap-2">
-            <span className="text-xs text-gray-500 shrink-0">Nadawca e-mail</span>
-            <span className="text-xs text-gray-300 text-right break-all">{ticket.email_sender}</span>
-          </div>
-        )}
-
         <div className="flex justify-between items-center gap-2">
           <span className="text-xs text-gray-500">Utworzono</span>
           <span className="text-xs text-gray-400">{formatDate(ticket.created_at)}</span>

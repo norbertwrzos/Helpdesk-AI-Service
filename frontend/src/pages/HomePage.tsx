@@ -29,15 +29,15 @@ export default function HomePage() {
             <p className="feature-card__desc">Klasyfikacja, priorytetyzacja i propozycje rozwiązań z użyciem AI/NLP — w przygotowaniu</p>
           </div>
           <div className="feature-card">
-            <span className="feature-card__icon">✉️</span>
-            <h2 className="feature-card__title">Import e-mail</h2>
-            <p className="feature-card__desc">Automatyczny import zgłoszeń z poczty elektronicznej — w przygotowaniu</p>
+            <span className="feature-card__icon">🧭</span>
+            <h2 className="feature-card__title">Przepływ zgłoszeń</h2>
+            <p className="feature-card__desc">Tworzenie zgłoszeń w systemie oraz dalsza obsługa przez agentów w jednym, prostym procesie</p>
           </div>
         </section>
 
         <div className="status-banner">
           <span className="status-banner__dot" />
-          Etap 2 — obsługa zgłoszeń, kategorie i priorytety. Moduły AI i import e-mail będą realizowane w kolejnych etapach.
+          Etap 2 — obsługa zgłoszeń, kategorie i priorytety. Moduły AI będą rozwijane w kolejnych etapach.
         </div>
 
         <div className="home-cta">

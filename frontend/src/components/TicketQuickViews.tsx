@@ -1,6 +1,6 @@
 import type { Ticket, TicketStatus } from '../types/ticket'
 
-export type QuickView = TicketStatus | 'email' | 'all'
+export type QuickView = TicketStatus | 'all'
 
 interface QuickViewDef {
   id: QuickView
@@ -13,7 +13,6 @@ const VIEWS: QuickViewDef[] = [
   { id: 'ai_reviewed', label: 'Zweryfikowane przez AI' },
   { id: 'pending', label: 'Oczekujące' },
   { id: 'resolved', label: 'Rozwiązane' },
-  { id: 'email', label: 'Z e-maila' },
 ]
 
 interface Props {
@@ -22,15 +21,16 @@ interface Props {
   onChange: (view: QuickView) => void
 }
 
+const BUTTON_BASE = 'inline-flex items-center gap-2 whitespace-nowrap rounded-xl border px-3.5 py-2 text-sm font-medium transition-all'
+
 export function applyQuickView(tickets: Ticket[], view: QuickView): Ticket[] {
   if (view === 'all') return tickets
-  if (view === 'email') return tickets.filter(t => t.source === 'email')
   return tickets.filter(t => t.status === view)
 }
 
 export default function TicketQuickViews({ active, counts, onChange }: Props) {
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-white/[0.02] p-2">
       {VIEWS.map(v => {
         const isActive = active === v.id
         const count = counts[v.id]
@@ -39,15 +39,20 @@ export default function TicketQuickViews({ active, counts, onChange }: Props) {
             key={v.id}
             onClick={() => onChange(v.id)}
             className={[
-              'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap',
+              BUTTON_BASE,
               isActive
-                ? 'bg-violet-600 text-white'
-                : 'bg-gray-800/60 border border-gray-700 text-gray-400 hover:text-gray-200 hover:border-gray-600',
+                ? 'border-violet-300/20 bg-violet-500 text-white shadow-[0_10px_20px_rgba(99,102,241,0.22)]'
+                : 'border-white/8 bg-white/[0.03] text-slate-300 hover:border-white/12 hover:bg-white/[0.05] hover:text-white',
             ].join(' ')}
           >
             {v.label}
             {count !== undefined && (
-              <span className={`ml-1.5 text-xs px-1.5 py-0.5 rounded-full ${isActive ? 'bg-white/20' : 'bg-gray-700 text-gray-400'}`}>
+              <span
+                className={[
+                  'rounded-full px-1.5 py-0.5 text-xs font-semibold',
+                  isActive ? 'bg-white/20 text-white' : 'bg-white/[0.06] text-slate-400',
+                ].join(' ')}
+              >
                 {count}
               </span>
             )}

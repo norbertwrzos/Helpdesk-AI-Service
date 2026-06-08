@@ -5,9 +5,11 @@ import type { Category } from '../types/category'
 interface Props {
   article: KnowledgeArticle
   categories: Category[]
-  canEdit: boolean
-  onEdit: (article: KnowledgeArticle) => void
-  onDelete: (id: number) => void
+  canEdit?: boolean
+  onEdit?: (article: KnowledgeArticle) => void
+  onDelete?: (id: number) => void
+  /** Override the default /knowledge/:id navigation */
+  onOpen?: () => void
 }
 
 function formatDate(iso: string): string {
@@ -18,9 +20,10 @@ function formatDate(iso: string): string {
   })
 }
 
-export default function KnowledgeArticleCard({ article, categories, canEdit, onEdit, onDelete }: Props) {
+export default function KnowledgeArticleCard({ article, categories, canEdit, onEdit, onDelete, onOpen }: Props) {
   const navigate = useNavigate()
   const category = categories.find(c => c.id === article.category_id)
+  const showManagementActions = Boolean(canEdit && onEdit && onDelete)
   const tags = article.tags
     ? article.tags.split(',').map(t => t.trim()).filter(Boolean)
     : []
@@ -29,29 +32,29 @@ export default function KnowledgeArticleCard({ article, categories, canEdit, onE
     : article.content
 
   return (
-    <div className="bg-gray-900 border border-gray-800 rounded-xl p-5 flex flex-col gap-3 hover:border-gray-700 transition-colors">
+    <div className="surface-card surface-card--interactive flex h-full flex-col gap-4 p-5">
       {/* Category badge */}
       {category && (
-        <span className="text-xs font-medium text-violet-400 bg-violet-900/30 border border-violet-800/40 px-2 py-0.5 rounded-full w-fit">
+        <span className="w-fit rounded-full border border-violet-800/40 bg-violet-900/30 px-2.5 py-1 text-xs font-medium text-violet-300">
           {category.name}
         </span>
       )}
 
       {/* Title */}
-      <h3 className="text-gray-100 font-semibold text-sm leading-snug line-clamp-2">
+      <h3 className="line-clamp-2 text-base font-semibold leading-snug text-gray-100">
         {article.title}
       </h3>
 
       {/* Excerpt */}
-      <p className="text-gray-500 text-xs leading-relaxed line-clamp-3 flex-1">
+      <p className="flex-1 line-clamp-3 text-sm leading-relaxed text-gray-400">
         {excerpt}
       </p>
 
       {/* Tags */}
       {tags.length > 0 && (
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-1.5">
           {tags.map(tag => (
-            <span key={tag} className="text-xs text-gray-600 bg-gray-800 px-2 py-0.5 rounded">
+            <span key={tag} className="rounded-full bg-white/5 px-2 py-1 text-xs text-gray-500">
               #{tag}
             </span>
           ))}
@@ -59,30 +62,30 @@ export default function KnowledgeArticleCard({ article, categories, canEdit, onE
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-1 border-t border-gray-800">
-        <span className="text-xs text-gray-600">
+      <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/10 pt-3">
+        <span className="text-xs text-gray-500">
           Aktualizacja: {formatDate(article.updated_at)}
         </span>
         <div className="flex items-center gap-2">
-          {canEdit && (
+          {showManagementActions && (
             <>
               <button
-                onClick={() => onEdit(article)}
-                className="text-xs text-gray-500 hover:text-violet-400 transition-colors"
+                onClick={() => onEdit?.(article)}
+                className="text-xs text-gray-400 transition-colors hover:text-violet-300"
               >
                 Edytuj
               </button>
               <button
-                onClick={() => onDelete(article.id)}
-                className="text-xs text-gray-500 hover:text-red-400 transition-colors"
+                onClick={() => onDelete?.(article.id)}
+                className="text-xs text-gray-400 transition-colors hover:text-red-400"
               >
                 Usuń
               </button>
             </>
           )}
           <button
-            onClick={() => navigate(`/knowledge/${article.id}`)}
-            className="text-xs font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-lg transition-colors"
+            onClick={() => onOpen ? onOpen() : navigate(`/knowledge/${article.id}`)}
+            className="rounded-full bg-white/5 px-3.5 py-1.5 text-xs font-semibold text-gray-200 transition-colors hover:bg-white/10"
           >
             Otwórz
           </button>

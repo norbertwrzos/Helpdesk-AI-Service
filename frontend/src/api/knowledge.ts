@@ -13,10 +13,5 @@ export const createArticle = (payload: KnowledgeArticleCreate): Promise<Knowledg
 export const updateArticle = (id: number, payload: KnowledgeArticleUpdate): Promise<KnowledgeArticle> =>
   apiClient.patch(`/knowledge/${id}`, payload)
 
-export const deleteArticle = async (id: number): Promise<void> => {
-  const BASE_URL = (import.meta.env.VITE_API_BASE_URL as string) || 'http://localhost:8000'
-  const response = await fetch(`${BASE_URL}/knowledge/${id}`, { method: 'DELETE' })
-  if (!response.ok && response.status !== 204) {
-    throw new Error(`HTTP ${response.status}`)
-  }
-}
+export const deleteArticle = (id: number): Promise<void> =>
+  apiClient.delete(`/knowledge/${id}`)

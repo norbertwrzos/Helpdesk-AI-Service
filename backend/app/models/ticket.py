@@ -17,7 +17,6 @@ class TicketStatus(str, enum.Enum):
 
 class TicketSource(str, enum.Enum):
     manual = "manual"
-    email = "email"
     csv = "csv"
 
 
@@ -65,14 +64,4 @@ class Ticket(Base):
         default=lambda: datetime.now(timezone.utc),
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
-    )
-
-    # Pola e-mail (wypełniane przy imporcie ze skrzynki)
-    email_sender: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    email_subject: Mapped[str | None] = mapped_column(String(500), nullable=True)
-    email_message_id: Mapped[str | None] = mapped_column(
-        String(500), nullable=True, unique=True, index=True
-    )
-    email_received_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
     )

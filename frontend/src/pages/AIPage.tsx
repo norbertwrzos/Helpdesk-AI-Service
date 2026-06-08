@@ -39,7 +39,7 @@ export default function AIPage() {
       </div>
 
       {loading && <LoadingState label="Pobieranie danych…" />}
-      {error && <div className="alert alert--error">{error}</div>}
+      {error && <div className="rounded-2xl border border-red-500/20 bg-red-500/10 p-4 text-sm text-red-300">{error}</div>}
 
       {!loading && !error && (
         <div className="flex flex-col gap-8">
@@ -47,7 +47,7 @@ export default function AIPage() {
           {metrics ? (
             <AIMetricsCards metrics={metrics} />
           ) : (
-            <div className="rounded-xl border border-gray-800 bg-gray-900/60 p-6">
+            <div className="surface-card surface-card--padded">
               <p className="text-sm text-gray-500">
                 Brak metryk. Uruchom analizę zgłoszeń i wystaw oceny AI, aby zobaczyć dane.
               </p>
@@ -55,14 +55,14 @@ export default function AIPage() {
           )}
 
           {/* Recent AI Responses */}
-          <section>
-            <h2 className="text-base font-semibold text-gray-200 mb-3">Ostatnie odpowiedzi AI</h2>
+          <section className="space-y-3">
+            <h2 className="section-heading">Ostatnie odpowiedzi AI</h2>
             <RecentAIResponses responses={responses} />
           </section>
 
           {/* Module Info */}
-          <section>
-            <h2 className="text-base font-semibold text-gray-200 mb-3">Informacja o module</h2>
+          <section className="space-y-3">
+            <h2 className="section-heading">Informacja o module</h2>
             <AIModuleInfo />
           </section>
         </div>

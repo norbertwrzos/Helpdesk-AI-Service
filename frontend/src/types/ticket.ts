@@ -1,5 +1,5 @@
 export type TicketStatus = 'open' | 'ai_reviewed' | 'pending' | 'resolved' | 'rejected'
-export type TicketSource = 'manual' | 'email' | 'csv'
+export type TicketSource = 'manual' | 'csv'
 
 export const TICKET_STATUS_LABELS: Record<TicketStatus, string> = {
   open: 'Otwarte',
@@ -25,10 +25,6 @@ export interface Ticket {
   priority_confidence: number | null
   classification_explanation: string | null
   priority_explanation: string | null
-  email_sender: string | null
-  email_subject: string | null
-  email_message_id: string | null
-  email_received_at: string | null
   created_at: string
   updated_at: string
 }
@@ -40,7 +36,6 @@ export interface TicketCreate {
   requester_name?: string | null
   category_id?: number | null
   priority_id?: number | null
-  source?: TicketSource
 }
 
 export interface TicketUpdate {

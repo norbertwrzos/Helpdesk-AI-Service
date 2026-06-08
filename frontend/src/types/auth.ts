@@ -1,4 +1,4 @@
-export type UserRole = 'admin' | 'agent' | 'end_user'
+export type UserRole = 'agent' | 'end_user'
 
 export interface MockUser {
   id: string

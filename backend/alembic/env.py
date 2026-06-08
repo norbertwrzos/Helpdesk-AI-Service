@@ -11,7 +11,10 @@ if config.config_file_name is not None:
 
 # Import Base and all models so that Alembic detects the schema
 from app.db.base import Base  # noqa: E402
+from app.core.config import settings  # noqa: E402
 import app.models  # noqa: E402, F401 — registers all models on Base.metadata
+
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 target_metadata = Base.metadata
 

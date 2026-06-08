@@ -17,21 +17,5 @@ services:
       timeout: 5s
       retries: 5
 
-  greenmail:
-    image: greenmail/standalone:2.0.1
-    container_name: helpdesk_greenmail
-    restart: unless-stopped
-    environment:
-      GREENMAIL_OPTS: >-
-        -Dgreenmail.setup.test.all
-        -Dgreenmail.hostname=0.0.0.0
-        -Dgreenmail.users=test:test@localhost
-        -Dgreenmail.api.hostname=0.0.0.0
-        -Dgreenmail.api.port=8080
-    ports:
-      - "3025:3025"
-      - "3143:3143"
-      - "8080:8080"
-
 volumes:
   postgres_data:

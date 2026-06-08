@@ -14,15 +14,15 @@ export default function NavItem({ to, icon, label, end = false }: Props) {
       to={to}
       end={end}
       className={({ isActive }) =>
-        `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150 w-full ${
+        `group flex w-full items-center gap-3 rounded-xl border px-3.5 py-3 text-sm font-medium transition-all duration-150 ${
           isActive
-            ? 'bg-violet-600/20 text-violet-300 border border-violet-500/30'
-            : 'text-gray-400 hover:bg-gray-800/60 hover:text-gray-200 border border-transparent'
+            ? 'border-white/10 bg-white/[0.07] text-white ring-1 ring-inset ring-white/5'
+            : 'border-transparent text-slate-400 hover:border-white/5 hover:bg-white/[0.04] hover:text-slate-100'
         }`
       }
     >
-      <span className="w-5 h-5 flex-shrink-0 flex items-center justify-center">{icon}</span>
-      <span>{label}</span>
+      <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center text-current">{icon}</span>
+      <span className="truncate">{label}</span>
     </NavLink>
   )
 }

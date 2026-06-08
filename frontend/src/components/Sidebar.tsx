@@ -1,28 +1,50 @@
 import RoleBasedNavigation from './RoleBasedNavigation'
 
-export default function Sidebar() {
+interface Props {
+  isOpen: boolean
+  onClose: () => void
+}
+
+export default function Sidebar({ isOpen, onClose }: Props) {
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-sidebar border-r border-gray-800 flex flex-col z-20">
-      {/* Brand */}
-      <div className="flex items-center gap-3 px-5 h-16 border-b border-gray-800 flex-shrink-0">
-        <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center text-sm font-bold text-white">
-          H
-        </div>
-        <div>
-          <div className="text-sm font-semibold text-gray-100 leading-none">Helpdesk AI</div>
-          <div className="text-xs text-gray-500 mt-0.5">Service</div>
-        </div>
-      </div>
+    <>
+      {/* Mobile backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-10 md:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
 
-      {/* Navigation */}
-      <nav className="flex-1 py-4 px-3 overflow-y-auto">
-        <RoleBasedNavigation />
-      </nav>
+      <aside
+        className={[
+          'fixed left-0 top-0 z-20 flex h-screen w-64 flex-col border-r border-white/10 bg-slate-950/90 backdrop-blur-xl transition-transform duration-200 ease-in-out',
+          'md:translate-x-0',
+          isOpen ? 'translate-x-0' : '-translate-x-full',
+        ].join(' ')}
+      >
+        {/* Brand */}
+        <div className="flex h-16 flex-shrink-0 items-center gap-3 border-b border-white/10 px-5">
+          <div className="flex h-9 w-9 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 via-violet-400 to-cyan-400 text-sm font-bold text-white shadow-[0_16px_24px_rgba(99,102,241,0.32)]">
+            H
+          </div>
+          <div>
+            <div className="leading-none text-sm font-semibold text-slate-100">Helpdesk AI</div>
+            <div className="mt-0.5 text-xs text-slate-500">Service</div>
+          </div>
+        </div>
 
-      {/* Footer */}
-      <div className="px-4 py-3 border-t border-gray-800 flex-shrink-0">
-        <div className="text-xs text-gray-700">Prototyp · praca inżynierska</div>
-      </div>
-    </aside>
+        {/* Navigation */}
+        <nav className="flex-1 py-4 px-3 overflow-y-auto">
+          <RoleBasedNavigation />
+        </nav>
+
+        {/* Footer */}
+        <div className="flex-shrink-0 border-t border-white/10 px-4 py-3">
+          <div className="text-[11px] uppercase tracking-[0.16em] text-slate-600">Prototyp · praca inżynierska</div>
+        </div>
+      </aside>
+    </>
   )
 }

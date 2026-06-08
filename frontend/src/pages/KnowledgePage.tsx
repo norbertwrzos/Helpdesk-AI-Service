@@ -13,7 +13,7 @@ import ErrorState from '../components/ErrorState'
 
 export default function KnowledgePage() {
   const { role } = useAuth()
-  const canEdit = role === 'admin' || role === 'agent'
+  const canEdit = role === 'agent'
 
   const [articles, setArticles] = useState<KnowledgeArticle[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -81,19 +81,19 @@ export default function KnowledgePage() {
   }
 
   return (
-    <div className="page space-y-6">
+    <div className="page">
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
+      <div className="page__header gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-gray-100">Baza wiedzy</h1>
-          <p className="text-sm text-gray-500 mt-0.5">
+          <h1 className="page__title">Baza wiedzy</h1>
+          <p className="page__subtitle">
             Artykuły i instrukcje wspierające obsługę najczęstszych problemów technicznych.
           </p>
         </div>
         {canEdit && (
           <button
             onClick={handleAddNew}
-            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors whitespace-nowrap"
+            className="inline-flex items-center gap-2 rounded-full bg-violet-500 px-4 py-2 text-sm font-semibold text-white shadow-[0_14px_28px_rgba(99,102,241,0.26)] transition-all hover:-translate-y-px hover:bg-violet-400"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-4 h-4">
               <line x1="12" y1="5" x2="12" y2="19" />
@@ -110,7 +110,7 @@ export default function KnowledgePage() {
       {/* Category filter */}
       {categories.length > 0 && (
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-gray-600 uppercase tracking-wider">Kategorie</p>
+          <p className="section-heading">Kategorie</p>
           <KnowledgeCategoryFilter
             categories={categories}
             selected={selectedCategory}

@@ -2,13 +2,11 @@ import type { TicketSource } from '../types/ticket'
 
 export const SOURCE_LABELS: Record<TicketSource, string> = {
   manual: 'Ręczne',
-  email: 'E-mail',
   csv: 'CSV',
 }
 
 const COLOR: Record<TicketSource, string> = {
   manual: 'bg-gray-700/60 text-gray-400 border-gray-600',
-  email: 'bg-cyan-500/15 text-cyan-300 border-cyan-500/30',
   csv: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
 }
 

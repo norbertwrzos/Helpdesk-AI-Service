@@ -5,7 +5,6 @@ import type { Ticket } from '../../types/ticket'
 import LoadingState from '../../components/LoadingState'
 import StatusBadge from '../../components/StatusBadge'
 import SourceBadge from '../../components/SourceBadge'
-import AIResponseHistory from '../../components/AIResponseHistory'
 import PortalLayout from '../../components/PortalLayout'
 import { useAuth } from '../../auth/AuthContext'
 
@@ -62,7 +61,7 @@ export default function PortalTicketDetailsPage() {
     return (
       <PortalLayout>
         <div className="page space-y-4">
-          <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-5 py-4 text-sm text-red-400">
+          <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-4 text-sm text-red-300">
             {error ?? 'Nie znaleziono zgłoszenia.'}
           </div>
           <button
@@ -102,7 +101,7 @@ export default function PortalTicketDetailsPage() {
           {/* Left: main content */}
           <div className="lg:col-span-2 space-y-5">
             {/* Description */}
-            <div className="bg-surface rounded-xl border border-white/8 p-5 space-y-3">
+            <div className="surface-card surface-card--padded space-y-3">
               <h3 className="text-sm font-semibold text-gray-300">Opis zgłoszenia</h3>
               <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
                 {ticket.description || <span className="text-gray-500 italic">Brak opisu.</span>}
@@ -111,7 +110,7 @@ export default function PortalTicketDetailsPage() {
 
             {/* Agent response */}
             {ticket.agent_response && (
-              <div className="bg-surface rounded-xl border border-green-500/20 p-5 space-y-3">
+              <div className="surface-card space-y-3 border-green-500/20 p-5">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-400" />
                   <h3 className="text-sm font-semibold text-green-300">Odpowiedź agenta</h3>
@@ -123,23 +122,17 @@ export default function PortalTicketDetailsPage() {
             )}
 
             {!ticket.agent_response && (
-              <div className="bg-surface rounded-xl border border-white/8 p-5">
+              <div className="surface-card surface-card--padded">
                 <h3 className="text-sm font-semibold text-gray-300 mb-2">Odpowiedź agenta</h3>
                 <p className="text-sm text-gray-500 italic">
                   Twoje zgłoszenie jest w trakcie realizacji. Agent odpowie wkrótce.
                 </p>
               </div>
             )}
-
-            {/* AI Response history (read-only) */}
-            <div className="bg-surface rounded-xl border border-white/8 p-5 space-y-3">
-              <h3 className="text-sm font-semibold text-gray-300">Propozycje AI</h3>
-              <AIResponseHistory ticketId={ticket.id} />
-            </div>
           </div>
 
           {/* Right: status panel */}
-          <div className="bg-surface rounded-xl border border-white/8 p-5 space-y-4 sticky top-6">
+          <div className="surface-card surface-card--padded sticky top-6 space-y-4">
             <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Szczegóły</h2>
 
             <div className="space-y-3">
