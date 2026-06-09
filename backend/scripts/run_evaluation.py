@@ -23,6 +23,7 @@ import sys
 # Dodaj katalog backendu do sys.path, aby działały importy app.*
 _SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 _BACKEND_DIR = os.path.dirname(_SCRIPT_DIR)
+ 
 sys.path.insert(0, _BACKEND_DIR)
 
 from app.evaluation.evaluator import EvaluationRunner
@@ -45,6 +46,17 @@ def main() -> None:
     args = parser.parse_args()
 
     input_path = os.path.abspath(args.input)
+        parser.add_argument(
+            "--mode",
+            choices=["mock", "rag", "openai_rag"],
+            default="rag",
+            help="Tryb ewaluacji: mock, rag lub openai_rag.",
+        )
+        parser.add_argument(
+            "--allow-openai",
+            action="store_true",
+            help="Jawnie zezwala na użycie OpenAI w trybie openai_rag.",
+        )
     output_dir = os.path.abspath(args.output)
 
     if not os.path.exists(input_path):

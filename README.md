@@ -21,6 +21,41 @@ W tym etapie frontend został rozszerzony o pełną prezentację wyników RAG i 
 
 Sekcja AI nadal wymaga ręcznego uruchomienia analizy i nie wykonuje automatycznych działań w tle. Najnowsza odpowiedź jest eksponowana na górze historii, starsze odpowiedzi pozostają dostępne poniżej, a feedback i metryki jakości działają bez zmian.
 
+## AI Etap 12 — Ewaluacja RAG i odpowiedzi mailowej
+
+Etap 12 rozszerza offline evaluation o metryki retrievalu źródeł wiedzy, heurystyczną ocenę formatu odpowiedzi mailowej oraz bezpieczne porównanie trybów `mock`, `rag` i `openai_rag`. Domyślnie uruchamiany jest wariant niewymagający kosztów API. Wywołanie OpenAI następuje wyłącznie wtedy, gdy środowisko ma ustawione `OPENAI_API_KEY` oraz przekazano jawną flagę `--allow-openai`.
+
+Uruchomienie ewaluacji:
+
+```bash
+cd backend
+source .venv/bin/activate
+python scripts/run_evaluation.py --mode mock
+python scripts/run_evaluation.py --mode rag
+python scripts/run_evaluation.py --mode openai_rag --allow-openai
+```
+
+Interpretacja metryk retrievalu:
+
+- `hit@k` sprawdza, czy w top-k wynikach RAG pojawił się przynajmniej jeden artykuł zawierający oczekiwane słowo kluczowe.
+- `MRR` premiuje sytuacje, w których pierwszy trafny artykuł znajduje się wysoko na liście wyników.
+- `coverage` pokazuje, jaki odsetek oczekiwanych słów kluczowych źródeł został pokryty przez zwrócone artykuły.
+
+Interpretacja jakości odpowiedzi mailowej:
+
+- `mail_format_score` mieści się w zakresie 0-5.
+- Metryka przyznaje punkty za powitanie `Dzień dobry`, zakończenie `Pozdrawiam`, podpis agenta, obecność kroków do wykonania oraz pokrycie oczekiwanych słów kluczowych w odpowiedzi.
+
+Raporty z ewaluacji są zapisywane w katalogu wyjściowym wskazanym przez skrypt ewaluacji jako:
+
+- `evaluation_summary.json`
+- `evaluation_results.csv`
+- `evaluation_report.md`
+
+Raport może zostać bezpośrednio wykorzystany w pracy inżynierskiej jako materiał do rozdziału testowego: pozwala porównać baseline `mock` z wariantem `rag`, a opcjonalnie także z `openai_rag`, opisać trafność klasyfikacji i priorytetyzacji oraz omówić wpływ źródeł RAG na końcową jakość odpowiedzi mailowej.
+
+Ostrzeżenie: tryb `openai_rag` może generować koszty API i jest aktywowany wyłącznie po jawnym przekazaniu `--allow-openai`. Samo ustawienie `OPENAI_API_KEY` nie uruchamia wywołań OpenAI w ewaluacji.
+
 ## AI Etap 10 — OpenAI Mail Response Generator
 
 W tym etapie system został rozszerzony o generowanie propozycji odpowiedzi mailowej dla użytkownika końcowego. Odpowiedź powstaje na podstawie treści zgłoszenia, wyniku rule-based classification, wyniku rule-based prioritization, kontekstu pobranego przez RAG oraz imienia przypisanego agenta. System nie wysyła wiadomości automatycznie; generuje wyłącznie szkic do weryfikacji przez człowieka.

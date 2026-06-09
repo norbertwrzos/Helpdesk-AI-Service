@@ -1,12 +1,3 @@
-"""
-report_writer.py — zapis wyników ewaluacji do plików JSON, CSV i Markdown.
-
-Generowane pliki:
-- evaluation_summary.json — metryki zbiorcze i macierze pomyłek
-- evaluation_results.csv  — wyniki dla każdego zgłoszenia
-- evaluation_report.md    — raport po polsku do pracy inżynierskiej
-"""
-
 from __future__ import annotations
 
 import csv
@@ -14,37 +5,23 @@ import json
 import os
 from datetime import datetime
 
-from app.evaluation.evaluator import EvaluationResult
+from app.evaluation.evaluator import CaseResult, EvaluationResult
 
 
 class ReportWriter:
-    """Zapisuje wyniki ewaluacji w formatach JSON, CSV i Markdown."""
-
     def write_all(self, result: EvaluationResult, output_dir: str) -> dict[str, str]:
-        """Zapisuje wszystkie raporty do katalogu output_dir.
-
-        Args:
-            result: wynik ewaluacji z EvaluationRunner.
-            output_dir: katalog docelowy.
-
-        Returns:
-            Słownik {typ: ścieżka} dla zapisanych plików.
-        """
         os.makedirs(output_dir, exist_ok=True)
-
-        paths = {
+        return {
             "json": self.write_json(result, output_dir),
             "csv": self.write_csv(result, output_dir),
             "markdown": self.write_markdown(result, output_dir),
         }
-        return paths
 
     def write_json(self, result: EvaluationResult, output_dir: str) -> str:
-        """Zapisuje podsumowanie ewaluacji w formacie JSON."""
         path = os.path.join(output_dir, "evaluation_summary.json")
-
         summary = {
             "generated_at": result.generated_at,
+            "mode": result.mode,
             "total_cases": result.total_cases,
             "classification_accuracy": result.classification_accuracy,
             "classification_macro_f1": result.classification_macro_f1,
@@ -53,22 +30,61 @@ class ReportWriter:
             "priority_macro_f1": result.priority_macro_f1,
             "priority_weighted_f1": result.priority_weighted_f1,
             "average_answer_quality_score": round(result.average_answer_quality_score, 4),
+            "average_mail_format_score": round(result.average_mail_format_score, 4),
             "average_response_length": round(result.average_response_length, 1),
+            "retrieval_hit_at_1": round(result.retrieval_hit_at_1, 4),
+            "retrieval_hit_at_3": round(result.retrieval_hit_at_3, 4),
+            "retrieval_hit_at_5": round(result.retrieval_hit_at_5, 4),
+            "retrieval_mrr": round(result.retrieval_mrr, 4),
+            "average_retrieval_score": round(result.average_retrieval_score, 4),
+            "average_retrieval_keyword_coverage": round(result.average_retrieval_keyword_coverage, 4),
+            "provider_mode": result.provider_mode,
+            "openai_used": result.openai_used,
+            "limitations": result.limitations,
             "classification_report": result.classification_report,
             "priority_report": result.priority_report,
             "classification_confusion_matrix": result.classification_confusion_matrix,
             "priority_confusion_matrix": result.priority_confusion_matrix,
+            "case_results": [
+                {
+                    "id": case.id,
+                    "title": case.title,
+                    "expected_category": case.expected_category,
+                    "predicted_category": case.predicted_category,
+                    "category_correct": case.category_correct,
+                    "expected_priority": case.expected_priority,
+                    "predicted_priority": case.predicted_priority,
+                    "priority_correct": case.priority_correct,
+                    "expected_article_keywords": case.expected_article_keywords,
+                    "expected_answer_format": case.expected_answer_format,
+                    "expected_rag_category": case.expected_rag_category,
+                    "retrieved_article_ids": case.retrieved_article_ids,
+                    "retrieved_article_titles": case.retrieved_article_titles,
+                    "retrieval_hit_at_1": round(case.retrieval_hit_at_1, 4),
+                    "retrieval_hit_at_3": round(case.retrieval_hit_at_3, 4),
+                    "retrieval_hit_at_5": round(case.retrieval_hit_at_5, 4),
+                    "retrieval_mrr": round(case.retrieval_mrr, 4),
+                    "retrieval_average_score": round(case.retrieval_average_score, 4),
+                    "retrieval_keyword_coverage": round(case.retrieval_keyword_coverage, 4),
+                    "generated_answer": case.generated_answer,
+                    "answer_quality_score": case.answer_quality_score,
+                    "answer_quality_notes": case.answer_quality_notes,
+                    "mail_format_score": case.mail_format_score,
+                    "mail_format_notes": case.mail_format_notes,
+                    "matched_keywords": case.matched_keywords,
+                    "missing_keywords": case.missing_keywords,
+                    "provider_name": case.provider_name,
+                    "model_name": case.model_name,
+                }
+                for case in result.case_results
+            ],
         }
-
-        with open(path, "w", encoding="utf-8") as f:
-            json.dump(summary, f, ensure_ascii=False, indent=2)
-
+        with open(path, "w", encoding="utf-8") as file_handle:
+            json.dump(summary, file_handle, ensure_ascii=False, indent=2)
         return path
 
     def write_csv(self, result: EvaluationResult, output_dir: str) -> str:
-        """Zapisuje wyniki dla każdego zgłoszenia w formacie CSV."""
         path = os.path.join(output_dir, "evaluation_results.csv")
-
         fieldnames = [
             "id",
             "title",
@@ -78,12 +94,25 @@ class ReportWriter:
             "expected_priority",
             "predicted_priority",
             "priority_correct",
+            "retrieved_article_ids",
+            "retrieved_article_titles",
+            "retrieval_hit_at_1",
+            "retrieval_hit_at_3",
+            "retrieval_hit_at_5",
+            "retrieval_mrr",
+            "retrieval_average_score",
+            "retrieval_keyword_coverage",
+            "generated_answer",
             "answer_quality_score",
+            "mail_format_score",
+            "provider_name",
+            "model_name",
             "answer_quality_notes",
+            "mail_format_notes",
         ]
 
-        with open(path, "w", encoding="utf-8", newline="") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
+        with open(path, "w", encoding="utf-8", newline="") as file_handle:
+            writer = csv.DictWriter(file_handle, fieldnames=fieldnames)
             writer.writeheader()
             for case in result.case_results:
                 writer.writerow(
@@ -96,219 +125,217 @@ class ReportWriter:
                         "expected_priority": case.expected_priority,
                         "predicted_priority": case.predicted_priority,
                         "priority_correct": case.priority_correct,
+                        "retrieved_article_ids": " | ".join(str(article_id) for article_id in case.retrieved_article_ids),
+                        "retrieved_article_titles": " | ".join(case.retrieved_article_titles),
+                        "retrieval_hit_at_1": f"{case.retrieval_hit_at_1:.4f}",
+                        "retrieval_hit_at_3": f"{case.retrieval_hit_at_3:.4f}",
+                        "retrieval_hit_at_5": f"{case.retrieval_hit_at_5:.4f}",
+                        "retrieval_mrr": f"{case.retrieval_mrr:.4f}",
+                        "retrieval_average_score": f"{case.retrieval_average_score:.4f}",
+                        "retrieval_keyword_coverage": f"{case.retrieval_keyword_coverage:.4f}",
+                        "generated_answer": case.generated_answer,
                         "answer_quality_score": case.answer_quality_score,
+                        "mail_format_score": case.mail_format_score,
+                        "provider_name": case.provider_name,
+                        "model_name": case.model_name,
                         "answer_quality_notes": case.answer_quality_notes,
+                        "mail_format_notes": case.mail_format_notes,
                     }
                 )
 
         return path
 
     def write_markdown(self, result: EvaluationResult, output_dir: str) -> str:
-        """Zapisuje raport ewaluacji w formacie Markdown (po polsku)."""
         path = os.path.join(output_dir, "evaluation_report.md")
 
-        correct_cat = sum(1 for c in result.case_results if c.category_correct)
-        correct_pri = sum(1 for c in result.case_results if c.priority_correct)
-        total = result.total_cases
-
-        # Najczęstsze błędy klasyfikacji
-        category_errors: list[tuple[str, str]] = [
-            (c.expected_category, c.predicted_category)
-            for c in result.case_results
-            if not c.category_correct
-        ]
-        priority_errors: list[tuple[str, str]] = [
-            (c.expected_priority, c.predicted_priority)
-            for c in result.case_results
-            if not c.priority_correct
-        ]
-
-        # Agreguj błędy
-        cat_error_counts: dict[str, int] = {}
-        for expected, predicted in category_errors:
-            key = f"{expected} → {predicted}"
-            cat_error_counts[key] = cat_error_counts.get(key, 0) + 1
-
-        pri_error_counts: dict[str, int] = {}
-        for expected, predicted in priority_errors:
-            key = f"{expected} → {predicted}"
-            pri_error_counts[key] = pri_error_counts.get(key, 0) + 1
-
-        top_cat_errors = sorted(cat_error_counts.items(), key=lambda x: -x[1])[:5]
-        top_pri_errors = sorted(pri_error_counts.items(), key=lambda x: -x[1])[:5]
-
-        # Raport klasyfikacji kategorii
-        cat_table = _format_metrics_table(result.classification_report)
-        pri_table = _format_metrics_table(result.priority_report)
-
-        # Data generowania
-        try:
-            gen_dt = datetime.fromisoformat(result.generated_at.replace("Z", "+00:00"))
-            gen_date = gen_dt.strftime("%d.%m.%Y %H:%M UTC")
-        except (ValueError, AttributeError):
-            gen_date = result.generated_at
+        generated_at = _format_generated_at(result.generated_at)
+        classification_table = _format_metrics_table(result.classification_report)
+        priority_table = _format_metrics_table(result.priority_report)
+        case_table = _format_case_table(result.case_results)
+        good_cases = _select_good_cases(result.case_results, result.provider_mode)
+        bad_cases = _select_bad_cases(result.case_results, result.provider_mode)
 
         lines = [
-            "# Raport ewaluacji modułu analizy zgłoszeń",
+            "# AI Etap 12 — Raport ewaluacji RAG i jakości odpowiedzi mailowej",
             "",
-            f"**Data wygenerowania:** {gen_date}  ",
-            f"**Liczba przypadków testowych:** {total}  ",
-            f"**Wersja pipeline'u:** mock/rule-based (etap 6)",
+            f"**Data wygenerowania:** {generated_at}",
+            f"**Liczba przypadków testowych:** {result.total_cases}",
+            f"**Tryb providera:** {result.provider_mode}",
+            f"**OpenAI użyte:** {'tak' if result.openai_used else 'nie'}",
             "",
-            "---",
+            "## 1. Cel ewaluacji RAG",
             "",
-            "## 1. Metodyka testów",
+            "Celem ewaluacji było rozszerzenie dotychczasowego offline evaluation o ocenę retrievalu artykułów bazy wiedzy, obecności oczekiwanych słów kluczowych w wygenerowanych odpowiedziach, zgodności odpowiedzi z formatem mailowym oraz wpływu trybu uruchomienia providera na końcowy wynik jakościowy.",
             "",
-            "Ewaluacja przeprowadzona na syntetycznym zbiorze zgłoszeń (`evaluation_tickets.csv`).",
-            "Każde zgłoszenie zawiera etykiety referencyjne (`expected_category`, `expected_priority`),",
-            "które zostały przypisane ręcznie przez autora systemu na podstawie treści zgłoszenia.",
+            "## 2. Opis danych testowych",
             "",
-            "Dla każdego zgłoszenia uruchomiono:",
-            "- `ClassificationService` — klasyfikacja kategorii na podstawie reguł słów kluczowych,",
-            "- `PriorityAnalysisService` — priorytetyzacja na podstawie reguł słów kluczowych,",
-            "- `MockAIGenerator` — generowanie odpowiedzi na podstawie szablonu.",
+            "Zbiór testowy zawiera syntetyczne zgłoszenia helpdesk z etykietami referencyjnymi dla kategorii, priorytetu oraz oczekiwanych słów kluczowych rozwiązania. W etapie 12 dane zostały rozszerzone o oczekiwane słowa kluczowe artykułów RAG, oczekiwany format odpowiedzi (`mail`) oraz opcjonalną kategorię retrievalu.",
             "",
-            "Usługi uruchomiono bezpośrednio (bez zapisu do bazy danych).",
-            "Kategorie i priorytety wczytano z plików seed (`data/seed/`).",
+            "## 3. Opis metryk klasyfikacji",
             "",
-            "---",
+            "Dla klasyfikacji kategorii raportowane są Accuracy, Macro F1 i Weighted F1. Pozwala to osobno ocenić ogólną trafność reguł oraz odporność metryk na nierówny rozkład klas.",
             "",
-            "## 2. Wyniki klasyfikacji kategorii",
+            "| Metryka | Wartość |",
+            "|---|---|",
+            f"| Accuracy | {result.classification_accuracy:.2%} |",
+            f"| Macro F1 | {result.classification_macro_f1:.4f} |",
+            f"| Weighted F1 | {result.classification_weighted_f1:.4f} |",
             "",
-            f"| Metryka | Wartość |",
-            f"|---------|---------|",
-            f"| Accuracy | **{result.classification_accuracy:.2%}** ({correct_cat}/{total}) |",
-            f"| Macro F1 | **{result.classification_macro_f1:.4f}** |",
-            f"| Weighted F1 | **{result.classification_weighted_f1:.4f}** |",
+            classification_table,
             "",
-            "### Szczegółowe metryki per kategoria",
+            "## 4. Opis metryk priorytetyzacji",
             "",
-            cat_table,
+            "Priorytetyzacja jest oceniana analogicznie jak klasyfikacja kategorii. Accuracy pokazuje udział poprawnych decyzji, a metryki F1 lepiej ujawniają przypadki mylenia zgłoszeń niskiego, wysokiego i krytycznego priorytetu.",
             "",
-            "---",
+            "| Metryka | Wartość |",
+            "|---|---|",
+            f"| Accuracy | {result.priority_accuracy:.2%} |",
+            f"| Macro F1 | {result.priority_macro_f1:.4f} |",
+            f"| Weighted F1 | {result.priority_weighted_f1:.4f} |",
             "",
-            "## 3. Wyniki priorytetyzacji",
+            priority_table,
             "",
-            f"| Metryka | Wartość |",
-            f"|---------|---------|",
-            f"| Accuracy | **{result.priority_accuracy:.2%}** ({correct_pri}/{total}) |",
-            f"| Macro F1 | **{result.priority_macro_f1:.4f}** |",
-            f"| Weighted F1 | **{result.priority_weighted_f1:.4f}** |",
+            "## 5. Opis metryk retrievalu",
             "",
-            "### Szczegółowe metryki per priorytet",
+            "Metryki retrievalu obejmują hit@k, MRR, średni score retrievalu oraz coverage oczekiwanych słów kluczowych źródeł. Hit@k sprawdza, czy w top-k artykułach pojawia się co najmniej jedno oczekiwane słowo kluczowe. MRR premiuje trafienie wysoko na liście wyników. Coverage mierzy, jaki odsetek oczekiwanych słów kluczowych wystąpił w zwróconych artykułach.",
             "",
-            pri_table,
+            "| Metryka | Wartość |",
+            "|---|---|",
+            f"| hit@1 | {result.retrieval_hit_at_1:.4f} |",
+            f"| hit@3 | {result.retrieval_hit_at_3:.4f} |",
+            f"| hit@5 | {result.retrieval_hit_at_5:.4f} |",
+            f"| MRR | {result.retrieval_mrr:.4f} |",
+            f"| Średni score retrievalu | {result.average_retrieval_score:.4f} |",
+            f"| Średnie coverage słów kluczowych | {result.average_retrieval_keyword_coverage:.4f} |",
             "",
-            "---",
+            "## 6. Opis metryk odpowiedzi mailowej",
             "",
-            "## 4. Ocena jakości generowanych odpowiedzi",
+            "Jakość odpowiedzi mailowej jest oceniana przez heurystyki wykrywające powitanie, zakończenie, podpis agenta, obecność kroków do wykonania oraz oczekiwanych słów kluczowych w treści odpowiedzi. `mail_format_score` mieści się w przedziale 0-5.",
             "",
-            f"| Metryka | Wartość |",
-            f"|---------|---------|",
-            f"| Średnia ocena jakości (0–5) | **{result.average_answer_quality_score:.2f}** |",
-            f"| Średnia długość odpowiedzi (znaki) | **{result.average_response_length:.0f}** |",
+            "| Metryka | Wartość |",
+            "|---|---|",
+            f"| Średnia ocena jakości odpowiedzi | {result.average_answer_quality_score:.4f} |",
+            f"| Średni mail_format_score | {result.average_mail_format_score:.4f} |",
+            f"| Średnia długość odpowiedzi | {result.average_response_length:.1f} |",
             "",
-            "Ocena jakości odpowiedzi opiera się na 5 kryteriach heurystycznych:",
-            "1. Odpowiedź nie jest pusta (+1 pkt),",
-            "2. Zawiera co najmniej jedno oczekiwane słowo kluczowe (+1 pkt),",
-            "3. Zawiera co najmniej połowę oczekiwanych słów kluczowych (+1 pkt),",
-            "4. Zawiera sugestię diagnostyczną lub kroki rozwiązania (+1 pkt),",
-            "5. Zawiera informację o weryfikacji przez IT Support (+1 pkt).",
+            "## 7. Wyniki tabelaryczne",
             "",
-            "---",
+            case_table,
             "",
-            "## 5. Najczęstsze błędy klasyfikacji",
+            "## 8. Przykładowe poprawne przypadki",
             "",
         ]
 
-        if top_cat_errors:
-            lines.append("### Błędy kategorii (oczekiwana → przewidziana)")
-            lines.append("")
-            lines.append("| Błąd klasyfikacji | Liczba |")
-            lines.append("|-------------------|--------|")
-            for err, count in top_cat_errors:
-                lines.append(f"| {err} | {count} |")
+        if good_cases:
+            lines.extend(_format_examples(good_cases))
         else:
-            lines.append("Brak błędów klasyfikacji kategorii.")
+            lines.append("Brak przypadków spełniających jednocześnie kryteria poprawnej klasyfikacji, priorytetyzacji oraz jakości odpowiedzi dla aktualnego trybu.")
 
-        lines += [
+        lines.extend([
             "",
-            "### Błędy priorytetu (oczekiwany → przewidziany)",
+            "## 9. Przykładowe błędne przypadki",
             "",
-        ]
+        ])
 
-        if top_pri_errors:
-            lines.append("| Błąd priorytetu | Liczba |")
-            lines.append("|-----------------|--------|")
-            for err, count in top_pri_errors:
-                lines.append(f"| {err} | {count} |")
+        if bad_cases:
+            lines.extend(_format_examples(bad_cases))
         else:
-            lines.append("Brak błędów priorytetyzacji.")
+            lines.append("Brak wyraźnie błędnych przypadków według zdefiniowanych heurystyk ewaluacyjnych.")
 
-        lines += [
+        lines.extend([
             "",
-            "---",
+            "## 10. Ograniczenia",
             "",
-            "## 6. Ograniczenia ewaluacji",
-            "",
-            "1. **Dane syntetyczne** — zbiór testowy został wygenerowany ręcznie przez autora.",
-            "   Może nie odzwierciedlać pełnej różnorodności rzeczywistych zgłoszeń.",
-            "2. **Pipeline rule-based** — klasyfikacja opiera się na słowach kluczowych,",
-            "   a nie na prawdziwym modelu ML/NLP. Wyniki nie są reprezentatywne",
-            "   dla metod uczenia maszynowego.",
-            "3. **Ocena odpowiedzi heurystyczna** — jakość odpowiedzi oceniana jest",
-            "   na podstawie prostych reguł, a nie przez eksperta dziedzinowego.",
-            "4. **Brak cross-walidacji** — ewaluacja przeprowadzona jednorazowo",
-            "   na całym zbiorze testowym.",
-            "5. **Brak danych produkcyjnych** — wyniki odnoszą się wyłącznie",
-            "   do prototypowego etapu systemu.",
-            "",
-            "---",
-            "",
-            "## 7. Wnioski do pracy inżynierskiej",
-            "",
-            "Przeprowadzona ewaluacja prototypowego pipeline'u rule-based pozwala na:",
-            "",
-            f"- Określenie **bazowych metryk** przed wdrożeniem właściwych modeli AI/NLP.",
-            f"  Accuracy klasyfikacji kategorii: **{result.classification_accuracy:.2%}**,",
-            f"  accuracy priorytetyzacji: **{result.priority_accuracy:.2%}**.",
-            "- Identyfikację **słabych punktów** systemu rule-based —",
-            "  najczęstsze błędy wynikają z nakładania się słów kluczowych",
-            "  między kategoriami (np. Konto i dostęp vs Aplikacje biznesowe).",
-            "- Zdefiniowanie **punktu odniesienia** (baseline) dla przyszłego porównania",
-            "  z modelami opartymi na embeddingach lub fine-tunowanych modelach językowych.",
-            "- Weryfikację, że **MockAIGenerator** generuje odpowiedzi zawierające",
-            "  kroki diagnostyczne i odwołanie do IT Support, co jest poprawną",
-            "  charakterystyką odpowiedzi helpdesk.",
-            "",
-            "Wyniki ewaluacji zostaną przedstawione w rozdziale",
-            "\"Testowanie systemu\" pracy inżynierskiej jako porównanie",
-            "podejścia rule-based z podejściem AI/NLP (etap 7+).",
-            "",
-            "---",
-            "",
-            "*Raport wygenerowany automatycznie przez skrypt `backend/scripts/run_evaluation.py`.*",
-            "",
-        ]
+        ])
+        for index, limitation in enumerate(result.limitations, start=1):
+            lines.append(f"{index}. {limitation}")
 
-        with open(path, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines))
+        lines.extend([
+            "",
+            "## 11. Wnioski do pracy inżynierskiej",
+            "",
+            f"Uruchomienie ewaluacji w trybie `{result.provider_mode}` pozwala wyznaczyć punkt odniesienia dla wpływu retrievalu RAG oraz providera generacji na jakość odpowiedzi helpdesk. W aktualnym przebiegu średni hit@3 wyniósł {result.retrieval_hit_at_3:.4f}, średni MRR {result.retrieval_mrr:.4f}, a średni `mail_format_score` {result.average_mail_format_score:.4f}.",
+            "Otrzymane wyniki mogą zostać wykorzystane w rozdziale testowym pracy do porównania baseline'u mock z wariantem RAG oraz z wariantem `openai_rag`, jeśli został uruchomiony z jawną zgodą na użycie API. Raport umożliwia osobne omówienie trafności klasyfikacji, priorytetyzacji, retrievalu oraz jakości odpowiedzi końcowej.",
+            "",
+            "Raport został wygenerowany automatycznie przez `backend/scripts/run_evaluation.py`.",
+        ])
+
+        with open(path, "w", encoding="utf-8") as file_handle:
+            file_handle.write("\n".join(lines))
 
         return path
 
 
+def _format_generated_at(value: str) -> str:
+    try:
+        dt_value = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return dt_value.strftime("%d.%m.%Y %H:%M UTC")
+    except (ValueError, AttributeError):
+        return value
+
+
 def _format_metrics_table(report: list[dict]) -> str:
-    """Formatuje raport klasyfikacji jako tabelę Markdown."""
     lines = [
         "| Etykieta | Precision | Recall | F1-score | Support |",
-        "|----------|-----------|--------|----------|---------|",
+        "|---|---|---|---|---|",
     ]
     for row in report:
         lines.append(
-            f"| {row['label']} "
-            f"| {row['precision']:.4f} "
-            f"| {row['recall']:.4f} "
-            f"| {row['f1_score']:.4f} "
-            f"| {row['support']} |"
+            f"| {row['label']} | {row['precision']:.4f} | {row['recall']:.4f} | {row['f1_score']:.4f} | {row['support']} |"
         )
     return "\n".join(lines)
+
+
+def _format_case_table(case_results: list[CaseResult]) -> str:
+    lines = [
+        "| ID | Kategoria | Priorytet | hit@3 | coverage | mail_format_score | Provider |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    for case in case_results:
+        lines.append(
+            f"| {case.id} | {'tak' if case.category_correct else 'nie'} | {'tak' if case.priority_correct else 'nie'} | {case.retrieval_hit_at_3:.2f} | {case.retrieval_keyword_coverage:.2f} | {case.mail_format_score} | {case.provider_name}/{case.model_name} |"
+        )
+    return "\n".join(lines)
+
+
+def _score_total(case: CaseResult) -> float:
+    return case.answer_quality_score + case.mail_format_score + case.retrieval_hit_at_3
+
+
+def _select_good_cases(case_results: list[CaseResult], provider_mode: str) -> list[CaseResult]:
+    candidates = []
+    for case in case_results:
+        retrieval_ok = True if provider_mode == "mock" else case.retrieval_hit_at_3 >= 1.0
+        if case.category_correct and case.priority_correct and retrieval_ok and case.mail_format_score >= 4:
+            candidates.append(case)
+    return sorted(candidates, key=_score_total, reverse=True)[:5]
+
+
+def _select_bad_cases(case_results: list[CaseResult], provider_mode: str) -> list[CaseResult]:
+    candidates = [
+        case
+        for case in case_results
+        if not case.category_correct
+        or not case.priority_correct
+        or case.mail_format_score <= 3
+        or (provider_mode != "mock" and case.retrieval_hit_at_3 == 0.0)
+    ]
+    return sorted(candidates, key=_score_total)[:5]
+
+
+def _format_examples(cases: list[CaseResult]) -> list[str]:
+    lines: list[str] = []
+    for case in cases:
+        lines.extend(
+            [
+                f"### {case.id} — {case.title}",
+                "",
+                f"- Klasyfikacja: oczekiwano `{case.expected_category}`, otrzymano `{case.predicted_category}`.",
+                f"- Priorytet: oczekiwano `{case.expected_priority}`, otrzymano `{case.predicted_priority}`.",
+                f"- Retrieval: hit@3={case.retrieval_hit_at_3:.2f}, coverage={case.retrieval_keyword_coverage:.2f}, źródła={', '.join(case.retrieved_article_titles) or 'brak'}.",
+                f"- Odpowiedź: answer_quality_score={case.answer_quality_score}, mail_format_score={case.mail_format_score}, provider={case.provider_name}/{case.model_name}.",
+                f"- Uwagi: {(case.answer_quality_notes + ' ' + case.mail_format_notes).strip()}",
+                "",
+            ]
+        )
+    return lines
