@@ -39,7 +39,15 @@ class Settings(BaseSettings):
 
     # AI
     AI_PROVIDER: str = "mock"
+    AI_GENERATION_PROVIDER: str = "mock"
     OPENAI_API_KEY: str = ""
+    OPENAI_CHAT_MODEL: str = "gpt-4o-mini"
+    OPENAI_RESPONSE_TEMPERATURE: float = 0.2
+    OPENAI_MAX_OUTPUT_TOKENS: int = 1200
+    OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
+    RAG_TOP_K: int = 5
+    RAG_MIN_SCORE: float = 0.0
+    RAG_EMBEDDING_PROVIDER: str = "openai"
 
 
 settings = Settings()

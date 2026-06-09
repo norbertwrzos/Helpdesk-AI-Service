@@ -15,13 +15,30 @@ Prototyp systemu helpdesk/service desk z modułem analizy AI dla zgłoszeń tech
 
 Repozytorium nie zawiera aktywnej integracji/importu poczty. Pole `requester_email` pozostaje zwykłym polem kontaktowym zgłaszającego używanym w formularzach i portalu użytkownika.
 
+## AI Etap 10 — OpenAI Mail Response Generator
+
+W tym etapie system został rozszerzony o generowanie propozycji odpowiedzi mailowej dla użytkownika końcowego. Odpowiedź powstaje na podstawie treści zgłoszenia, wyniku rule-based classification, wyniku rule-based prioritization, kontekstu pobranego przez RAG oraz imienia przypisanego agenta. System nie wysyła wiadomości automatycznie; generuje wyłącznie szkic do weryfikacji przez człowieka.
+
+Warstwa generowania działa w dwóch trybach:
+
+- `mock` — bezpieczny provider lokalny, który nie wymaga klucza API,
+- `openai` — provider korzystający z OpenAI Responses API i Structured Outputs.
+
+Jeżeli `AI_GENERATION_PROVIDER=openai`, ale `OPENAI_API_KEY` nie jest ustawiony albo wywołanie OpenAI zakończy się błędem, backend bezpiecznie wraca do providera `mock`.
+
+## AI Etap 9 — RAG Foundation
+
+W tym etapie projekt otrzymał fundament mechanizmu RAG dla bazy wiedzy. System potrafi indeksować artykuły jako embeddingi, zapisywać je w PostgreSQL z użyciem `pgvector`, wykonywać techniczne wyszukiwanie top-k podobnych artykułów oraz wracać do istniejącego mechanizmu bag-of-words, gdy provider embeddingów lub pgvector są niedostępne.
+
+Zakres etapu nie obejmuje jeszcze generowania odpowiedzi przez OpenAI. Generator odpowiedzi końcowej pozostaje mockowy, a warstwa RAG odpowiada wyłącznie za retrieval i przygotowanie kontekstu.
+
 ## Stack
 
 | Warstwa | Technologia |
 |---|---|
-| Backend | Python 3.12, FastAPI, SQLAlchemy |
+| Backend | Python 3.12, FastAPI, SQLAlchemy, OpenAI SDK |
 | Frontend | React 18, TypeScript, Vite, Tailwind CSS |
-| Baza danych | PostgreSQL 16 |
+| Baza danych | PostgreSQL 16 + pgvector |
 | Migracje | Alembic |
 | Kontenery | Docker Compose |
 | Testy | pytest, TypeScript build |
@@ -40,6 +57,7 @@ Logowanie jest mockowe i zapisuje wybrane konto w `localStorage`.
 ### 1. Konfiguracja środowiska
 
 ```bash
+cd backend
 cp .env.example .env
 ```
 
@@ -49,6 +67,25 @@ Kluczowe zmienne:
 |---|---|
 | `DATABASE_URL` | Połączenie do lokalnego PostgreSQL |
 | `AI_PROVIDER` | Dostawca AI, domyślnie `mock` |
+| `AI_GENERATION_PROVIDER` | Provider generowania odpowiedzi mailowej: `mock` albo `openai` |
+| `RAG_EMBEDDING_PROVIDER` | Dostawca embeddingów, domyślnie `openai` |
+| `OPENAI_API_KEY` | Klucz OpenAI dla embeddingów; gdy pusty, działa fallback |
+| `OPENAI_CHAT_MODEL` | Model generujący odpowiedź mailową, domyślnie `gpt-4o-mini` |
+| `OPENAI_RESPONSE_TEMPERATURE` | Temperatura generowania odpowiedzi |
+| `OPENAI_MAX_OUTPUT_TOKENS` | Limit tokenów odpowiedzi generatywnej |
+| `OPENAI_EMBEDDING_MODEL` | Model embeddingów, domyślnie `text-embedding-3-small` |
+| `RAG_TOP_K` | Liczba zwracanych artykułów w retrievalu |
+| `RAG_MIN_SCORE` | Minimalny wynik podobieństwa dla wyników RAG |
+
+Przykładowa konfiguracja dla trybu OpenAI:
+
+```env
+AI_GENERATION_PROVIDER=openai
+OPENAI_API_KEY=twoj_klucz
+OPENAI_CHAT_MODEL=gpt-4o-mini
+OPENAI_RESPONSE_TEMPERATURE=0.2
+OPENAI_MAX_OUTPUT_TOKENS=1200
+```
 
 ### 2. Docker Compose
 
@@ -58,7 +95,15 @@ docker compose logs -f postgres
 docker compose down
 ```
 
-Compose uruchamia wyłącznie PostgreSQL wymagany przez aplikację.
+Compose uruchamia PostgreSQL z wbudowanym rozszerzeniem `pgvector` wymaganym przez etap RAG.
+
+Po zmianie obrazu na `pgvector/pgvector:pg16` lokalny wolumen developerski zwykle można zachować, ale w razie problemów z poprzednią instancją najbezpieczniejszym wariantem jest reset lokalnego wolumenu i ponowne wykonanie migracji.
+
+Weryfikacja rozszerzenia:
+
+```bash
+docker compose exec postgres psql -U helpdesk -d helpdesk_ai -c "SELECT extname, extversion FROM pg_extension WHERE extname = 'vector';"
+```
 
 ### 3. Backend
 
@@ -69,6 +114,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 alembic upgrade head
 python scripts/seed_data.py
+python scripts/reindex_knowledge_embeddings.py
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -99,6 +145,7 @@ cd backend
 source .venv/bin/activate
 alembic upgrade head
 python scripts/seed_data.py
+python scripts/reindex_knowledge_embeddings.py
 ```
 
 Jeżeli lokalna baza ma już aktualne tabele, ale `alembic upgrade head` kończy się błędem `Can't locate revision identified by '007_remove_email_features'`, zsynchronizuj znacznik rewizji bez kasowania danych:
@@ -110,6 +157,8 @@ alembic stamp 001_initial --purge
 alembic upgrade head
 ```
 
+Nowa migracja `002_knowledge_article_embeddings` tworzy rozszerzenie `vector` i tabelę `knowledge_article_embeddings`.
+
 ## Główne funkcje
 
 - tworzenie, przeglądanie i aktualizacja zgłoszeń,
@@ -118,7 +167,73 @@ alembic upgrade head
 - edycja kategorii i priorytetów w Ustawieniach,
 - feedback do odpowiedzi AI,
 - agentowa baza wiedzy,
+- embeddingi artykułów bazy wiedzy i techniczny retrieval RAG,
 - portal użytkownika końcowego ograniczony do jego własnych zgłoszeń.
+
+## Jak działa RAG w tym projekcie
+
+1. Artykuły bazy wiedzy są zamieniane na tekst indeksowy z tytułu, treści, tagów i kategorii.
+2. Serwis reindeksacji liczy hash treści i pomija artykuły, które się nie zmieniły.
+3. Embeddingi są zapisywane w PostgreSQL w tabeli `knowledge_article_embeddings` z użyciem `pgvector`.
+4. Endpoint `POST /knowledge/search` pozwala technicznie przetestować retrieval po embeddingach lub fallback bag-of-words.
+5. Endpoint `POST /tickets/{ticket_id}/retrieve-context` zwraca kontekst dla konkretnego zgłoszenia bez generowania odpowiedzi OpenAI.
+6. `AnalysisPipeline` używa RAG tylko wtedy, gdy embeddingi są dostępne; w przeciwnym razie wraca do `SimilarityService`.
+
+## Jak działa generator odpowiedzi mailowej
+
+1. `AnalysisPipeline` uruchamia klasyfikację i priorytetyzację w trybie rule-based.
+2. `RAGRetriever` pobiera artykuły bazy wiedzy powiązane ze zgłoszeniem.
+3. Provider AI buduje prompt na podstawie zgłoszenia, kategorii, priorytetu, artykułów RAG i imienia agenta.
+4. Provider `openai` generuje ustrukturyzowaną odpowiedź mailową przez OpenAI Responses API.
+5. Provider `mock` przygotowuje lokalny szkic maila, gdy OpenAI jest wyłączone lub niedostępne.
+6. `AIResponse.response_text` zapisuje treść maila, a `sources_used` przechowuje JSON z metadanymi źródeł RAG użytych przez model.
+
+Format odpowiedzi mailowej:
+
+```text
+Dzień dobry,
+
+[krótkie odniesienie do problemu użytkownika]
+
+[proponowane kroki rozwiązania]
+
+[co zrobić, jeśli problem nadal występuje]
+
+Pozdrawiam,
+[imię agenta]
+```
+
+Analizę ticketu można uruchomić przez Swagger UI lub endpoint `POST /tickets/{ticket_id}/analyze`.
+
+## Zasady bezpieczeństwa dla AI Etapu 10
+
+- klucz `OPENAI_API_KEY` jest używany wyłącznie po stronie backendu,
+- system nie wysyła maili i nie wykonuje automatycznych działań administracyjnych,
+- każda odpowiedź AI wymaga weryfikacji przez agenta,
+- do modelu nie jest przekazywany `requester_email`,
+- przy braku wystarczających źródeł model powinien wskazać potrzebę dalszej analizy przez pracownika IT.
+
+## Reindeksacja bazy wiedzy
+
+```bash
+cd backend
+source .venv/bin/activate
+python scripts/reindex_knowledge_embeddings.py
+python scripts/reindex_knowledge_embeddings.py --force
+python scripts/reindex_knowledge_embeddings.py --limit 10
+```
+
+Reindeksację należy uruchomić po seedowaniu danych oraz po każdej istotnej zmianie treści artykułów.
+
+## Test retrievalu
+
+Można użyć Swagger UI lub bezpośrednio endpointów technicznych:
+
+- `POST /knowledge/search`
+- `POST /tickets/{ticket_id}/retrieve-context`
+- `POST /knowledge/reindex`
+
+Jeżeli `OPENAI_API_KEY` nie jest ustawiony albo środowisko nie udostępnia `pgvector`, aplikacja zachowuje działanie dzięki fallbackowi do obecnego mechanizmu bag-of-words.
 
 ## Testy i weryfikacja
 
@@ -169,5 +284,10 @@ Raporty są zapisywane w `reports/evaluation/`.
 
 - brak prawdziwego auth/JWT i autoryzacji backendowej,
 - brak backendowego filtrowania i paginacji listy zgłoszeń,
-- analiza AI jest rule-based i nie używa zewnętrznych modeli,
+- klasyfikacja i priorytetyzacja pozostają rule-based,
+- jakość odpowiedzi zależy od jakości treści zgłoszenia i bazy wiedzy,
+- odpowiedzi AI mają charakter propozycji i wymagają weryfikacji człowieka,
+- system nie wysyła wiadomości e-mail automatycznie,
+- retrieval RAG wymaga wcześniejszej reindeksacji po zmianie artykułów,
+- standardowe testy SQLite nie uruchamiają realnego pgvector, tylko ścieżki fallbackowe i logikę serwisów,
 - brak testów end-to-end frontendu.

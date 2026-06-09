@@ -1,11 +1,14 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
+from app.schemas.rag import RagRetrievedArticle
+from app.services.rag_retriever import RagRetriever
 from app.schemas.ticket import TicketCreate, TicketResponse, TicketUpdate
 from app.services import ticket_service
 
 router = APIRouter()
+_rag_retriever = RagRetriever()
 
 
 @router.get("/tickets", response_model=list[TicketResponse])
@@ -30,3 +33,16 @@ def update_ticket(
     ticket_id: int, data: TicketUpdate, db: Session = Depends(get_db)
 ) -> TicketResponse:
     return ticket_service.update_ticket(db, ticket_id, data)
+
+
+@router.post(
+    "/tickets/{ticket_id}/retrieve-context",
+    response_model=list[RagRetrievedArticle],
+)
+def retrieve_ticket_context(
+    ticket_id: int,
+    top_k: int | None = Query(default=None, ge=1, le=20),
+    db: Session = Depends(get_db),
+) -> list[RagRetrievedArticle]:
+    ticket = ticket_service.get_ticket(db, ticket_id)
+    return _rag_retriever.retrieve_for_ticket(db, ticket, top_k=top_k)

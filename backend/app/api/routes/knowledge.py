@@ -7,9 +7,19 @@ from app.schemas.knowledge_article import (
     KnowledgeArticleResponse,
     KnowledgeArticleUpdate,
 )
+from app.schemas.rag import (
+    KnowledgeReindexRequest,
+    KnowledgeReindexResponse,
+    KnowledgeSearchRequest,
+    KnowledgeSearchResult,
+)
+from app.services.knowledge_embedding_service import KnowledgeEmbeddingService
+from app.services.rag_retriever import RagRetriever
 from app.services import knowledge_service
 
 router = APIRouter()
+_embedding_service = KnowledgeEmbeddingService()
+_rag_retriever = RagRetriever()
 
 
 @router.get("/knowledge", response_model=list[KnowledgeArticleResponse])
@@ -43,3 +53,20 @@ def delete_article(
     article_id: int, db: Session = Depends(get_db)
 ) -> None:
     knowledge_service.delete_article(db, article_id)
+
+
+@router.post("/knowledge/reindex", response_model=KnowledgeReindexResponse)
+def reindex_knowledge(
+    data: KnowledgeReindexRequest,
+    db: Session = Depends(get_db),
+) -> KnowledgeReindexResponse:
+    summary = _embedding_service.reindex_all(db, force=data.force)
+    return KnowledgeReindexResponse.model_validate(summary)
+
+
+@router.post("/knowledge/search", response_model=list[KnowledgeSearchResult])
+def search_knowledge(
+    data: KnowledgeSearchRequest,
+    db: Session = Depends(get_db),
+) -> list[KnowledgeSearchResult]:
+    return _rag_retriever.retrieve_for_query(db, data.query, top_k=data.top_k)

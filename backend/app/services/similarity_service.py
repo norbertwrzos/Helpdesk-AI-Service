@@ -41,6 +41,7 @@ class SimilarityService:
         description: str,
         articles: list[KnowledgeArticle],
         classification_category_id: int | None = None,
+        top_k: int | None = None,
     ) -> list[SimilarArticle]:
         if not articles:
             return []
@@ -67,7 +68,7 @@ class SimilarityService:
             scored.append((score, article))
 
         scored.sort(key=lambda x: x[0], reverse=True)
-        top = scored[:TOP_K]
+        top = scored[: (top_k or TOP_K)]
 
         return [
             SimilarArticle(

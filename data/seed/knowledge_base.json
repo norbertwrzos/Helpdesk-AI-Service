@@ -1,50 +1,261 @@
 [
   {
     "title": "Problemy z połączeniem VPN",
-    "content": "Jeśli klient VPN nie może się połączyć, wykonaj następujące kroki:\n1. Sprawdź połączenie internetowe — bez dostępu do internetu VPN nie zadziała.\n2. Zrestartuj klienta VPN i spróbuj ponownie.\n3. Zweryfikuj poprawność nazwy użytkownika i hasła.\n4. Sprawdź, czy certyfikaty VPN są ważne.\n5. Spróbuj połączyć się z innej sieci (np. LTE), aby wykluczyć blokadę na poziomie sieci lokalnej.\n6. Jeśli problem nadal występuje, skontaktuj się z administratorem sieci podając dokładny komunikat błędu.",
+    "content": "Jeśli klient VPN nie może się połączyć, wykonaj następujące kroki:\n1. Sprawdź połączenie internetowe — bez dostępu do internetu VPN nie zadziała.\n2. Zrestartuj klienta VPN i spróbuj ponownie.\n3. Zweryfikuj poprawność nazwy użytkownika i hasła.\n4. Sprawdź, czy certyfikaty VPN są ważne.\n5. Spróbuj połączyć się z innej sieci, np. LTE, aby wykluczyć blokadę na poziomie sieci lokalnej.\n6. Sprawdź, czy data i godzina systemowa są poprawne — błędny czas może powodować odrzucenie certyfikatu.\n7. Jeśli problem nadal występuje, skontaktuj się z administratorem sieci, podając dokładny komunikat błędu, nazwę klienta VPN i godzinę próby połączenia.",
     "category_name": "Sieć i VPN",
-    "tags": "vpn,sieć,połączenie,klient vpn"
+    "tags": "vpn,sieć,połączenie,klient vpn,certyfikat",
+    "source": "ai"
   },
   {
     "title": "Jak zresetować hasło użytkownika w Active Directory",
-    "content": "Procedura resetu hasła użytkownika:\n1. Zaloguj się do narzędzia ADUC (Active Directory Users and Computers) z konta administratora.\n2. Odszukaj konto użytkownika.\n3. Kliknij prawym przyciskiem myszy → Reset Password.\n4. Wprowadź nowe hasło tymczasowe zgodne z polityką bezpieczeństwa (min. 8 znaków, duże/małe litery, cyfra, znak specjalny).\n5. Zaznacz opcję 'User must change password at next logon'.\n6. Poinformuj użytkownika o tymczasowym haśle bezpiecznym kanałem (np. telefon).\n\nUwaga: Nie wysyłaj haseł e-mailem.",
+    "content": "Procedura resetu hasła użytkownika:\n1. Zaloguj się do narzędzia ADUC (Active Directory Users and Computers) z konta administratora.\n2. Odszukaj konto użytkownika.\n3. Kliknij prawym przyciskiem myszy konto użytkownika i wybierz Reset Password.\n4. Wprowadź nowe hasło tymczasowe zgodne z polityką bezpieczeństwa organizacji.\n5. Zaznacz opcję User must change password at next logon.\n6. Poinformuj użytkownika o haśle tymczasowym bezpiecznym kanałem, np. telefonicznie po weryfikacji tożsamości.\n\nUwaga: Nie wysyłaj haseł e-mailem ani komunikatorem bez szyfrowania. Odnotuj wykonanie resetu w zgłoszeniu.",
     "category_name": "Konto i dostęp",
-    "tags": "hasło,reset,active directory,konto,dostęp"
+    "tags": "hasło,reset,active directory,konto,dostęp,aduc",
+    "source": "ai"
   },
   {
     "title": "Konto użytkownika zablokowane — procedura odblokowania",
-    "content": "Konto w Active Directory może zostać zablokowane po kilkukrotnym błędnym wpisaniu hasła.\n\nKroki odblokowania:\n1. Otwórz ADUC i znajdź konto użytkownika.\n2. Sprawdź zakładkę 'Account' — jeśli konto jest zablokowane, zaznaczone będzie pole 'Account is locked out'.\n3. Odznacz to pole i kliknij OK.\n4. Opcjonalnie zresetuj hasło, jeśli użytkownik go nie pamięta.\n5. Poinformuj użytkownika, że konto jest odblokowane.\n\nJeśli konto blokuje się cyklicznie, sprawdź czy nie istnieje zapamiętane błędne hasło (np. w zadaniach zaplanowanych, usługach, aplikacjach mobilnych).",
+    "content": "Konto w Active Directory może zostać zablokowane po kilkukrotnym błędnym wpisaniu hasła.\n\nKroki odblokowania:\n1. Otwórz ADUC i znajdź konto użytkownika.\n2. Sprawdź zakładkę Account — jeśli konto jest zablokowane, zaznaczone będzie pole Account is locked out.\n3. Odznacz to pole i kliknij OK.\n4. Opcjonalnie zresetuj hasło, jeśli użytkownik go nie pamięta.\n5. Poinformuj użytkownika, że konto jest odblokowane.\n\nJeśli konto blokuje się cyklicznie, sprawdź zapamiętane błędne hasło w urządzeniach mobilnych, mapowanych dyskach, usługach, zadaniach zaplanowanych, sesjach RDP oraz aplikacjach pocztowych.",
     "category_name": "Konto i dostęp",
-    "tags": "konto,zablokowane,active directory,odblokowanie"
+    "tags": "konto,zablokowane,active directory,odblokowanie,lockout",
+    "source": "ai"
   },
   {
     "title": "Brak dostępu do systemu CRM — diagnostyka",
-    "content": "Gdy użytkownik zgłasza brak dostępu do systemu CRM, sprawdź:\n1. Czy serwer CRM działa (sprawdź status usługi na serwerze).\n2. Czy użytkownik ma aktywne konto w systemie CRM (nie mylić z kontem domenowym).\n3. Czy przypisano właściwe role i uprawnienia w CRM.\n4. Czy przeglądarka jest aktualna (niektóre wersje CRM wymagają konkretnych przeglądarek).\n5. Wyczyść cache przeglądarki i spróbuj ponownie.\n6. Sprawdź logi aplikacji CRM pod kątem komunikatów o błędach autoryzacji.",
+    "content": "Gdy użytkownik zgłasza brak dostępu do systemu CRM, sprawdź:\n1. Czy serwer CRM działa oraz czy nie ma zaplanowanej przerwy technicznej.\n2. Czy użytkownik ma aktywne konto w systemie CRM — nie mylić z kontem domenowym.\n3. Czy przypisano właściwe role i uprawnienia w CRM.\n4. Czy przeglądarka jest aktualna i zgodna z wymaganiami aplikacji.\n5. Wyczyść cache przeglądarki i spróbuj ponownie w trybie prywatnym/incognito.\n6. Sprawdź, czy problem występuje u jednego użytkownika, czy u wielu osób.\n7. Sprawdź logi aplikacji CRM pod kątem komunikatów o błędach autoryzacji.",
     "category_name": "Aplikacje biznesowe",
-    "tags": "crm,dostęp,aplikacja,uprawnienia"
+    "tags": "crm,dostęp,aplikacja,uprawnienia,role,cache",
+    "source": "ai"
   },
   {
     "title": "Podejrzana wiadomość e-mail — procedura postępowania",
-    "content": "Jeśli użytkownik otrzymał podejrzaną wiadomość e-mail (potencjalny phishing):\n\nCo należy zrobić NATYCHMIAST:\n1. NIE klikać w żadne linki w wiadomości.\n2. NIE otwierać załączników.\n3. NIE odpowiadać na wiadomość.\n4. Zgłosić incydent do działu bezpieczeństwa IT.\n\nJak zgłosić:\n- Prześlij wiadomość jako załącznik (nie forward) na adres security@firma.pl.\n- Podaj datę i godzinę otrzymania wiadomości.\n\nJeśli użytkownik kliknął w link lub otworzył załącznik:\n1. Natychmiast odłącz urządzenie od sieci.\n2. Zadzwoń do helpdesk — nie korzystaj z poczty na tym urządzeniu.\n3. Technik IT przeprowadzi skanowanie i dalsze kroki.",
+    "content": "Jeśli użytkownik otrzymał podejrzaną wiadomość e-mail, potencjalny phishing:\n\nCo należy zrobić natychmiast:\n1. Nie klikać w żadne linki w wiadomości.\n2. Nie otwierać załączników.\n3. Nie odpowiadać na wiadomość.\n4. Zgłosić incydent do działu bezpieczeństwa IT.\n\nJak zgłosić:\n- Prześlij wiadomość jako załącznik, a nie zwykły forward, na adres security@firma.pl.\n- Podaj datę i godzinę otrzymania wiadomości oraz informację, czy wykonano jakąkolwiek akcję.\n\nJeśli użytkownik kliknął link lub otworzył załącznik:\n1. Natychmiast odłącz urządzenie od sieci przewodowej i Wi‑Fi.\n2. Zadzwoń do helpdesk — nie korzystaj z poczty na tym urządzeniu.\n3. Technik IT przeprowadzi skanowanie, analizę IOC oraz dalsze kroki zgodnie z procedurą incydentową.",
     "category_name": "Bezpieczeństwo",
-    "tags": "phishing,bezpieczeństwo,e-mail,podejrzana wiadomość,incydent"
+    "tags": "phishing,bezpieczeństwo,e-mail,podejrzana wiadomość,incydent",
+    "source": "ai"
   },
   {
     "title": "Problem z drukarką sieciową — diagnostyka",
-    "content": "Gdy drukarka sieciowa nie działa:\n1. Sprawdź, czy drukarka jest włączona i ma papier oraz toner.\n2. Zweryfikuj, czy drukarka jest podłączona do sieci (lampka sieciowa powinna świecić).\n3. Spróbuj wydrukować stronę testową bezpośrednio z drukarki.\n4. Na komputerze użytkownika: Urządzenia i drukarki → sprawdź status kolejki wydruku.\n5. Wyczyść kolejkę wydruku (zatrzymaj serwis Spooler, usuń pliki z C:\\Windows\\System32\\spool\\PRINTERS, uruchom Spooler).\n6. Jeśli problem dotyczy tylko jednego komputera, usuń i dodaj drukarkę ponownie.\n7. Upewnij się, że sterowniki są aktualne.",
+    "content": "Gdy drukarka sieciowa nie działa:\n1. Sprawdź, czy drukarka jest włączona, ma papier oraz toner.\n2. Zweryfikuj, czy drukarka jest podłączona do sieci i czy ma poprawny adres IP.\n3. Spróbuj wydrukować stronę testową bezpośrednio z panelu drukarki.\n4. Na komputerze użytkownika sprawdź status drukarki i kolejkę wydruku.\n5. Jeśli zadania utknęły w kolejce, wyczyść kolejkę wydruku oraz zrestartuj usługę Print Spooler.\n6. Jeśli problem dotyczy tylko jednego komputera, usuń drukarkę i dodaj ją ponownie.\n7. Upewnij się, że sterowniki są aktualne i zgodne z wersją systemu.\n8. Jeśli problem dotyczy wielu użytkowników, sprawdź serwer wydruku, uprawnienia i dostępność drukarki w sieci.",
     "category_name": "Sprzęt komputerowy",
-    "tags": "drukarka,sieciowa,wydruk,sprzęt"
+    "tags": "drukarka,sieciowa,wydruk,sprzęt,kolejka,spooler",
+    "source": "ai"
   },
   {
     "title": "Błąd niebieski ekran (BSOD) po aktualizacji Windows",
-    "content": "Niebieski ekran (BSOD) po aktualizacji Windows może być spowodowany:\n- Niekompatybilnymi sterownikami.\n- Uszkodzonymi plikami systemowymi.\n- Problemem z pamięcią RAM.\n\nKroki diagnostyki:\n1. Uruchom komputer w trybie awaryjnym (F8 podczas startu lub Shift+Restart).\n2. Odinstaluj ostatnią aktualizację Windows: Ustawienia → Windows Update → Historia aktualizacji → Odinstaluj aktualizacje.\n3. Zaktualizuj lub wycofaj sterowniki karty graficznej i chipsetu.\n4. Uruchom sfc /scannow w wierszu poleceń (administrator).\n5. Sprawdź logi błędów w Podglądzie zdarzeń (Event Viewer).\n\nJeśli problem nadal występuje, może być konieczne przywrócenie systemu do punktu przywracania sprzed aktualizacji.",
+    "content": "Niebieski ekran po aktualizacji Windows może być spowodowany niekompatybilnym sterownikiem, uszkodzonymi plikami systemowymi, błędem aktualizacji albo problemem sprzętowym.\n\nKroki diagnostyki:\n1. Zapisz kod błędu BSOD oraz godzinę wystąpienia.\n2. Uruchom komputer w trybie awaryjnym.\n3. Odinstaluj ostatnią aktualizację: Ustawienia → Windows Update → Historia aktualizacji → Odinstaluj aktualizacje.\n4. Zaktualizuj albo wycofaj sterowniki karty graficznej, chipsetu i urządzeń peryferyjnych.\n5. Uruchom sfc /scannow w wierszu poleceń jako administrator.\n6. Uruchom DISM /Online /Cleanup-Image /RestoreHealth, jeśli SFC nie naprawi błędów.\n7. Sprawdź logi w Podglądzie zdarzeń i pliki minidump.\n\nJeśli problem nadal występuje, rozważ przywrócenie systemu do punktu sprzed aktualizacji lub eskalację do zespołu endpoint/desktop engineering.",
     "category_name": "System operacyjny",
-    "tags": "windows,bsod,aktualizacja,niebieski ekran,system"
+    "tags": "windows,bsod,aktualizacja,niebieski ekran,system,sfc,dism",
+    "source": "ai"
   },
   {
     "title": "Outlook nie synchronizuje poczty — diagnostyka",
-    "content": "Gdy Outlook nie pobiera nowych wiadomości:\n1. Sprawdź połączenie internetowe.\n2. Sprawdź, czy Outlook nie pracuje w trybie offline (Wyślij/Odbierz → Pracuj offline).\n3. Uruchom Outlooka ponownie.\n4. Sprawdź status serwera Exchange/O365 na stronie status.office.com.\n5. Usuń i ponownie dodaj konto pocztowe w Outlooku.\n6. Uruchom narzędzie diagnostyczne Microsoft Support and Recovery Assistant (SaRA).\n7. Sprawdź, czy antywirusowy skaner poczty nie blokuje połączenia.",
+    "content": "Gdy Outlook nie pobiera nowych wiadomości:\n1. Sprawdź połączenie internetowe.\n2. Sprawdź, czy Outlook nie pracuje w trybie offline: Wyślij/Odbierz → Pracuj offline.\n3. Uruchom Outlooka ponownie.\n4. Sprawdź status usługi Exchange Online/Microsoft 365 w panelu administracyjnym lub na stronie statusu usług.\n5. Sprawdź, czy skrzynka nie jest pełna oraz czy użytkownik może zalogować się przez Outlook Web.\n6. Napraw profil Outlooka albo utwórz nowy profil pocztowy.\n7. Uruchom narzędzia diagnostyczne Microsoft w aplikacji Uzyskaj pomoc/Get Help.\n8. Sprawdź, czy antywirusowy skaner poczty, VPN albo proxy nie blokuje połączenia.",
     "category_name": "Poczta e-mail",
-    "tags": "outlook,poczta,synchronizacja,e-mail,exchange"
+    "tags": "outlook,poczta,synchronizacja,e-mail,exchange,microsoft 365",
+    "source": "ai"
+  },
+  {
+    "title": "Microsoft Office nie uruchamia się — naprawa pakietu Office",
+    "content": "Jeśli Word, Excel, PowerPoint lub inna aplikacja Office nie uruchamia się, zamyka się od razu albo wyświetla komunikat o błędzie:\n1. Zamknij wszystkie aplikacje Microsoft Office.\n2. Otwórz Ustawienia → Aplikacje → Zainstalowane aplikacje / Aplikacje i funkcje.\n3. Wyszukaj Microsoft 365 lub Microsoft Office.\n4. Wybierz Modyfikuj/Zmień.\n5. Uruchom najpierw Szybką naprawę.\n6. Jeśli problem pozostaje, uruchom Naprawę online — wymaga internetu i może potrwać dłużej.\n7. Po naprawie uruchom komputer ponownie i sprawdź aplikację.\n8. Jeśli problem dotyczy tylko jednej aplikacji, sprawdź dodatki COM i szablony użytkownika.\n\nUwaga: Naprawa dotyczy całego pakietu Office, nawet gdy problem zgłoszono tylko dla Worda lub Excela.",
+    "category_name": "Microsoft Office",
+    "tags": "office,microsoft 365,word,excel,powerpoint,naprawa,quick repair,online repair",
+    "source": "ms_support"
+  },
+  {
+    "title": "Microsoft 365 pokazuje Produkt nielicencjonowany lub Product Deactivated",
+    "content": "Jeśli aplikacje Office pokazują Produkt nielicencjonowany, Product Deactivated albo wymagają ponownej aktywacji:\n1. Sprawdź, czy użytkownik jest zalogowany właściwym kontem służbowym.\n2. W aplikacji Office przejdź do Plik → Konto i sprawdź informacje o licencji.\n3. Wyloguj użytkownika z aplikacji Office i zaloguj ponownie.\n4. Sprawdź w Microsoft 365 Admin Center, czy użytkownik ma przypisaną licencję.\n5. Sprawdź łączność internetową i dostęp do usług Microsoft 365.\n6. Uruchom narzędzie rozwiązywania problemów z aktywacją Microsoft 365.\n7. Jeśli problem wystąpił po zmianie hasła, MFA lub migracji konta, usuń stare poświadczenia z Menedżera poświadczeń Windows i zaloguj się ponownie.\n8. W razie braku poprawy wykonaj naprawę Office.",
+    "category_name": "Microsoft Office",
+    "tags": "office,aktywacja,licencja,microsoft 365,product deactivated,unlicensed product",
+    "source": "ms_support"
+  },
+  {
+    "title": "Outlook nie otwiera się lub zatrzymuje się na Loading Profile",
+    "content": "Gdy Outlook nie startuje, zawiesza się na Loading Profile albo zamyka się podczas uruchamiania:\n1. Uruchom Outlook w trybie awaryjnym: Win+R → outlook.exe /safe.\n2. Jeśli Outlook działa w trybie awaryjnym, wyłącz dodatki COM: Plik → Opcje → Dodatki → Zarządzaj dodatkami COM.\n3. Sprawdź, czy skrzynka działa w Outlook Web.\n4. Napraw profil pocztowy w Panelu sterowania → Poczta → Konta e-mail → Napraw.\n5. Utwórz nowy profil Outlooka i ustaw go jako domyślny.\n6. Wykonaj naprawę pakietu Office, jeśli problem dotyczy także innych aplikacji.\n7. Jeśli występuje błąd pliku danych, uruchom Inbox Repair Tool dla pliku PST/OST albo przebuduj plik OST.",
+    "category_name": "Poczta e-mail",
+    "tags": "outlook,loading profile,tryb awaryjny,dodatki,profil,pst,ost",
+    "source": "ms_support"
+  },
+  {
+    "title": "Outlook ciągle pyta o hasło — pętla logowania",
+    "content": "Jeśli Outlook wielokrotnie prosi o hasło mimo poprawnego logowania:\n1. Sprawdź, czy użytkownik może zalogować się do Outlook Web.\n2. Upewnij się, że hasło nie zostało niedawno zmienione i że MFA działa poprawnie.\n3. Zamknij Outlook i wszystkie aplikacje Office.\n4. Otwórz Menedżer poświadczeń Windows i usuń stare wpisy związane z Office, Outlook, Microsoft 365, ADAL lub Exchange.\n5. Uruchom Outlook ponownie i zaloguj użytkownika.\n6. Wyloguj i zaloguj konto w Plik → Konto pakietu Office.\n7. Jeśli problem dotyczy tylko jednego profilu, utwórz nowy profil Outlooka.\n8. W środowiskach hybrydowych sprawdź autodiscover, stare wpisy DNS, reguły Conditional Access oraz status synchronizacji konta.\n\nW zgłoszeniu zapisz, czy problem występuje w klasycznym Outlooku, nowym Outlooku, Outlook Web czy na wielu urządzeniach.",
+    "category_name": "Poczta e-mail",
+    "tags": "outlook,hasło,credential manager,poświadczenia,mfa,autodiscover,office 365",
+    "source": "reddit"
+  },
+  {
+    "title": "Naprawa plików danych Outlook PST i OST",
+    "content": "Objawy uszkodzonego pliku danych Outlook to brak wyszukiwania, błędy synchronizacji, znikające wiadomości, zawieszanie Outlooka lub komunikaty o uszkodzonym pliku PST/OST.\n\nKroki:\n1. Zamknij Outlook.\n2. Ustal lokalizację pliku PST lub OST w ustawieniach konta albo w profilu użytkownika.\n3. Dla pliku PST wykonaj kopię zapasową przed naprawą.\n4. Uruchom narzędzie SCANPST.EXE, czyli Inbox Repair Tool.\n5. Wskaż plik PST i wykonaj skanowanie oraz naprawę.\n6. Dla kont Exchange/Microsoft 365 przy problemach z OST często bezpieczniej jest zamknąć Outlook, zmienić nazwę starego pliku OST i pozwolić Outlookowi pobrać skrzynkę od nowa.\n7. Jeśli plik jest bardzo duży, sprawdź archiwizację, rozmiar skrzynki oraz tryb buforowany Exchange.",
+    "category_name": "Poczta e-mail",
+    "tags": "outlook,pst,ost,scanpst,inbox repair,exchange,plik danych",
+    "source": "ms_support"
+  },
+  {
+    "title": "Outlook pracuje w trybie offline",
+    "content": "Jeśli w Outlooku widoczny jest status Praca offline / Working Offline:\n1. Otwórz kartę Wyślij/Odbierz.\n2. Kliknij Pracuj offline, aby wyłączyć ten tryb.\n3. Sprawdź pasek stanu — powinien zmienić się na Połączono lub Łączenie.\n4. Jeśli status nie zmienia się, uruchom Outlook ponownie.\n5. Sprawdź połączenie internetowe, VPN, proxy i DNS.\n6. Sprawdź, czy użytkownik może wejść do Outlook Web.\n7. Jeśli problem wraca, napraw profil Outlooka albo utwórz nowy profil.\n8. W środowisku firmowym sprawdź, czy nie ma incydentu usługi Exchange Online/Microsoft 365.",
+    "category_name": "Poczta e-mail",
+    "tags": "outlook,working offline,praca offline,send receive,exchange,synchronizacja",
+    "source": "ms_support"
+  },
+  {
+    "title": "OneDrive nie synchronizuje plików — podstawowa diagnostyka",
+    "content": "Gdy OneDrive nie synchronizuje plików:\n1. Sprawdź ikonę OneDrive w obszarze powiadomień i odczytaj komunikat błędu.\n2. Upewnij się, że użytkownik jest zalogowany właściwym kontem służbowym.\n3. Sprawdź połączenie internetowe oraz VPN/proxy.\n4. Wstrzymaj i wznów synchronizację.\n5. Uruchom ponownie klienta OneDrive oraz komputer.\n6. Sprawdź, czy plik nie jest otwarty lokalnie przez inną aplikację.\n7. Sprawdź długość ścieżki, znaki niedozwolone w nazwie pliku i dostępne miejsce na dysku.\n8. Jeśli problem dotyczy biblioteki SharePoint, sprawdź uprawnienia użytkownika do biblioteki.\n9. Jeśli problem pozostaje, wykonaj reset klienta OneDrive.",
+    "category_name": "OneDrive i SharePoint",
+    "tags": "onedrive,synchronizacja,sharepoint,chmura,plik,folder,uprawnienia",
+    "source": "ms_support"
+  },
+  {
+    "title": "Reset klienta OneDrive w Windows",
+    "content": "Reset OneDrive może pomóc, gdy synchronizacja stoi w miejscu, ikona pokazuje ciągłe przetwarzanie zmian albo aplikacja nie reaguje.\n\nKroki:\n1. Zamknij OneDrive z obszaru powiadomień, jeśli jest uruchomiony.\n2. Otwórz Win+R.\n3. Wpisz: %localappdata%\\Microsoft\\OneDrive\\onedrive.exe /reset\n4. Jeśli OneDrive nie uruchomi się automatycznie po kilku minutach, uruchom go z menu Start.\n5. Poczekaj na ponowne zestawienie synchronizacji.\n6. Sprawdź, czy problematyczny plik/folder został zsynchronizowany.\n\nUwaga: Reset nie usuwa danych z chmury, ale może wymagać ponownego zalogowania albo ponownego wybrania folderów synchronizacji.",
+    "category_name": "OneDrive i SharePoint",
+    "tags": "onedrive,reset,synchronizacja,windows,sharepoint,plik",
+    "source": "ms_support"
+  },
+  {
+    "title": "Office nie zapisuje plików do OneDrive lub SharePoint",
+    "content": "Jeśli Word, Excel albo PowerPoint nie zapisuje zmian do OneDrive/SharePoint, pokazuje Upload failed, Saved offline albo prosi o ponowne logowanie:\n1. Sprawdź, czy użytkownik jest zalogowany w Office tym samym kontem, które ma dostęp do lokalizacji pliku.\n2. Sprawdź status synchronizacji OneDrive.\n3. Otwórz plik w przeglądarce i sprawdź, czy można go edytować online.\n4. Zamknij plik na innych urządzeniach, jeśli jest konflikt edycji.\n5. Zapisz kopię lokalnie, aby nie utracić zmian.\n6. Wyloguj i zaloguj konto Office.\n7. Usuń stare poświadczenia Office z Menedżera poświadczeń Windows.\n8. Zresetuj OneDrive, jeśli problem dotyczy wielu plików.\n9. Sprawdź uprawnienia w bibliotece SharePoint i limit miejsca.",
+    "category_name": "OneDrive i SharePoint",
+    "tags": "onedrive,sharepoint,office,upload failed,zapis,word,excel,synchronizacja",
+    "source": "reddit"
+  },
+  {
+    "title": "Microsoft Teams — mikrofon nie działa podczas spotkania",
+    "content": "Gdy mikrofon nie działa w Teams:\n1. Sprawdź, czy mikrofon nie jest wyciszony w Teams i w systemie.\n2. W Teams przejdź do Ustawienia → Urządzenia i wybierz właściwy mikrofon.\n3. Sprawdź mikrofon w innej aplikacji, np. Rejestrator dźwięku.\n4. Sprawdź ustawienia prywatności Windows: Ustawienia → Prywatność i zabezpieczenia → Mikrofon.\n5. Zamknij aplikacje, które mogą przejmować mikrofon, np. Zoom, Webex, przeglądarka.\n6. Odłącz i podłącz zestaw słuchawkowy.\n7. Zaktualizuj sterownik audio i Teams.\n8. W wersji webowej sprawdź uprawnienia mikrofonu w przeglądarce.\n9. Jeśli problem dotyczy tylko jednego zestawu słuchawkowego, przetestuj inny port USB albo inne urządzenie.",
+    "category_name": "Microsoft Teams",
+    "tags": "teams,mikrofon,audio,spotkanie,uprawnienia,sterownik,headset",
+    "source": "ms_support"
+  },
+  {
+    "title": "Microsoft Teams — kamera nie działa lub pokazuje czarny ekran",
+    "content": "Gdy kamera w Teams nie działa:\n1. Sprawdź, czy kamera nie jest zasłonięta fizyczną przesłoną.\n2. W Teams wybierz właściwą kamerę w Ustawienia → Urządzenia.\n3. Zamknij inne aplikacje używające kamery.\n4. Sprawdź uprawnienia Windows: Ustawienia → Prywatność i zabezpieczenia → Kamera.\n5. Sprawdź kamerę w aplikacji Aparat.\n6. W przeglądarce zezwól stronie Teams na dostęp do kamery.\n7. Zaktualizuj Teams, sterownik kamery i system Windows.\n8. Odłącz i podłącz kamerę USB albo zmień port.\n9. Jeśli kamera działa lokalnie, ale nie w Teams, wyczyść cache Teams lub przeinstaluj aplikację.",
+    "category_name": "Microsoft Teams",
+    "tags": "teams,kamera,wideo,czarny ekran,uprawnienia,sterownik,meeting",
+    "source": "ms_support"
+  },
+  {
+    "title": "Microsoft Teams w przeglądarce — brak dostępu do kamery lub mikrofonu",
+    "content": "Jeśli Teams Web nie widzi kamery albo mikrofonu:\n1. Sprawdź, czy używana przeglądarka jest wspierana i aktualna.\n2. Kliknij ikonę kłódki przy adresie strony i sprawdź uprawnienia kamery oraz mikrofonu.\n3. W Chrome/Edge usuń blokadę urządzeń dla teams.microsoft.com.\n4. Odśwież stronę i dołącz ponownie do spotkania.\n5. Sprawdź ustawienia prywatności systemu Windows dla kamery i mikrofonu.\n6. Zamknij inne aplikacje używające urządzeń.\n7. Przetestuj spotkanie w aplikacji desktopowej Teams.\n8. Jeśli uprawnienia są zarządzane przez organizację, sprawdź polityki przeglądarki lub skontaktuj się z administratorem.",
+    "category_name": "Microsoft Teams",
+    "tags": "teams web,chrome,edge,kamera,mikrofon,uprawnienia,przeglądarka",
+    "source": "ms_support"
+  },
+  {
+    "title": "Teams działa wolno, zawiesza się lub nie pokazuje powiadomień",
+    "content": "Gdy Teams działa wolno, zawiesza się albo nie pokazuje powiadomień:\n1. Sprawdź, czy problem występuje w aplikacji desktopowej i w wersji webowej.\n2. Wyloguj użytkownika z Teams i zaloguj ponownie.\n3. Zamknij Teams całkowicie z obszaru powiadomień.\n4. Uruchom komputer ponownie.\n5. Sprawdź dostępność aktualizacji Teams i Windows.\n6. Wyczyść cache Teams zgodnie z procedurą organizacji.\n7. Sprawdź, czy komputer nie ma wysokiego użycia CPU/RAM.\n8. Jeśli problem występuje tylko w jednej sieci, sprawdź VPN, proxy i reguły firewall.\n9. Tymczasowo użyj Teams Web, jeśli aplikacja desktopowa uniemożliwia pracę.",
+    "category_name": "Microsoft Teams",
+    "tags": "teams,cache,powiadomienia,wolno,zawiesza się,wydajność",
+    "source": "ai"
+  },
+  {
+    "title": "Google Chrome nie ładuje stron, mimo że internet działa",
+    "content": "Jeśli inne aplikacje mają dostęp do internetu, ale Chrome nie ładuje stron:\n1. Sprawdź stronę w innej przeglądarce, np. Edge.\n2. Otwórz stronę w trybie incognito. Jeśli działa, podejrzewaj cache, cookies, rozszerzenia lub profil użytkownika.\n3. Wyczyść cache i cookies dla problematycznej strony.\n4. Wyłącz rozszerzenia i uruchom Chrome ponownie.\n5. Sprawdź ustawienia proxy i VPN.\n6. Wyczyść systemowy DNS: ipconfig /flushdns.\n7. Zresetuj ustawienia Chrome do domyślnych.\n8. Utwórz nowy profil Chrome i sprawdź działanie.\n9. Jeśli problem dotyczy wielu użytkowników, sprawdź DNS, filtrację web, zaporę i polityki firmowe.",
+    "category_name": "Przeglądarki internetowe",
+    "tags": "chrome,przeglądarka,strona nie działa,dns,cache,cookies,proxy,incognito",
+    "source": "reddit"
+  },
+  {
+    "title": "Google Chrome — czyszczenie cache i cookies dla problemów z logowaniem lub wyglądem strony",
+    "content": "Cache i cookies mogą powodować błędy logowania, stare wersje formularzy, problemy z formatowaniem strony albo zapętlenia sesji.\n\nKroki:\n1. Otwórz Chrome.\n2. Kliknij trzy kropki → Ustawienia → Prywatność i bezpieczeństwo.\n3. Wybierz Wyczyść dane przeglądania.\n4. Zaznacz Cookies i inne dane witryn oraz Obrazy i pliki zapisane w pamięci podręcznej.\n5. Wybierz zakres czasu, np. Ostatnie 24 godziny albo Od początku.\n6. Kliknij Wyczyść dane.\n7. Zamknij i uruchom Chrome ponownie.\n8. Jeśli problem dotyczy jednej aplikacji biznesowej, usuń dane tylko dla tej witryny, aby nie wylogować użytkownika ze wszystkich usług.",
+    "category_name": "Przeglądarki internetowe",
+    "tags": "chrome,cache,cookies,czyszczenie danych,logowanie,przeglądarka",
+    "source": "ai"
+  },
+  {
+    "title": "Google Chrome — reset ustawień do domyślnych",
+    "content": "Reset Chrome pomaga, gdy przeglądarka zmieniła stronę startową, wyszukiwarkę, otwiera reklamy, działa niestabilnie lub zachowuje się inaczej po instalacji rozszerzenia.\n\nKroki:\n1. Otwórz Chrome.\n2. Przejdź do Ustawienia → Resetowanie ustawień.\n3. Wybierz Przywróć ustawienia do oryginalnych wartości domyślnych.\n4. Potwierdź reset.\n5. Uruchom Chrome ponownie.\n6. Sprawdź rozszerzenia i usuń nieznane dodatki.\n7. Jeśli problem wraca, wykonaj skanowanie antymalware i sprawdź, czy Chrome nie jest zarządzany przez podejrzaną politykę.\n\nReset zwykle nie usuwa zakładek ani zapisanych haseł, ale wyłącza rozszerzenia i resetuje część ustawień witryn.",
+    "category_name": "Przeglądarki internetowe",
+    "tags": "chrome,reset,ustawienia,rozszerzenia,malware,przeglądarka",
+    "source": "ai"
+  },
+  {
+    "title": "Google Chrome — rozszerzenie powoduje wysokie użycie RAM/CPU lub awarie",
+    "content": "Jeśli Chrome zużywa dużo pamięci, zawiesza się albo wyświetla Aw, Snap!, częstą przyczyną jest wadliwe rozszerzenie.\n\nKroki:\n1. Otwórz Menedżer zadań Chrome: Shift+Esc.\n2. Sprawdź, która karta lub rozszerzenie zużywa najwięcej zasobów.\n3. Przejdź do chrome://extensions.\n4. Wyłącz wszystkie rozszerzenia i uruchom Chrome ponownie.\n5. Włączaj rozszerzenia pojedynczo, aż problem wróci.\n6. Usuń problematyczne lub nieznane rozszerzenie.\n7. Sprawdź, czy rozszerzenie nie jest wymuszone polityką firmową.\n8. W przypadku podejrzanego dodatku wykonaj skanowanie bezpieczeństwa i sprawdź ścieżki instalacji.\n9. Jeśli problem występuje tylko na jednym profilu Chrome, utwórz nowy profil użytkownika.",
+    "category_name": "Przeglądarki internetowe",
+    "tags": "chrome,rozszerzenia,ram,cpu,aw snap,crash,profil,adblock",
+    "source": "reddit"
+  },
+  {
+    "title": "Google Chrome — aktualizacja przeglądarki i problemy z update",
+    "content": "Aktualna wersja Chrome jest ważna ze względów bezpieczeństwa i zgodności z aplikacjami webowymi.\n\nKroki:\n1. Otwórz Chrome.\n2. Kliknij trzy kropki → Pomoc → Google Chrome — informacje.\n3. Poczekaj, aż Chrome sprawdzi dostępność aktualizacji.\n4. Jeśli aktualizacja została pobrana, kliknij Uruchom ponownie.\n5. Jeśli aktualizacja nie działa, sprawdź połączenie internetowe, proxy, VPN i polityki firmowe.\n6. Sprawdź, czy system operacyjny jest nadal wspierany przez aktualną wersję Chrome.\n7. W środowisku firmowym sprawdź narzędzie dystrybucji oprogramowania, GPO/Intune oraz harmonogram aktualizacji.\n8. Po aktualizacji ponownie przetestuj aplikację, której dotyczyło zgłoszenie.",
+    "category_name": "Przeglądarki internetowe",
+    "tags": "chrome,aktualizacja,update,bezpieczeństwo,przeglądarka,gpo,intune",
+    "source": "ai"
+  },
+  {
+    "title": "Google Chrome — błędy pobierania plików",
+    "content": "Jeśli Chrome nie pobiera pliku albo pokazuje błąd Failed, Forbidden, Needs authorization lub Network error:\n1. Sprawdź, czy użytkownik ma dostęp do strony i jest zalogowany.\n2. Spróbuj pobrać plik w trybie incognito.\n3. Spróbuj opcji Zapisz link jako.\n4. Zmień lokalizację pobierania na Pulpit albo Dokumenty, aby wykluczyć brak uprawnień do folderu.\n5. Sprawdź, czy antywirus, EDR, DLP lub proxy nie blokuje pobierania.\n6. Wyczyść cache i cookies dla witryny.\n7. Sprawdź, czy problem dotyczy jednego pliku, jednej strony czy wszystkich pobrań.\n8. Jeżeli błąd dotyczy uprawnień serwera, skieruj użytkownika do właściciela aplikacji lub administratora witryny.",
+    "category_name": "Przeglądarki internetowe",
+    "tags": "chrome,pobieranie,download,failed,forbidden,network error,uprawnienia,proxy",
+    "source": "ai"
+  },
+  {
+    "title": "Windows Update — aktualizacja nie instaluje się lub zwraca kod błędu",
+    "content": "Jeśli Windows Update nie pobiera lub nie instaluje aktualizacji:\n1. Zapisz kod błędu z Windows Update.\n2. Sprawdź połączenie internetowe oraz VPN/proxy.\n3. Sprawdź ilość wolnego miejsca na dysku.\n4. Uruchom narzędzie Windows Update Troubleshooter w aplikacji Uzyskaj pomoc/Get Help lub w Ustawieniach.\n5. Uruchom komputer ponownie i ponów aktualizację.\n6. Uruchom jako administrator: DISM /Online /Cleanup-Image /RestoreHealth, a następnie sfc /scannow.\n7. Sprawdź, czy usługi Windows Update i BITS są uruchomione.\n8. Jeśli problem dotyczy urządzeń firmowych, sprawdź polityki WSUS/Intune oraz pierścienie aktualizacji.",
+    "category_name": "System operacyjny",
+    "tags": "windows update,aktualizacja,błąd,dism,sfc,bits,wsus,intune",
+    "source": "ms_support"
+  },
+  {
+    "title": "Brak dźwięku w Windows — diagnostyka audio",
+    "content": "Gdy użytkownik nie słyszy dźwięku w Windows:\n1. Sprawdź, czy urządzenie nie jest wyciszone i czy głośność jest ustawiona poprawnie.\n2. Sprawdź właściwe urządzenie wyjściowe: Ustawienia → System → Dźwięk.\n3. Odłącz i podłącz słuchawki lub zestaw USB.\n4. Przetestuj dźwięk w innej aplikacji.\n5. Uruchom narzędzie rozwiązywania problemów z dźwiękiem w Windows.\n6. Sprawdź sterownik audio w Menedżerze urządzeń.\n7. Wyłącz ulepszenia audio, jeśli powodują zakłócenia.\n8. Dla problemów w Teams sprawdź osobno urządzenie wybrane w Teams.\n9. Jeśli problem pojawił się po aktualizacji, wycofaj sterownik lub zainstaluj wersję producenta sprzętu.",
+    "category_name": "System operacyjny",
+    "tags": "windows,dźwięk,audio,słuchawki,głośniki,sterownik,teams",
+    "source": "ms_support"
+  },
+  {
+    "title": "Problemy z Bluetooth w Windows",
+    "content": "Gdy mysz, klawiatura, słuchawki albo inne urządzenie Bluetooth nie łączy się z komputerem:\n1. Sprawdź, czy Bluetooth jest włączony.\n2. Sprawdź, czy urządzenie jest naładowane i w trybie parowania.\n3. Wyłącz i włącz Bluetooth.\n4. Usuń urządzenie z listy sparowanych i dodaj ponownie.\n5. Uruchom narzędzie rozwiązywania problemów z Bluetooth.\n6. Sprawdź sterownik Bluetooth w Menedżerze urządzeń.\n7. Uruchom ponownie usługę Bluetooth Support Service, jeśli jest zatrzymana.\n8. Sprawdź zakłócenia, zasięg oraz port USB odbiornika, jeśli urządzenie korzysta z dongla.\n9. Jeśli problem dotyczy wielu urządzeń, sprawdź aktualizacje Windows i sterowniki producenta.",
+    "category_name": "System operacyjny",
+    "tags": "bluetooth,windows,mysz,klawiatura,słuchawki,parowanie,sterownik",
+    "source": "ms_support"
+  },
+  {
+    "title": "Problemy z Wi-Fi w Windows",
+    "content": "Jeśli komputer nie łączy się z Wi-Fi albo traci połączenie:\n1. Sprawdź, czy Wi-Fi i tryb samolotowy są ustawione poprawnie.\n2. Połącz się z inną siecią lub hotspotem telefonu, aby zawęzić problem.\n3. Zapomnij sieć i połącz ponownie, wpisując hasło od nowa.\n4. Uruchom narzędzie Network and Internet Troubleshooter.\n5. Uruchom ponownie kartę sieciową w Menedżerze urządzeń.\n6. Zaktualizuj sterownik karty Wi-Fi.\n7. Sprawdź adres IP, DNS i bramę: ipconfig /all.\n8. Odśwież konfigurację: ipconfig /release, ipconfig /renew, ipconfig /flushdns.\n9. Jeśli problem dotyczy firmowej sieci Wi-Fi, sprawdź certyfikat, profil Wi-Fi, NAC/802.1X oraz blokady konta.",
+    "category_name": "Sieć i VPN",
+    "tags": "wifi,wi-fi,windows,sieć,dns,karta sieciowa,ipconfig,802.1x",
+    "source": "ms_support"
+  },
+  {
+    "title": "Microsoft Authenticator nie wysyła powiadomień MFA",
+    "content": "Jeśli użytkownik nie otrzymuje powiadomienia MFA w Microsoft Authenticator:\n1. Sprawdź, czy telefon ma dostęp do internetu; przełącz Wi-Fi/LTE i wyłącz tryb samolotowy.\n2. Sprawdź, czy powiadomienia aplikacji Authenticator są włączone w systemie telefonu.\n3. Sprawdź, czy aplikacja Authenticator jest aktualna.\n4. Sprawdź poprawność daty i godziny w telefonie.\n5. Wyłącz optymalizację baterii dla aplikacji Authenticator, jeśli system ją ogranicza.\n6. Poproś użytkownika o użycie alternatywnej metody MFA, np. kodu z aplikacji lub SMS, jeśli jest skonfigurowana.\n7. Jeśli użytkownik zmienił telefon, rozpocznij procedurę rejestracji nowej metody MFA po weryfikacji tożsamości.\n8. Jeśli pojawiają się niezamówione kody MFA, potraktuj to jako potencjalny incydent bezpieczeństwa i wymuś zmianę hasła.",
+    "category_name": "Konto i dostęp",
+    "tags": "mfa,authenticator,microsoft authenticator,logowanie,powiadomienia,bezpieczeństwo",
+    "source": "ms_support"
+  },
+  {
+    "title": "Sprawdzenie statusu usług Microsoft 365 przy awarii wielu użytkowników",
+    "content": "Jeśli wiele osób zgłasza jednocześnie problem z Outlook, Teams, OneDrive, SharePoint albo logowaniem Microsoft 365:\n1. Ustal zakres: ilu użytkowników, jaka lokalizacja, które aplikacje, od kiedy.\n2. Sprawdź, czy problem występuje poza siecią firmową.\n3. Sprawdź Microsoft 365 Admin Center → Health → Service health.\n4. Sprawdź publiczny status usług Microsoft, jeśli nie masz dostępu administratora.\n5. Sprawdź komunikaty w Message Center, jeśli problem dotyczy zmiany funkcji.\n6. Zbierz przykładowe błędy, godziny i konta testowe.\n7. Nie wykonuj masowych zmian na stacjach roboczych, jeśli źródłem jest awaria usługi chmurowej.\n8. Poinformuj użytkowników o obejściu, np. Outlook Web, Teams Web albo dostęp mobilny, jeśli działa.",
+    "category_name": "Microsoft 365",
+    "tags": "microsoft 365,status,service health,awaria,outlook,teams,onedrive,exchange",
+    "source": "ms_support"
+  },
+  {
+    "title": "Drukarka offline w Windows",
+    "content": "Jeśli Windows pokazuje drukarkę jako Offline, mimo że drukarka jest włączona:\n1. Sprawdź zasilanie, kabel sieciowy/Wi-Fi oraz adres IP drukarki.\n2. Wydrukuj stronę konfiguracyjną z panelu drukarki.\n3. Na komputerze uruchom narzędzie rozwiązywania problemów z drukarką.\n4. Sprawdź, czy port drukarki wskazuje prawidłowy adres IP, a nie stary adres.\n5. Wyłącz opcję Użyj drukarki w trybie offline, jeśli jest aktywna.\n6. Wyczyść kolejkę wydruku.\n7. Zrestartuj usługę Print Spooler.\n8. Usuń i dodaj drukarkę ponownie.\n9. Jeśli drukarka ma zmienny adres IP, rozważ rezerwację DHCP albo stały adres dla urządzenia.",
+    "category_name": "Sprzęt komputerowy",
+    "tags": "drukarka,offline,windows,ip,spooler,kolejka,port drukarki",
+    "source": "ms_support"
+  },
+  {
+    "title": "Udostępniona skrzynka pocztowa nie widoczna w Outlooku",
+    "content": "Jeśli użytkownik ma dostęp do shared mailbox, ale nie widzi jej w Outlooku:\n1. Sprawdź w centrum administracyjnym Exchange/Microsoft 365, czy uprawnienie Full Access zostało nadane właściwemu użytkownikowi.\n2. Poczekaj na propagację uprawnień; w środowiskach Microsoft 365 może to potrwać.\n3. Zamknij i uruchom Outlook ponownie.\n4. Sprawdź, czy skrzynka jest widoczna w Outlook Web.\n5. Dodaj skrzynkę ręcznie jako dodatkową skrzynkę w ustawieniach konta, jeśli automapping nie działa.\n6. Jeśli skrzynka pojawia się, ale nie synchronizuje poprawnie, wyłącz pobieranie folderów udostępnionych w trybie buforowanym albo utwórz nowy profil Outlook.\n7. Sprawdź, czy użytkownik ma też uprawnienie Send As lub Send on behalf, jeśli problem dotyczy wysyłki.",
+    "category_name": "Poczta e-mail",
+    "tags": "shared mailbox,outlook,exchange,uprawnienia,full access,send as,automapping",
+    "source": "ai"
+  },
+  {
+    "title": "Mapowany dysk sieciowy nie łączy się po zmianie hasła",
+    "content": "Jeśli użytkownik nie może połączyć się z mapowanym dyskiem po zmianie hasła:\n1. Sprawdź, czy użytkownik może zalogować się do domeny i odblokować konto.\n2. Usuń stare poświadczenia z Menedżera poświadczeń Windows dla danego serwera plików.\n3. Odłącz mapowanie dysku: net use X: /delete.\n4. Dodaj mapowanie ponownie przez Eksplorator plików albo net use.\n5. Sprawdź, czy użytkownik jest w odpowiedniej grupie AD do udziału sieciowego.\n6. Zweryfikuj dostęp po ścieżce UNC, np. \\\\serwer\\udział.\n7. Jeśli dysk mapuje się przez GPO, uruchom gpupdate /force i sprawdź wynik gpresult.\n8. Jeśli konto blokuje się ponownie, szukaj starego hasła w usługach, urządzeniach mobilnych i zapamiętanych poświadczeniach.",
+    "category_name": "Konto i dostęp",
+    "tags": "dysk sieciowy,mapowanie,hasło,credential manager,ad,gpo,net use,udział",
+    "source": "ai"
+  },
+  {
+    "title": "Pulpit zdalny RDP nie łączy się z komputerem użytkownika",
+    "content": "Jeśli połączenie RDP nie działa:\n1. Sprawdź, czy komputer docelowy jest włączony i osiągalny w sieci: ping lub test po nazwie DNS.\n2. Sprawdź, czy użytkownik/technik ma uprawnienia do logowania zdalnego.\n3. Sprawdź, czy Pulpit zdalny jest włączony na komputerze docelowym.\n4. Zweryfikuj reguły zapory Windows dla Remote Desktop.\n5. Sprawdź, czy komputer jest w sieci firmowej albo podłączony przez VPN.\n6. Jeżeli pojawia się błąd NLA, sprawdź poprawność hasła, synchronizację czasu i dostępność kontrolera domeny.\n7. Jeśli zdalnie pracuje już inny użytkownik, ustal, czy polityka pozwala na przejęcie sesji.\n8. W zgłoszeniu zapisz komunikat błędu RDP i nazwę hosta.",
+    "category_name": "System operacyjny",
+    "tags": "rdp,pulpit zdalny,remote desktop,vpn,zapora,nla,dns",
+    "source": "ai"
   }
 ]

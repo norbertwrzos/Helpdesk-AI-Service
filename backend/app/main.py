@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+import app.models  # noqa: F401
 from app.api.routes import ai, categories, feedback, health, knowledge, priorities, quality_metrics, tickets
 from app.core.config import settings
 
