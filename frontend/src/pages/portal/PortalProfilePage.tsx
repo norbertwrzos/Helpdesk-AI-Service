@@ -30,7 +30,7 @@ export default function PortalProfilePage() {
         <div className="surface-card surface-card--soft space-y-6 p-6">
           {/* Avatar */}
           <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-500 via-violet-400 to-cyan-400 text-2xl font-bold text-white shadow-[0_16px_30px_rgba(99,102,241,0.32)]">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-600 text-2xl font-bold text-white shadow-sm">
               {currentUser.name.charAt(0).toUpperCase()}
             </div>
             <div>

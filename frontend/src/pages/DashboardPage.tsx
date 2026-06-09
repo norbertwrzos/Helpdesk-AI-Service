@@ -3,7 +3,6 @@ import { useAuth } from '../auth/AuthContext'
 import { getTickets } from '../api/tickets'
 import type { Ticket } from '../types/ticket'
 import StatCard from '../components/StatCard'
-import RecentTickets from '../components/RecentTickets'
 import QuickActions from '../components/QuickActions'
 
 export default function DashboardPage() {
@@ -23,10 +22,6 @@ export default function DashboardPage() {
   const open = tickets.filter((t) => t.status === 'open').length
   const aiReviewed = tickets.filter((t) => t.status === 'ai_reviewed').length
   const pending = tickets.filter((t) => t.status === 'pending').length
-
-  const recent = [...tickets]
-    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    .slice(0, 5)
 
   return (
     <div className="page">

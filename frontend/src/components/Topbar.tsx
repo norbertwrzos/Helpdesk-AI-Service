@@ -25,11 +25,6 @@ export default function Topbar({ onMenuClick }: Props) {
           </svg>
         </button>
 
-        {/* App title (compact, desktop only) */}
-        <div className="hidden min-w-0 lg:block">
-          
-          <div className="text-sm text-slate-400">Panel obsługi zgłoszeń</div>
-        </div>
 
         {/* Search */}
         <div className="max-w-md flex-1 lg:ml-2">

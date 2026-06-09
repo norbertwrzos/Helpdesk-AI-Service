@@ -85,7 +85,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             <div
               key={toast.id}
               className={[
-                'pointer-events-auto flex w-full items-start gap-3 rounded-full border px-4 py-3 shadow-xl backdrop-blur-xl',
+                'pointer-events-auto flex w-full items-start gap-3 rounded-lg border px-4 py-3 shadow-lg',
                 'transition-all duration-300',
                 v.bg, v.border,
                 toast.onClick ? 'cursor-pointer hover:brightness-110 active:scale-[0.98]' : '',

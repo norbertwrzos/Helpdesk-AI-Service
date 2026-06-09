@@ -41,7 +41,6 @@ export default function TicketAiSection({ ticket, onAnalyzed, onAgentResponseSav
           onClick={handleAnalyze}
           disabled={analyzing}
         >
-          <span>🤖</span>
           {analyzing ? 'Analizowanie…' : 'Uruchom analizę AI'}
         </button>
       </div>
@@ -96,8 +95,6 @@ export default function TicketAiSection({ ticket, onAnalyzed, onAgentResponseSav
       )}
 
       <div className="pt-2 border-t border-white/8 space-y-3">
-        <div className="flex items-center justify-between gap-3">
-        </div>
         <AIResponseHistory
           ticketId={ticket.id}
           refreshKey={aiHistoryKey}

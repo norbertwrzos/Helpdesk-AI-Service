@@ -19,21 +19,6 @@ const ROLE_DESTINATIONS: Record<UserRole, string> = {
   end_user: 'Portal użytkownika z listą zgłoszeń',
 }
 
-const LOGIN_FEATURES = [
-  {
-    title: 'Obsługa zgłoszeń',
-    description: 'Przegląd ticketów, priorytetów i kategorii w jednym miejscu.',
-  },
-  {
-    title: 'Wsparcie AI',
-    description: 'Generowanie odpowiedzi i ocena jakości bez opuszczania panelu.',
-  },
-  {
-    title: 'Portal użytkownika',
-    description: 'Szybkie zgłoszenia, historia spraw i prosty kontakt z działem wsparcia.',
-  },
-] as const
-
 function getRedirectPath(role: UserRole) {
   return role === 'end_user' ? '/portal/tickets' : '/dashboard'
 }
@@ -113,27 +98,6 @@ export default function LoginPage() {
             To jest prototyp. Logowanie jest mockowe i służy do demonstracji dwóch profili oraz przepływów w aplikacji.
           </p>
         </section>
-
-        <aside className="login-hero" aria-label="Informacje o aplikacji">
-          <div className="login-hero__intro">
-            <span className="login-hero__badge">Środowisko testowe</span>
-            <h2 className="login-hero__title">
-              Jedno miejsce do obsługi zgłoszeń, wiedzy i odpowiedzi AI.
-            </h2>
-            <p className="login-hero__subtitle">
-              Ten ekran pozwala szybko przełączać profile i sprawdzać pełne ścieżki produktu bez prawdziwej autoryzacji.
-            </p>
-          </div>
-
-          <div className="login-hero__grid">
-            {LOGIN_FEATURES.map(feature => (
-              <article key={feature.title} className="login-feature-card">
-                <h3 className="login-feature-card__title">{feature.title}</h3>
-                <p className="login-feature-card__description">{feature.description}</p>
-              </article>
-            ))}
-          </div>
-        </aside>
       </div>
     </main>
   )

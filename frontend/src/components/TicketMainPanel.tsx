@@ -2,7 +2,6 @@ import type { Ticket } from '../types/ticket'
 import type { AnalysisResult } from '../types/analysis'
 import AgentResponseBox from './AgentResponseBox'
 import TicketAiSection from './TicketAiSection'
-import TicketTimeline from './TicketTimeline'
 
 interface Props {
   ticket: Ticket
@@ -54,9 +53,6 @@ export default function TicketMainPanel({ ticket, onAgentResponseSaved, onAnalyz
         initialResponse={ticket.agent_response}
         onSaved={onAgentResponseSaved}
       />
-
-      {/* Timeline */}
-      <TicketTimeline ticket={ticket} />
     </div>
   )
 }

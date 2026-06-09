@@ -12,14 +12,6 @@ interface Props {
   onOpen?: () => void
 }
 
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('pl-PL', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
-  })
-}
-
 export default function KnowledgeArticleCard({ article, categories, canEdit, onEdit, onDelete, onOpen }: Props) {
   const navigate = useNavigate()
   const category = categories.find(c => c.id === article.category_id)

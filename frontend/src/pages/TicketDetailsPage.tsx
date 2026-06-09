@@ -12,6 +12,7 @@ import StatusBadge from '../components/StatusBadge'
 import SourceBadge from '../components/SourceBadge'
 import TicketMainPanel from '../components/TicketMainPanel'
 import TicketPropertiesPanel from '../components/TicketPropertiesPanel'
+import TicketTimeline from '../components/TicketTimeline'
 
 export default function TicketDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -133,13 +134,14 @@ export default function TicketDetailsPage() {
         </div>
 
         {/* Right: properties */}
-        <div className="lg:col-span-1">
+        <div className="lg:col-span-1 space-y-6">
           <TicketPropertiesPanel
             ticket={ticket}
             categories={categories}
             priorities={priorities}
             onUpdate={handleUpdate}
           />
+          <TicketTimeline ticket={ticket} />
         </div>
       </div>
     </div>

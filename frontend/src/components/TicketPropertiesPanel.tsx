@@ -3,9 +3,6 @@ import type { Ticket, TicketStatus, TicketUpdate } from '../types/ticket'
 import { TICKET_STATUS_LABELS } from '../types/ticket'
 import type { Category } from '../types/category'
 import type { Priority } from '../types/priority'
-import StatusBadge from './StatusBadge'
-import SourceBadge from './SourceBadge'
-import PriorityBadge from './PriorityBadge'
 import { formatDateTime } from '../utils/dateFormat'
 
 interface Props {
@@ -27,8 +24,6 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [saveSuccess, setSaveSuccess] = useState(false)
-
-  const currentPriority = priorities.find(p => p.id === Number(priorityId))
 
   async function handleSave() {
     setSaveError(null)
