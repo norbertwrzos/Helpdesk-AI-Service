@@ -43,6 +43,12 @@ export default function TicketMainPanel({ ticket, onAgentResponseSaved, onAnalyz
       )}
 
       {/* Agent response */}
+      <TicketAiSection
+        ticket={ticket}
+        onAnalyzed={onAnalyzed}
+        onAgentResponseSaved={onAgentResponseSaved}
+      />
+
       <AgentResponseBox
         ticketId={ticket.id}
         initialResponse={ticket.agent_response}
@@ -51,9 +57,6 @@ export default function TicketMainPanel({ ticket, onAgentResponseSaved, onAnalyz
 
       {/* Timeline */}
       <TicketTimeline ticket={ticket} />
-
-      {/* AI section */}
-      <TicketAiSection ticket={ticket} onAnalyzed={onAnalyzed} />
     </div>
   )
 }

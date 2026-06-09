@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { AIResponse } from '../types/aiResponse'
+import { getProviderDisplay } from '../utils/aiProvider'
 
 interface Props {
   responses: AIResponse[]
@@ -68,9 +69,12 @@ export default function RecentAIResponses({ responses }: Props) {
                   {formatDate(r.created_at)}
                 </td>
                 <td className="px-4 py-3">
-                  <span className="text-violet-300">{r.model_name}</span>
-                  <span className="text-gray-600 mx-1">/</span>
-                  <span className="text-gray-400">{r.provider_name}</span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-violet-300">{r.model_name}</span>
+                    <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${getProviderDisplay(r.provider_name).badgeClassName}`}>
+                      {getProviderDisplay(r.provider_name).label}
+                    </span>
+                  </div>
                 </td>
                 <td className="px-4 py-3">
                   {ratingBadge(r.feedback?.rating)}

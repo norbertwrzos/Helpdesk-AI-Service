@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { updateTicket } from '../api/tickets'
 
 interface Props {
@@ -12,6 +12,10 @@ export default function AgentResponseBox({ ticketId, initialResponse, onSaved }:
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
+
+  useEffect(() => {
+    setResponse(initialResponse ?? '')
+  }, [initialResponse])
 
   async function handleSave() {
     setError(null)

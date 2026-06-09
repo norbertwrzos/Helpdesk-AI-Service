@@ -15,6 +15,12 @@ Prototyp systemu helpdesk/service desk z modułem analizy AI dla zgłoszeń tech
 
 Repozytorium nie zawiera aktywnej integracji/importu poczty. Pole `requester_email` pozostaje zwykłym polem kontaktowym zgłaszającego używanym w formularzach i portalu użytkownika.
 
+## AI Etap 11 — UI Integration for RAG and Mail Response
+
+W tym etapie frontend został rozszerzony o pełną prezentację wyników RAG i wygenerowanej odpowiedzi mailowej w widoku szczegółów zgłoszenia. Agent widzi badge providera i modelu, datę wygenerowania, treść odpowiedzi zachowującą format mailowy, listę źródeł RAG z oceną dopasowania oraz linkami do artykułów bazy wiedzy, a także akcje kopiowania szkicu i zapisania go jako `agent_response`.
+
+Sekcja AI nadal wymaga ręcznego uruchomienia analizy i nie wykonuje automatycznych działań w tle. Najnowsza odpowiedź jest eksponowana na górze historii, starsze odpowiedzi pozostają dostępne poniżej, a feedback i metryki jakości działają bez zmian.
+
 ## AI Etap 10 — OpenAI Mail Response Generator
 
 W tym etapie system został rozszerzony o generowanie propozycji odpowiedzi mailowej dla użytkownika końcowego. Odpowiedź powstaje na podstawie treści zgłoszenia, wyniku rule-based classification, wyniku rule-based prioritization, kontekstu pobranego przez RAG oraz imienia przypisanego agenta. System nie wysyła wiadomości automatycznie; generuje wyłącznie szkic do weryfikacji przez człowieka.
@@ -166,6 +172,7 @@ Nowa migracja `002_knowledge_article_embeddings` tworzy rozszerzenie `vector` i 
 - status `ai_reviewed` po analizie AI,
 - edycja kategorii i priorytetów w Ustawieniach,
 - feedback do odpowiedzi AI,
+- interfejs odpowiedzi AI z prezentacją źródeł RAG, kopiowaniem treści i zapisem do odpowiedzi agenta,
 - agentowa baza wiedzy,
 - embeddingi artykułów bazy wiedzy i techniczny retrieval RAG,
 - portal użytkownika końcowego ograniczony do jego własnych zgłoszeń.
@@ -187,6 +194,15 @@ Nowa migracja `002_knowledge_article_embeddings` tworzy rozszerzenie `vector` i 
 4. Provider `openai` generuje ustrukturyzowaną odpowiedź mailową przez OpenAI Responses API.
 5. Provider `mock` przygotowuje lokalny szkic maila, gdy OpenAI jest wyłączone lub niedostępne.
 6. `AIResponse.response_text` zapisuje treść maila, a `sources_used` przechowuje JSON z metadanymi źródeł RAG użytych przez model.
+
+## Jak działa UI odpowiedzi AI
+
+1. Agent uruchamia `POST /tickets/{ticket_id}/analyze` z widoku szczegółów zgłoszenia.
+2. Frontend odświeża historię odpowiedzi AI przez `GET /tickets/{ticket_id}/ai-responses`.
+3. Najnowsza odpowiedź jest pokazywana jako główna karta, a starsze odpowiedzi pozostają w historii poniżej.
+4. Pole `sources_used` jest parsowane po stronie frontendu do listy źródeł RAG z tytułem, score, fragmentem treści i linkiem do `/knowledge/{article_id}`.
+5. Agent może skopiować szkic odpowiedzi albo zapisać go jako `agent_response` przez istniejący `PATCH /tickets/{ticket_id}`.
+6. Feedback do odpowiedzi AI pozostaje dostępny bez zmian i nadal zasila metryki jakości w widoku `AI`.
 
 Format odpowiedzi mailowej:
 
@@ -251,6 +267,15 @@ pytest
 cd frontend
 npm run build
 ```
+
+### Manualny scenariusz Etapu 11
+
+1. Zaloguj się jako `agent@helpdesk.local`.
+2. Otwórz szczegóły zgłoszenia i uruchom analizę AI.
+3. Sprawdź, czy karta odpowiedzi pokazuje providera, model, datę, treść maila i źródła RAG.
+4. Kliknij „Kopiuj odpowiedź” i zweryfikuj komunikat sukcesu.
+5. Kliknij „Zapisz jako odpowiedź agenta” i potwierdź nadpisanie, jeśli pole odpowiedzi agenta było już uzupełnione.
+6. Otwórz link do artykułu bazy wiedzy z sekcji źródeł i wystaw feedback dla odpowiedzi AI.
 
 ### Ewaluacja offline
 
