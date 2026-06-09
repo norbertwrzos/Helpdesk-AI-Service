@@ -1,8 +1,9 @@
-# Business logic and AI services are implemented here.
-# Placeholder — services are added in the next development phase.
+# Business logic and AI services for the Helpdesk AI Service backend.
 #
-# Planned modules:
-#   - ticket_service.py       — CRUD and ticket lifecycle
-#   - classifier_service.py   — AI classification (category, priority)
-#   - similarity_service.py   — Semantic similarity search
-#   - ai_service.py           — AI solution generation (mock / OpenAI)
+# Key modules:
+#   - ticket_service.py            — ticket CRUD and lifecycle
+#   - classification_service.py    — rule-based category classification
+#   - priority_analysis_service.py — rule-based priority analysis
+#   - rag_retriever.py             — RAG retrieval with similarity fallback
+#   - analysis_pipeline.py         — orchestrates classification, RAG and AI response
+#   - ai_generation/, embeddings/  — provider-based AI/embedding generation (mock / OpenAI)

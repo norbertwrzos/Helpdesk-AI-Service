@@ -63,9 +63,6 @@ export default function KnowledgeArticleCard({ article, categories, canEdit, onE
 
       {/* Footer */}
       <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/10 pt-3">
-        <span className="text-xs text-gray-500">
-          Aktualizacja: {formatDate(article.updated_at)}
-        </span>
         <div className="flex items-center gap-2">
           {showManagementActions && (
             <>

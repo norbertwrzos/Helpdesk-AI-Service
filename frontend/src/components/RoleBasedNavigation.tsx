@@ -90,9 +90,7 @@ export default function RoleBasedNavigation() {
 
   return (
     <div className="space-y-1.5">
-      <p className="px-3 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-slate-500">
-        Menu
-      </p>
+      
       <NavItem to="/dashboard" icon={<DashboardIcon />} label="Dashboard" end />
       <NavItem to="/tickets" icon={<TicketsIcon />} label="Zgłoszenia" />
       <NavItem to="/knowledge" icon={<KnowledgeIcon />} label="Baza wiedzy" />

@@ -27,9 +27,7 @@ export default function Topbar({ onMenuClick }: Props) {
 
         {/* App title (compact, desktop only) */}
         <div className="hidden min-w-0 lg:block">
-          <div className="text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-violet-300/80">
-            Helpdesk AI Service
-          </div>
+          
           <div className="text-sm text-slate-400">Panel obsługi zgłoszeń</div>
         </div>
 

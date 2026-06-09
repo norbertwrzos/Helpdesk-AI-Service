@@ -7,10 +7,7 @@ import StatusBadge from '../../components/StatusBadge'
 import SourceBadge from '../../components/SourceBadge'
 import PortalLayout from '../../components/PortalLayout'
 import { useAuth } from '../../auth/AuthContext'
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleString('pl-PL', { dateStyle: 'medium', timeStyle: 'short' })
-}
+import { formatDateTime } from '../../utils/dateFormat'
 
 export default function PortalTicketDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -94,7 +91,7 @@ export default function PortalTicketDetailsPage() {
             <SourceBadge source={ticket.source} />
           </div>
           <h1 className="text-xl font-semibold text-gray-100 leading-snug">{ticket.title}</h1>
-          <p className="text-xs text-gray-600">Zgłoszono {formatDate(ticket.created_at)}</p>
+          <p className="text-xs text-gray-600">Zgłoszono {formatDateTime(ticket.created_at)}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -155,12 +152,12 @@ export default function PortalTicketDetailsPage() {
 
               <div className="flex justify-between items-center gap-2">
                 <span className="text-xs text-gray-500">Zgłoszono</span>
-                <span className="text-xs text-gray-400">{formatDate(ticket.created_at)}</span>
+                <span className="text-xs text-gray-400">{formatDateTime(ticket.created_at)}</span>
               </div>
 
               <div className="flex justify-between items-center gap-2">
                 <span className="text-xs text-gray-500">Zaktualizowano</span>
-                <span className="text-xs text-gray-400">{formatDate(ticket.updated_at)}</span>
+                <span className="text-xs text-gray-400">{formatDateTime(ticket.updated_at)}</span>
               </div>
 
               {ticket.assigned_agent_name && (

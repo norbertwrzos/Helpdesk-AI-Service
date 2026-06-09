@@ -15,6 +15,46 @@ Prototyp systemu helpdesk/service desk z modułem analizy AI dla zgłoszeń tech
 
 Repozytorium nie zawiera aktywnej integracji/importu poczty. Pole `requester_email` pozostaje zwykłym polem kontaktowym zgłaszającego używanym w formularzach i portalu użytkownika.
 
+## Etap 12.5 — Code review i uproszczenie implementacji
+
+Przed przygotowaniem wersji demonstracyjnej przeprowadzono kontrolowany przegląd kodu (pre-demo code review). Celem było uporządkowanie prototypu — usunięcie martwego kodu, ujednolicenie oczywistych duplikatów oraz poprawa nieaktualnej dokumentacji — bez zmiany zachowania aplikacji i bez dodawania nowych funkcji.
+
+**Zakres review:** backend (routery, serwisy, konfiguracja), frontend (strony, komponenty, typy, narzędzia), moduły AI/RAG, ewaluacja offline, testy oraz dokumentacja.
+
+**Co zostało uporządkowane:**
+
+- usunięto martwe, nieroutowane strony frontendu (`HomePage`, `UserPortalPage`, `QualityPage`),
+- usunięto komponenty zastąpione we wcześniejszych redesignach (`Layout`, `TicketList`, `TicketDetails`, `TicketForm`, `QualityMetricsPanel`, `TicketSourceBadge`),
+- usunięto nieużywaną, zduplikowaną definicję typu `AIResponse` z `types/analysis.ts`,
+- ujednolicono trzy identyczne funkcje formatowania daty do `frontend/src/utils/dateFormat.ts`,
+- zaktualizowano nieaktualny komentarz-placeholder w `backend/app/services/__init__.py`.
+
+Szczegóły zawiera raport [docs/reviews/pre_demo_code_review.md](docs/reviews/pre_demo_code_review.md) oraz dokument akademicki [docs/ai/ai_etap_12_5_code_review.md](docs/ai/ai_etap_12_5_code_review.md).
+
+**Weryfikacja po review:**
+
+```bash
+# Backend — testy (152 testy, bez OPENAI_API_KEY, fallback SQLite)
+cd backend
+source .venv/bin/activate
+pytest
+
+# Frontend — build produkcyjny
+cd frontend
+npm install
+npm run build
+
+# Ewaluacja offline (tryb bez kosztów API)
+cd backend
+source .venv/bin/activate
+python scripts/run_evaluation.py --mode mock
+python scripts/run_evaluation.py --mode rag
+```
+
+Reindeksacja embeddingów RAG (`python scripts/reindex_knowledge_embeddings.py`) jest idempotentna; pełny tryb wektorowy wymaga PostgreSQL z `pgvector` oraz `OPENAI_API_KEY`, a przy ich braku działa fallback bag-of-words.
+
+**Elementy pozostawione świadomie:** mock auth (role `agent`/`end_user`), fallback do providerów `mock`, rule-based klasyfikacja i priorytetyzacja, `SimilarityService` jako fallback RAG oraz brak automatycznej wysyłki odpowiedzi (system generuje wyłącznie szkice do weryfikacji przez agenta).
+
 ## AI Etap 11 — UI Integration for RAG and Mail Response
 
 W tym etapie frontend został rozszerzony o pełną prezentację wyników RAG i wygenerowanej odpowiedzi mailowej w widoku szczegółów zgłoszenia. Agent widzi badge providera i modelu, datę wygenerowania, treść odpowiedzi zachowującą format mailowy, listę źródeł RAG z oceną dopasowania oraz linkami do artykułów bazy wiedzy, a także akcje kopiowania szkicu i zapisania go jako `agent_response`.

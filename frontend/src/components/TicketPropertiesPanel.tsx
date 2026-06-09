@@ -6,6 +6,7 @@ import type { Priority } from '../types/priority'
 import StatusBadge from './StatusBadge'
 import SourceBadge from './SourceBadge'
 import PriorityBadge from './PriorityBadge'
+import { formatDateTime } from '../utils/dateFormat'
 
 interface Props {
   ticket: Ticket
@@ -17,10 +18,6 @@ interface Props {
 const STATUS_OPTIONS = (Object.entries(TICKET_STATUS_LABELS) as [TicketStatus, string][]).map(
   ([value, label]) => ({ value, label }),
 )
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleString('pl-PL', { dateStyle: 'medium', timeStyle: 'short' })
-}
 
 export default function TicketPropertiesPanel({ ticket, categories, priorities, onUpdate }: Props) {
   const [status, setStatus] = useState<TicketStatus>(ticket.status)
@@ -76,9 +73,7 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
       {/* Status */}
       <div className="space-y-1.5">
         <label className="text-xs text-gray-500 font-medium block">Status</label>
-        <div className="flex items-center gap-2 mb-1">
-          <StatusBadge status={status} />
-        </div>
+        
         <select
           className="w-full bg-[#0f1117] border border-white/10 rounded-lg text-sm text-gray-200 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-violet-500"
           value={status}
@@ -108,11 +103,6 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
       {/* Priority */}
       <div className="space-y-1.5">
         <label className="text-xs text-gray-500 font-medium block">Priorytet</label>
-        {currentPriority && (
-          <div className="mb-1">
-            <PriorityBadge name={currentPriority.name} level={currentPriority.level} />
-          </div>
-        )}
         <select
           className="w-full bg-[#0f1117] border border-white/10 rounded-lg text-sm text-gray-200 px-3 py-2 focus:outline-none focus:ring-1 focus:ring-violet-500"
           value={priorityId}
@@ -137,36 +127,24 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
         />
       </div>
 
-      {/* Divider */}
-      <hr className="border-white/8" />
+      
 
       {/* Readonly info */}
       <div className="space-y-3">
-        <div className="flex justify-between items-start gap-2">
-          <span className="text-xs text-gray-500">Źródło</span>
-          <SourceBadge source={ticket.source} />
-        </div>
+        
 
-        {ticket.requester_email && (
-          <div className="flex justify-between items-start gap-2">
-            <span className="text-xs text-gray-500 shrink-0">Zgłaszający</span>
-            <span className="text-xs text-gray-300 text-right break-all">{ticket.requester_name ? `${ticket.requester_name} <${ticket.requester_email}>` : ticket.requester_email}</span>
-          </div>
-        )}
+        
 
         <div className="flex justify-between items-center gap-2">
           <span className="text-xs text-gray-500">Utworzono</span>
-          <span className="text-xs text-gray-400">{formatDate(ticket.created_at)}</span>
+          <span className="text-xs text-gray-400">{formatDateTime(ticket.created_at)}</span>
         </div>
 
         <div className="flex justify-between items-center gap-2">
           <span className="text-xs text-gray-500">Zaktualizowano</span>
-          <span className="text-xs text-gray-400">{formatDate(ticket.updated_at)}</span>
+          <span className="text-xs text-gray-400">{formatDateTime(ticket.updated_at)}</span>
         </div>
       </div>
-
-      {/* Divider */}
-      <hr className="border-white/8" />
 
       {/* Actions */}
       {saveError && (

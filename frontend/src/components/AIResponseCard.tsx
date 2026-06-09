@@ -7,12 +7,9 @@ import type { AIResponse } from '../types/aiResponse'
 import type { Feedback } from '../types/feedback'
 import { getProviderDisplay } from '../utils/aiProvider'
 import { parseSourcesUsed } from '../utils/ragSources'
+import { formatDateTime } from '../utils/dateFormat'
 import FeedbackForm from './FeedbackForm'
 import FeedbackSummary from './FeedbackSummary'
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleString('pl-PL', { dateStyle: 'medium', timeStyle: 'short' })
-}
 
 interface Props {
   ticketId: number
@@ -108,7 +105,7 @@ export default function AIResponseCard({
             </span>
           </div>
           <div className="text-xs text-gray-500">
-            Wygenerowano: {formatDate(aiResponse.created_at)}
+            Wygenerowano: {formatDateTime(aiResponse.created_at)}
           </div>
         </div>
 

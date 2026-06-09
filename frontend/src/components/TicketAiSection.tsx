@@ -60,12 +60,7 @@ export default function TicketAiSection({ ticket, onAnalyzed, onAgentResponseSav
         </div>
       )}
 
-      {/* Empty hint */}
-      {!analysisResult && !analyzing && !analysisError && (
-        <p className="text-sm text-gray-500">
-          Kliknij „Uruchom analizę AI", aby automatycznie sklasyfikować zgłoszenie i wygenerować propozycję rozwiązania.
-        </p>
-      )}
+      
 
       {/* Results */}
       {analysisResult && !analyzing && (
@@ -102,8 +97,6 @@ export default function TicketAiSection({ ticket, onAnalyzed, onAgentResponseSav
 
       <div className="pt-2 border-t border-white/8 space-y-3">
         <div className="flex items-center justify-between gap-3">
-          <div className="text-xs text-gray-500 font-medium uppercase tracking-wider">Historia odpowiedzi AI</div>
-          <div className="text-xs text-gray-600">Najświeższa odpowiedź znajduje się na górze listy.</div>
         </div>
         <AIResponseHistory
           ticketId={ticket.id}

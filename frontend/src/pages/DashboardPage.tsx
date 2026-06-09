@@ -35,9 +35,6 @@ export default function DashboardPage() {
         <h1 className="page__title">
           Witaj, {currentUser?.name ?? 'użytkowniku'}
         </h1>
-        <p className="page__subtitle">
-          Panel obsługi zgłoszeń technicznych.
-        </p>
       </div>
 
       {/* Stat cards */}
@@ -60,46 +57,28 @@ export default function DashboardPage() {
             label="Wszystkie zgłoszenia"
             value={total}
             valueColor="text-gray-100"
-            description="Łącznie w systemie"
+            
           />
           <StatCard
             label="Otwarte"
             value={open}
             valueColor="text-violet-400"
-            description="Nowe, nieprzetworzone"
+            
           />
           <StatCard
             label="Zweryfikowane przez AI"
             value={aiReviewed}
             valueColor="text-blue-400"
-            description="Po analizie pipeline'u"
+            
           />
           <StatCard
             label="Oczekujące"
             value={pending}
             valueColor="text-yellow-400"
-            description="Wymagają działania agenta"
+            
           />
         </div>
       )}
-
-      {/* Recent tickets */}
-      <div className="surface-card surface-card--padded mt-8">
-        <h2 className="section-heading mb-4">
-          Ostatnie zgłoszenia
-        </h2>
-        {loading ? (
-          <div className="space-y-2">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-8 rounded bg-gray-800/60 animate-pulse" />
-            ))}
-          </div>
-        ) : error ? (
-          <p className="text-sm text-gray-500">Brak danych.</p>
-        ) : (
-          <RecentTickets tickets={recent} />
-        )}
-      </div>
 
       {/* Quick actions */}
       <div className="surface-card surface-card--padded mt-6">
