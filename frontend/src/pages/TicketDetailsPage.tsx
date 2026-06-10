@@ -67,11 +67,6 @@ export default function TicketDetailsPage() {
     })
   }
 
-  function handleAgentResponseSaved(response: string) {
-    if (!ticket) return
-    setTicket({ ...ticket, agent_response: response })
-  }
-
   if (loading) {
     return (
       <div className="page">
@@ -128,7 +123,6 @@ export default function TicketDetailsPage() {
         <div className="lg:col-span-2">
           <TicketMainPanel
             ticket={ticket}
-            onAgentResponseSaved={handleAgentResponseSaved}
             onAnalyzed={handleAnalyzed}
           />
         </div>

@@ -1,15 +1,24 @@
+import { useState } from 'react'
 import type { Ticket } from '../types/ticket'
 import type { AnalysisResult } from '../types/analysis'
-import AgentResponseBox from './AgentResponseBox'
 import TicketAiSection from './TicketAiSection'
+import TicketConversation from './tickets/TicketConversation'
+import { useAuth } from '../auth/AuthContext'
 
 interface Props {
   ticket: Ticket
-  onAgentResponseSaved: (response: string) => void
   onAnalyzed: (result: AnalysisResult) => void
 }
 
-export default function TicketMainPanel({ ticket, onAgentResponseSaved, onAnalyzed }: Props) {
+export default function TicketMainPanel({ ticket, onAnalyzed }: Props) {
+  const { currentUser } = useAuth()
+  const [conversationKey, setConversationKey] = useState(0)
+
+  function handleAiResponseSavedAsMessage() {
+    // Refresh conversation so AI responses saved by agent are immediately visible.
+    setConversationKey(k => k + 1)
+  }
+
   return (
     <div className="space-y-5">
       {/* Description */}
@@ -41,17 +50,20 @@ export default function TicketMainPanel({ ticket, onAgentResponseSaved, onAnalyz
         </div>
       )}
 
+      {/* Conversation thread */}
+      <TicketConversation
+        ticketId={ticket.id}
+        authorRole="agent"
+        authorName={currentUser?.name ?? 'Agent'}
+        authorEmail={currentUser?.email ?? null}
+        refreshKey={conversationKey}
+      />
+
       {/* Agent response */}
       <TicketAiSection
         ticket={ticket}
         onAnalyzed={onAnalyzed}
-        onAgentResponseSaved={onAgentResponseSaved}
-      />
-
-      <AgentResponseBox
-        ticketId={ticket.id}
-        initialResponse={ticket.agent_response}
-        onSaved={onAgentResponseSaved}
+        onSavedAsMessage={handleAiResponseSavedAsMessage}
       />
     </div>
   )

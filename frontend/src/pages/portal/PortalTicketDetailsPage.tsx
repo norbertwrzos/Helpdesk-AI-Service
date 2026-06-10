@@ -8,6 +8,7 @@ import SourceBadge from '../../components/SourceBadge'
 import PortalLayout from '../../components/PortalLayout'
 import { useAuth } from '../../auth/AuthContext'
 import { formatDateTime } from '../../utils/dateFormat'
+import TicketConversation from '../../components/tickets/TicketConversation'
 
 export default function PortalTicketDetailsPage() {
   const { id } = useParams<{ id: string }>()
@@ -105,27 +106,14 @@ export default function PortalTicketDetailsPage() {
               </p>
             </div>
 
-            {/* Agent response */}
-            {ticket.agent_response && (
-              <div className="surface-card space-y-3 border-green-500/20 p-5">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-green-400" />
-                  <h3 className="text-sm font-semibold text-green-300">Odpowiedź agenta</h3>
-                </div>
-                <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
-                  {ticket.agent_response}
-                </p>
-              </div>
-            )}
-
-            {!ticket.agent_response && (
-              <div className="surface-card surface-card--padded">
-                <h3 className="text-sm font-semibold text-gray-300 mb-2">Odpowiedź agenta</h3>
-                <p className="text-sm text-gray-500 italic">
-                  Twoje zgłoszenie jest w trakcie realizacji. Agent odpowie wkrótce.
-                </p>
-              </div>
-            )}
+          {/* Conversation */}
+            <TicketConversation
+              ticketId={ticket.id}
+              authorRole="end_user"
+              authorName={currentUser?.name ?? 'Użytkownik'}
+              authorEmail={currentUser?.email ?? null}
+              title="Wiadomości"
+            />
           </div>
 
           {/* Right: status panel */}

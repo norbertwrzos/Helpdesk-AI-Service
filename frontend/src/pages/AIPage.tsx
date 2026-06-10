@@ -5,7 +5,6 @@ import type { QualityMetrics } from '../types/qualityMetrics'
 import type { AIResponse } from '../types/aiResponse'
 import AIMetricsCards from '../components/AIMetricsCards'
 import RecentAIResponses from '../components/RecentAIResponses'
-import AIModuleInfo from '../components/AIModuleInfo'
 import LoadingState from '../components/LoadingState'
 
 export default function AIPage() {
@@ -58,12 +57,6 @@ export default function AIPage() {
           <section className="space-y-3">
             <h2 className="section-heading">Ostatnie odpowiedzi AI</h2>
             <RecentAIResponses responses={responses} />
-          </section>
-
-          {/* Module Info */}
-          <section className="space-y-3">
-            <h2 className="section-heading">Informacja o module</h2>
-            <AIModuleInfo />
           </section>
         </div>
       )}

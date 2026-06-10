@@ -2,7 +2,7 @@ import enum
 from datetime import datetime, timezone
 
 from sqlalchemy import DateTime, Enum as SAEnum, Float, ForeignKey, Index, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
 
@@ -45,7 +45,6 @@ class Ticket(Base):
     requester_email: Mapped[str | None] = mapped_column(String(255), nullable=True)
     requester_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     assigned_agent_name: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    agent_response: Mapped[str | None] = mapped_column(Text, nullable=True)
     classification_confidence: Mapped[float | None] = mapped_column(
         Float, nullable=True
     )
@@ -64,4 +63,8 @@ class Ticket(Base):
         default=lambda: datetime.now(timezone.utc),
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False,
+    )
+    messages: Mapped[list["TicketMessage"]] = relationship(
+        back_populates="ticket",
+        cascade="all, delete-orphan",
     )

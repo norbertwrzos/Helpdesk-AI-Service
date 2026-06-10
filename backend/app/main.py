@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import app.models  # noqa: F401
-from app.api.routes import ai, categories, feedback, health, knowledge, priorities, quality_metrics, tickets
+from app.api.routes import ai, categories, feedback, health, knowledge, priorities, quality_metrics, ticket_messages, tickets
 from app.core.config import settings
 
 
@@ -22,6 +22,7 @@ app.add_middleware(
 
 app.include_router(health.router, tags=["system"])
 app.include_router(tickets.router, tags=["tickets"])
+app.include_router(ticket_messages.router, tags=["ticket_messages"])
 app.include_router(ai.router, tags=["ai"])
 app.include_router(feedback.router, tags=["feedback"])
 app.include_router(quality_metrics.router, tags=["quality"])

@@ -1,13 +1,11 @@
 import type { TicketSource } from '../types/ticket'
 
 export const SOURCE_LABELS: Record<TicketSource, string> = {
-  manual: 'Ręczne',
-  csv: 'CSV',
+  manual: 'Portal'
 }
 
 const COLOR: Record<TicketSource, string> = {
   manual: 'bg-gray-700/60 text-gray-400 border-gray-600',
-  csv: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
 }
 
 export default function SourceBadge({ source }: { source: TicketSource }) {

@@ -10,15 +10,13 @@ interface Props {
   ticketId: number
   /** Jeśli true, lista zostanie ponownie pobrana z API */
   refreshKey?: number
-  currentAgentResponse?: string | null
-  onAgentResponseSaved?: (response: string) => void
+  onSavedAsMessage?: () => void
 }
 
 export default function AIResponseHistory({
   ticketId,
   refreshKey,
-  currentAgentResponse,
-  onAgentResponseSaved,
+  onSavedAsMessage,
 }: Props) {
   const [responses, setResponses] = useState<AIResponse[]>([])
   const [loading, setLoading] = useState(true)
@@ -69,8 +67,7 @@ export default function AIResponseHistory({
           key={latestResponse.id}
           ticketId={ticketId}
           aiResponse={latestResponse}
-          currentAgentResponse={currentAgentResponse}
-          onAgentResponseSaved={onAgentResponseSaved}
+          onSavedAsMessage={onSavedAsMessage}
         />
       </div>
 
@@ -85,8 +82,7 @@ export default function AIResponseHistory({
                 key={resp.id}
                 ticketId={ticketId}
                 aiResponse={resp}
-                currentAgentResponse={currentAgentResponse}
-                onAgentResponseSaved={onAgentResponseSaved}
+                onSavedAsMessage={onSavedAsMessage}
               />
             ))}
           </div>

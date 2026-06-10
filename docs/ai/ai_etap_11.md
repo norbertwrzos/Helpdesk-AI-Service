@@ -24,13 +24,13 @@ Takie podejście zwiększa odporność aplikacji na starsze dane historyczne ora
 
 ## 5. Akcje użytkownika i ergonomia pracy agenta
 
-W karcie odpowiedzi dodano dwie akcje robocze. Pierwsza umożliwia skopiowanie wygenerowanej odpowiedzi do schowka, co przyspiesza dalszą edycję lub wykorzystanie treści poza aplikacją. Druga pozwala zapisać wygenerowany szkic bezpośrednio jako `agent_response` przez istniejący endpoint `PATCH /tickets/{ticket_id}`. Jeżeli pole odpowiedzi agenta było już wcześniej wypełnione, interfejs wymaga potwierdzenia nadpisania, co ogranicza ryzyko przypadkowej utraty ręcznie przygotowanej treści.
+W karcie odpowiedzi dodano dwie akcje robocze. Pierwsza umożliwia skopiowanie wygenerowanej odpowiedzi do schowka, co przyspiesza dalszą edycję lub wykorzystanie treści poza aplikacją. Druga pozwala dodać wygenerowany szkic bezpośrednio jako wiadomość agenta do konwersacji ticketu.
 
-Istotna była również synchronizacja sekcji AI z polem odpowiedzi agenta. Po zapisaniu szkicu z karty AI formularz odpowiedzi agenta powinien od razu pokazywać nową wartość. W tym celu zaktualizowano komponent `AgentResponseBox`, aby reagował na zmianę `initialResponse` przekazywaną z komponentu nadrzędnego.
+Istotna była również synchronizacja sekcji AI z historią komunikacji. Po zapisaniu szkicu z karty AI konwersacja powinna od razu pokazywać nową wiadomość agenta, dzięki czemu użytkownik końcowy i agent widzą spójny przebieg kontaktu.
 
 ## 6. Kontrola dostępu i bezpieczeństwo
 
-Z punktu widzenia bezpieczeństwa zachowano wcześniejsze założenie, że wygenerowana odpowiedź nie może zostać wysłana automatycznie. Interfejs podkreśla, że jest to wyłącznie propozycja wymagająca weryfikacji człowieka. Akcja zapisu do `agent_response` pozostaje dostępna jedynie w panelu agenta, ponieważ sam widok szczegółów zgłoszenia jest chroniony rolą `agent`. W ten sposób warstwa UI nie osłabia modelu uprawnień już obecnego w aplikacji.
+Z punktu widzenia bezpieczeństwa zachowano wcześniejsze założenie, że wygenerowana odpowiedź nie może zostać wysłana automatycznie. Interfejs podkreśla, że jest to wyłącznie propozycja wymagająca weryfikacji człowieka. Akcja dodania odpowiedzi AI do konwersacji pozostaje dostępna jedynie w panelu agenta, ponieważ sam widok szczegółów zgłoszenia jest chroniony rolą `agent`. W ten sposób warstwa UI nie osłabia modelu uprawnień już obecnego w aplikacji.
 
 ## 7. Wpływ na widok AI
 
@@ -38,7 +38,7 @@ Widok `AI` został odświeżony w niewielkim zakresie, aby lista ostatnich odpow
 
 ## 8. Walidacja
 
-Walidację etapu przeprowadzono przez produkcyjny build frontendu (`npm run build`). Test ten potwierdził poprawność typów TypeScript, importów, tras nawigacyjnych oraz integracji nowych komponentów z istniejącymi endpointami API. Dodatkowo przewidziano manualny scenariusz sprawdzający uruchomienie analizy, wyświetlenie źródeł RAG, kopiowanie treści, zapis do odpowiedzi agenta oraz przejście do artykułu bazy wiedzy.
+Walidację etapu przeprowadzono przez produkcyjny build frontendu (`npm run build`). Test ten potwierdził poprawność typów TypeScript, importów, tras nawigacyjnych oraz integracji nowych komponentów z istniejącymi endpointami API. Dodatkowo przewidziano manualny scenariusz sprawdzający uruchomienie analizy, wyświetlenie źródeł RAG, kopiowanie treści, dodanie odpowiedzi AI jako wiadomości agenta oraz przejście do artykułu bazy wiedzy.
 
 ## 9. Ograniczenia
 

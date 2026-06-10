@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { updateTicket } from '../api/tickets'
+import { createTicketMessage } from '../api/ticketMessages'
 import { useAuth } from '../auth/AuthContext'
 import { useToast } from '../context/ToastContext'
 import type { AIResponse } from '../types/aiResponse'
@@ -14,8 +14,7 @@ import FeedbackSummary from './FeedbackSummary'
 interface Props {
   ticketId: number
   aiResponse: AIResponse
-  currentAgentResponse?: string | null
-  onAgentResponseSaved?: (response: string) => void
+  onSavedAsMessage?: () => void
 }
 
 function formatScore(score: number | null | undefined) {
@@ -27,19 +26,18 @@ function formatScore(score: number | null | undefined) {
 export default function AIResponseCard({
   ticketId,
   aiResponse,
-  currentAgentResponse,
-  onAgentResponseSaved,
+  onSavedAsMessage,
 }: Props) {
   const [feedback, setFeedback] = useState<Feedback | null>(aiResponse.feedback ?? null)
   const [showForm, setShowForm] = useState(false)
   const [copying, setCopying] = useState(false)
   const [savingAsAgent, setSavingAsAgent] = useState(false)
-  const { role } = useAuth()
+  const { role, currentUser } = useAuth()
   const { showToast } = useToast()
 
   const providerDisplay = getProviderDisplay(aiResponse.provider_name)
   const parsedSources = parseSourcesUsed(aiResponse.sources_used)
-  const canSaveAsAgent = role === 'agent' && typeof onAgentResponseSaved === 'function'
+  const canSaveAsAgent = role === 'agent'
 
   function handleFeedbackSaved(saved: Feedback) {
     setFeedback(saved)
@@ -64,29 +62,22 @@ export default function AIResponseCard({
   }
 
   async function handleSaveAsAgentResponse() {
-    if (!canSaveAsAgent || !onAgentResponseSaved) {
+    if (!canSaveAsAgent) {
       return
-    }
-
-    const existingResponse = currentAgentResponse?.trim()
-    const nextResponse = aiResponse.response_text.trim()
-
-    if (existingResponse && existingResponse !== nextResponse) {
-      const confirmed = window.confirm(
-        'Odpowiedź agenta już istnieje. Czy chcesz ją zastąpić treścią odpowiedzi AI?',
-      )
-      if (!confirmed) {
-        return
-      }
     }
 
     setSavingAsAgent(true)
     try {
-      const updated = await updateTicket(ticketId, { agent_response: aiResponse.response_text })
-      onAgentResponseSaved(updated.agent_response ?? aiResponse.response_text)
-      showToast('Odpowiedź AI została zapisana jako odpowiedź agenta.', 'success')
+      await createTicketMessage(ticketId, {
+        author_role: 'agent',
+        author_name: currentUser?.name ?? 'Agent',
+        author_email: currentUser?.email ?? null,
+        message_text: aiResponse.response_text,
+      })
+      onSavedAsMessage?.()
+      showToast('Odpowiedź AI została dodana do konwersacji.', 'success')
     } catch {
-      showToast('Nie udało się zapisać odpowiedzi agenta.', 'error')
+      showToast('Nie udało się dodać odpowiedzi AI do konwersacji.', 'error')
     } finally {
       setSavingAsAgent(false)
     }
@@ -123,7 +114,7 @@ export default function AIResponseCard({
               onClick={handleSaveAsAgentResponse}
               disabled={savingAsAgent}
             >
-              {savingAsAgent ? 'Zapisywanie…' : 'Zapisz jako odpowiedź agenta'}
+              {savingAsAgent ? 'Zapisywanie…' : 'Dodaj jako wiadomość agenta'}
             </button>
           )}
         </div>

@@ -1,14 +1,20 @@
 import { useEffect, useState } from 'react'
 import { getTicketAiResponses } from '../api/aiResponses'
+import { getTicketMessages } from '../api/ticketMessages'
 import type { Ticket } from '../types/ticket'
 import type { AIResponse } from '../types/aiResponse'
+import type { TicketMessage } from '../types/ticketMessage'
 import TimelineItem, { type TimelineEvent } from './TimelineItem'
 
 interface Props {
   ticket: Ticket
 }
 
-function buildEvents(ticket: Ticket, aiResponses: AIResponse[]): TimelineEvent[] {
+function buildEvents(
+  ticket: Ticket,
+  aiResponses: AIResponse[],
+  ticketMessages: TicketMessage[],
+): TimelineEvent[] {
   const events: TimelineEvent[] = []
   const createdAt = new Date(ticket.created_at)
   const updatedAt = new Date(ticket.updated_at)
@@ -114,12 +120,19 @@ function buildEvents(ticket: Ticket, aiResponses: AIResponse[]): TimelineEvent[]
     }
   }
 
-  // Agent response
-  if (ticket.agent_response) {
+  // Agent response event inferred from conversation history
+  const latestAgentMessage = [...ticketMessages]
+    .filter(msg => msg.author_role === 'agent')
+    .sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+    )[0]
+
+  if (latestAgentMessage) {
     events.push({
       id: 'agent',
       label: 'Odpowiedź agenta dodana',
-      date: updatedAt,
+      date: new Date(latestAgentMessage.created_at),
       iconType: 'agent',
     })
   }
@@ -142,19 +155,27 @@ function buildEvents(ticket: Ticket, aiResponses: AIResponse[]): TimelineEvent[]
 
 export default function TicketTimeline({ ticket }: Props) {
   const [aiResponses, setAiResponses] = useState<AIResponse[]>([])
+  const [ticketMessages, setTicketMessages] = useState<TicketMessage[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let cancelled = false
     setLoading(true)
-    getTicketAiResponses(ticket.id)
-      .then(data => { if (!cancelled) setAiResponses(data) })
+    Promise.all([
+      getTicketAiResponses(ticket.id),
+      getTicketMessages(ticket.id),
+    ])
+      .then(([responses, messages]) => {
+        if (cancelled) return
+        setAiResponses(responses)
+        setTicketMessages(messages)
+      })
       .catch(() => { /* non-critical — timeline still works without AI data */ })
       .finally(() => { if (!cancelled) setLoading(false) })
     return () => { cancelled = true }
   }, [ticket.id])
 
-  const events = buildEvents(ticket, aiResponses)
+  const events = buildEvents(ticket, aiResponses, ticketMessages)
 
   return (
     <div className="bg-surface rounded-xl border border-white/8 p-5 space-y-1">

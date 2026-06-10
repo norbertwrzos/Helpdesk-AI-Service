@@ -38,7 +38,7 @@ Jeżeli `AI_GENERATION_PROVIDER=openai`, ale `OPENAI_API_KEY` nie jest ustawiony
 
 ### AI Etap 11 — UI Integration for RAG and Mail Response
 
-W tym etapie frontend został rozszerzony o pełną prezentację wyników RAG i wygenerowanej odpowiedzi mailowej w widoku szczegółów zgłoszenia. Agent widzi badge providera i modelu, datę wygenerowania, treść odpowiedzi zachowującą format mailowy, listę źródeł RAG z oceną dopasowania oraz linkami do artykułów bazy wiedzy, a także akcje kopiowania szkicu i zapisania go jako `agent_response`.
+W tym etapie frontend został rozszerzony o pełną prezentację wyników RAG i wygenerowanej odpowiedzi mailowej w widoku szczegółów zgłoszenia. Agent widzi badge providera i modelu, datę wygenerowania, treść odpowiedzi zachowującą format mailowy, listę źródeł RAG z oceną dopasowania oraz linkami do artykułów bazy wiedzy, a także akcje kopiowania szkicu i dodania go do konwersacji.
 
 Sekcja AI nadal wymaga ręcznego uruchomienia analizy i nie wykonuje automatycznych działań w tle. Najnowsza odpowiedź jest eksponowana na górze historii, starsze odpowiedzi pozostają dostępne poniżej, a feedback i metryki jakości działają bez zmian.
 
@@ -116,6 +116,89 @@ python scripts/run_evaluation.py --mode rag
 Reindeksacja embeddingów RAG (`python scripts/reindex_knowledge_embeddings.py`) jest idempotentna; pełny tryb wektorowy wymaga PostgreSQL z `pgvector` oraz `OPENAI_API_KEY`, a przy ich braku działa fallback bag-of-words.
 
 **Elementy pozostawione świadomie:** mock auth (role `agent`/`end_user`), fallback do providerów `mock`, rule-based klasyfikacja i priorytetyzacja, `SimilarityService` jako fallback RAG oraz brak automatycznej wysyłki odpowiedzi (system generuje wyłącznie szkice do weryfikacji przez agenta).
+
+## Etap — Wymiana wiadomości w zgłoszeniu
+
+Etap wprowadza pełną, chronologiczną historię komunikacji w ramach jednego zgłoszenia opartą o model `TicketMessage`. Rozwiązanie jest celowo proste i oparte o REST API, bez realtime i bez WebSocketów.
+
+### Cel funkcji
+
+- umożliwienie użytkownikowi końcowemu dodania wiadomości do własnego zgłoszenia,
+- umożliwienie agentowi odpowiedzi w tym samym wątku,
+- prezentacja wspólnej historii wiadomości po obu stronach UI (agent i end_user),
+- utrzymanie jednego źródła prawdy dla komunikacji w tabeli `ticket_messages`.
+
+### Model danych `TicketMessage`
+
+Dodano tabelę `ticket_messages` oraz model SQLAlchemy `TicketMessage` z relacją 1:N do `Ticket`.
+
+Najważniejsze pola:
+
+- `ticket_id` (FK do `tickets.id`),
+- `author_role` (`agent`, `end_user`, opcjonalnie rezerwowe `system`),
+- `author_name`, `author_email`,
+- `message_text`,
+- `message_type` (aktualnie `public`),
+- `created_at`, `updated_at`.
+
+Wiadomości nie są edytowane ani usuwane, dzięki czemu historia konwersacji pozostaje audytowalna.
+
+### Endpointy API
+
+- `GET /tickets/{ticket_id}/messages`
+	zwraca listę wiadomości dla zgłoszenia, posortowaną rosnąco po `created_at`.
+- `POST /tickets/{ticket_id}/messages`
+	dodaje nową wiadomość agenta lub użytkownika końcowego.
+
+Przykładowy payload `POST`:
+
+```json
+{
+	"author_role": "agent",
+	"author_name": "Adam Agent",
+	"author_email": "agent@example.local",
+	"message_text": "Dzień dobry, proszę wykonać poniższe kroki..."
+}
+```
+
+Walidacja:
+
+- pusta treść wiadomości zwraca `422`,
+- niepoprawna rola autora zwraca `422`,
+- brak zgłoszenia zwraca `404`.
+
+### Komunikacja agent ↔ end_user
+
+Frontend zawiera sekcję konwersacji w obu widokach szczegółów zgłoszenia:
+
+- agent: sekcja „Konwersacja”,
+- portal użytkownika: sekcja „Wiadomości”.
+
+Po wysłaniu wiadomości interfejs odświeża listę i zachowuje porządek chronologiczny.
+
+### Źródło prawdy konwersacji
+
+Komunikacja agenta i użytkownika końcowego jest przechowywana wyłącznie w `ticket_messages`.
+
+- wiadomości agenta i end_user są zapisywane jako wpisy `TicketMessage`,
+- historia jest pobierana przez `GET /tickets/{ticket_id}/messages`,
+- interfejsy agenta i portalu opierają się na tej samej liście wiadomości.
+
+### Integracja z odpowiedzią AI
+
+Przycisk „Dodaj jako wiadomość agenta” zapisuje treść AI bezpośrednio jako wiadomość `agent` w konwersacji ticketu.
+
+W praktyce zapewnia to pełną audytowalność i eliminuje duplikowanie źródeł danych komunikacji.
+
+### Ograniczenia etapu
+
+- brak realtime,
+- brak WebSocket,
+- brak backendowego auth/JWT,
+- mock auth pozostaje po stronie frontendu,
+- brak załączników,
+- brak edycji/usuwania wiadomości,
+- brak wysyłki e-mail i brak push notifications.
 
 ## Stack
 
@@ -251,7 +334,7 @@ Nowa migracja `002_knowledge_article_embeddings` tworzy rozszerzenie `vector` i 
 - status `ai_reviewed` po analizie AI,
 - edycja kategorii i priorytetów w Ustawieniach,
 - feedback do odpowiedzi AI,
-- interfejs odpowiedzi AI z prezentacją źródeł RAG, kopiowaniem treści i zapisem do odpowiedzi agenta,
+- interfejs odpowiedzi AI z prezentacją źródeł RAG, kopiowaniem treści i dodaniem odpowiedzi do konwersacji,
 - agentowa baza wiedzy,
 - embeddingi artykułów bazy wiedzy i techniczny retrieval RAG,
 - portal użytkownika końcowego ograniczony do jego własnych zgłoszeń.
@@ -280,7 +363,7 @@ Nowa migracja `002_knowledge_article_embeddings` tworzy rozszerzenie `vector` i 
 2. Frontend odświeża historię odpowiedzi AI przez `GET /tickets/{ticket_id}/ai-responses`.
 3. Najnowsza odpowiedź jest pokazywana jako główna karta, a starsze odpowiedzi pozostają w historii poniżej.
 4. Pole `sources_used` jest parsowane po stronie frontendu do listy źródeł RAG z tytułem, score, fragmentem treści i linkiem do `/knowledge/{article_id}`.
-5. Agent może skopiować szkic odpowiedzi albo zapisać go jako `agent_response` przez istniejący `PATCH /tickets/{ticket_id}`.
+5. Agent może skopiować szkic odpowiedzi albo dodać go jako wiadomość agenta do konwersacji ticketu.
 6. Feedback do odpowiedzi AI pozostaje dostępny bez zmian i nadal zasila metryki jakości w widoku `AI`.
 
 Format odpowiedzi mailowej:

@@ -24,7 +24,6 @@ class TicketUpdate(BaseModel):
     category_id: int | None = None
     priority_id: int | None = None
     assigned_agent_name: str | None = None
-    agent_response: str | None = None
 
 
 class TicketResponse(BaseModel):
@@ -38,7 +37,6 @@ class TicketResponse(BaseModel):
     requester_email: str | None
     requester_name: str | None
     assigned_agent_name: str | None
-    agent_response: str | None
     classification_confidence: float | None
     priority_confidence: float | None
     classification_explanation: str | None

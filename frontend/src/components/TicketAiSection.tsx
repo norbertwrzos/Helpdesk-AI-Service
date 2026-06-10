@@ -7,10 +7,10 @@ import AIResponseHistory from './AIResponseHistory'
 interface Props {
   ticket: Ticket
   onAnalyzed: (result: AnalysisResult) => void
-  onAgentResponseSaved: (response: string) => void
+  onSavedAsMessage?: () => void
 }
 
-export default function TicketAiSection({ ticket, onAnalyzed, onAgentResponseSaved }: Props) {
+export default function TicketAiSection({ ticket, onAnalyzed, onSavedAsMessage }: Props) {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null)
   const [analyzing, setAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
@@ -98,8 +98,7 @@ export default function TicketAiSection({ ticket, onAnalyzed, onAgentResponseSav
         <AIResponseHistory
           ticketId={ticket.id}
           refreshKey={aiHistoryKey}
-          currentAgentResponse={ticket.agent_response}
-          onAgentResponseSaved={onAgentResponseSaved}
+          onSavedAsMessage={onSavedAsMessage}
         />
       </div>
     </div>
