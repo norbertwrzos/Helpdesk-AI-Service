@@ -1,5 +1,3 @@
-import type { Feedback } from './feedback'
-
 export interface RagSource {
   article_id: number | null
   title: string
@@ -22,5 +20,4 @@ export interface AIResponse {
   provider_name: string
   sources_used: string | null
   created_at: string
-  feedback?: Feedback | null
 }

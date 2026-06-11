@@ -87,17 +87,6 @@ function buildEvents(
       date: aiDate,
       iconType: 'ai-response',
     })
-
-    // Feedback (if present on this AI response)
-    if (resp.feedback) {
-      events.push({
-        id: `feedback-${resp.feedback.id}`,
-        label: 'Feedback zapisany',
-        sublabel: `Ocena: ${resp.feedback.rating}/5${resp.feedback.is_helpful !== null ? (resp.feedback.is_helpful ? ' · Pomocna' : ' · Niepomocna') : ''}`,
-        date: new Date(resp.feedback.created_at),
-        iconType: 'feedback',
-      })
-    }
   })
 
   // If no AI responses but category/priority exist — show them based on updated_at

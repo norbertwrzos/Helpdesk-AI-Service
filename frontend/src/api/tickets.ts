@@ -10,3 +10,6 @@ export const createTicket = (payload: TicketCreate): Promise<Ticket> =>
 
 export const updateTicket = (id: number, payload: TicketUpdate): Promise<Ticket> =>
   apiClient.patch(`/tickets/${id}`, payload)
+
+export const deleteTicket = (id: number): Promise<void> =>
+  apiClient.delete(`/tickets/${id}`)

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
@@ -33,6 +33,12 @@ def update_ticket(
     ticket_id: int, data: TicketUpdate, db: Session = Depends(get_db)
 ) -> TicketResponse:
     return ticket_service.update_ticket(db, ticket_id, data)
+
+
+@router.delete("/tickets/{ticket_id}", status_code=204)
+def delete_ticket(ticket_id: int, db: Session = Depends(get_db)) -> Response:
+    ticket_service.delete_ticket(db, ticket_id)
+    return Response(status_code=204)
 
 
 @router.post(

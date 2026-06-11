@@ -93,6 +93,13 @@ Przed przygotowaniem wersji demonstracyjnej przeprowadzono kontrolowany przeglą
 
 Szczegóły zawiera raport [docs/reviews/pre_demo_code_review.md](docs/reviews/pre_demo_code_review.md) oraz dokument akademicki [docs/ai/ai_etap_12_5_code_review.md](docs/ai/ai_etap_12_5_code_review.md).
 
+### Jednokrotna analiza AI
+
+Analiza AI (`POST /tickets/{ticket_id}/analyze`) może zostać przeprowadzona wyłącznie jeden raz per zgłoszenie:
+
+- **backend**: `AnalysisPipeline.analyze_ticket` sprawdza istnienie `AIResponse` dla ticketu i zwraca `409 Conflict` przy ponownej próbie,
+- **frontend**: `TicketAiSection` pobiera istniejące odpowiedzi przy załadowaniu widoku i blokuje przycisk „Uruchom analizę AI", gdy analiza już istnieje.
+
 **Weryfikacja po review:**
 
 ```bash
@@ -359,9 +366,10 @@ Nowa migracja `002_knowledge_article_embeddings` tworzy rozszerzenie `vector` i 
 
 ## Jak działa UI odpowiedzi AI
 
-1. Agent uruchamia `POST /tickets/{ticket_id}/analyze` z widoku szczegółów zgłoszenia.
-2. Frontend odświeża historię odpowiedzi AI przez `GET /tickets/{ticket_id}/ai-responses`.
-3. Najnowsza odpowiedź jest pokazywana jako główna karta, a starsze odpowiedzi pozostają w historii poniżej.
+1. Agent uruchamia `POST /tickets/{ticket_id}/analyze` z widoku szczegółów zgłoszenia — endpoint można wywołać tylko raz per zgłoszenie (ponowna próba zwraca `409 Conflict`).
+2. Frontend blokuje przycisk analizy po wykryciu istniejących odpowiedzi AI dla danego zgłoszenia.
+3. Frontend odświeża historię odpowiedzi AI przez `GET /tickets/{ticket_id}/ai-responses`.
+4. Najnowsza odpowiedź jest pokazywana jako główna karta, a starsze odpowiedzi pozostają w historii poniżej.
 4. Pole `sources_used` jest parsowane po stronie frontendu do listy źródeł RAG z tytułem, score, fragmentem treści i linkiem do `/knowledge/{article_id}`.
 5. Agent może skopiować szkic odpowiedzi albo dodać go jako wiadomość agenta do konwersacji ticketu.
 6. Feedback do odpowiedzi AI pozostaje dostępny bez zmian i nadal zasila metryki jakości w widoku `AI`.

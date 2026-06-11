@@ -84,6 +84,16 @@ class AnalysisPipeline:
                 detail=f"Zgłoszenie o ID {ticket_id} nie zostało znalezione.",
             )
 
+        # 1b. Zablokuj ponowną analizę jeśli AIResponse już istnieje
+        existing_response = (
+            db.query(AIResponse).filter(AIResponse.ticket_id == ticket_id).first()
+        )
+        if existing_response:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Analiza AI dla tego zgłoszenia już istnieje.",
+            )
+
         # 2. Statusu nie zmieniamy do czasu zakończenia analizy
         db.flush()
 

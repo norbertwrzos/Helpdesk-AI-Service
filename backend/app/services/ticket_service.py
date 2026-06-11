@@ -44,3 +44,9 @@ def update_ticket(db: Session, ticket_id: int, data: TicketUpdate) -> Ticket:
     db.commit()
     db.refresh(ticket)
     return ticket
+
+
+def delete_ticket(db: Session, ticket_id: int) -> None:
+    ticket = get_ticket(db, ticket_id)
+    db.delete(ticket)
+    db.commit()

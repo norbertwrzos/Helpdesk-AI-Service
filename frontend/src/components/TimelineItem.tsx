@@ -6,7 +6,6 @@ export type TimelineIconType =
   | 'category'
   | 'priority'
   | 'ai-response'
-  | 'feedback'
   | 'agent'
   | 'resolved'
 
@@ -26,7 +25,6 @@ const ICON_STYLES: Record<TimelineIconType, { bg: string; border: string; text: 
   category:    { bg: 'bg-indigo-500/20', border: 'border-indigo-500/50', text: 'text-indigo-300' },
   priority:    { bg: 'bg-orange-500/20', border: 'border-orange-500/50', text: 'text-orange-300' },
   'ai-response': { bg: 'bg-blue-500/20', border: 'border-blue-500/50',  text: 'text-blue-300'   },
-  feedback:    { bg: 'bg-yellow-500/20', border: 'border-yellow-500/50', text: 'text-yellow-300' },
   agent:       { bg: 'bg-green-500/20',  border: 'border-green-500/50',  text: 'text-green-300'  },
   resolved:    { bg: 'bg-green-500/20',  border: 'border-green-500/50',  text: 'text-green-300'  },
 }
@@ -70,11 +68,6 @@ const ICONS: Record<TimelineIconType, React.ReactNode> = {
   'ai-response': (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3 h-3">
       <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-    </svg>
-  ),
-  feedback: (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-3 h-3">
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
     </svg>
   ),
   agent: (

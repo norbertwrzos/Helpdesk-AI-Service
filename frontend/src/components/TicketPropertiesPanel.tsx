@@ -10,13 +10,14 @@ interface Props {
   categories: Category[]
   priorities: Priority[]
   onUpdate: (update: TicketUpdate) => Promise<void>
+  onDelete: () => Promise<void>
 }
 
 const STATUS_OPTIONS = (Object.entries(TICKET_STATUS_LABELS) as [TicketStatus, string][]).map(
   ([value, label]) => ({ value, label }),
 )
 
-export default function TicketPropertiesPanel({ ticket, categories, priorities, onUpdate }: Props) {
+export default function TicketPropertiesPanel({ ticket, categories, priorities, onUpdate, onDelete }: Props) {
   const [status, setStatus] = useState<TicketStatus>(ticket.status)
   const [categoryId, setCategoryId] = useState<string>(ticket.category_id?.toString() ?? '')
   const [priorityId, setPriorityId] = useState<string>(ticket.priority_id?.toString() ?? '')
@@ -24,6 +25,8 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
   const [saveSuccess, setSaveSuccess] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   async function handleSave() {
     setSaveError(null)
@@ -62,7 +65,7 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
   }
 
   return (
-    <aside className="bg-surface rounded-xl border border-white/8 p-5 space-y-5 sticky top-6">
+    <aside className="bg-surface rounded-xl border border-white/8 p-5 space-y-5">
       <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider">Właściwości</h2>
 
       {/* Status */}
@@ -164,6 +167,44 @@ export default function TicketPropertiesPanel({ ticket, categories, priorities, 
         >
           {saving ? 'Zapisywanie…' : 'Zapisz zmiany'}
         </button>
+
+        {!confirmDelete ? (
+          <button
+            className="w-full bg-transparent hover:bg-red-900/30 disabled:opacity-50 text-red-500 hover:text-red-400 border border-red-800/50 text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+            onClick={() => setConfirmDelete(true)}
+            disabled={saving || deleting}
+          >
+            Usuń zgłoszenie
+          </button>
+        ) : (
+          <div className="space-y-1.5">
+            <p className="text-xs text-red-400 text-center">Czy na pewno chcesz usunąć to zgłoszenie?</p>
+            <div className="flex gap-2">
+              <button
+                className="flex-1 bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white text-sm font-medium px-3 py-2 rounded-lg transition-colors"
+                onClick={async () => {
+                  setDeleting(true)
+                  try {
+                    await onDelete()
+                  } finally {
+                    setDeleting(false)
+                    setConfirmDelete(false)
+                  }
+                }}
+                disabled={deleting}
+              >
+                {deleting ? 'Usuwanie…' : 'Tak, usuń'}
+              </button>
+              <button
+                className="flex-1 bg-white/10 hover:bg-white/15 text-gray-300 text-sm font-medium px-3 py-2 rounded-lg transition-colors"
+                onClick={() => setConfirmDelete(false)}
+                disabled={deleting}
+              >
+                Anuluj
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   )

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { getTicket, updateTicket } from '../api/tickets'
+import { getTicket, updateTicket, deleteTicket } from '../api/tickets'
 import { getCategories } from '../api/categories'
 import { getPriorities } from '../api/priorities'
 import type { Ticket, TicketUpdate } from '../types/ticket'
@@ -51,6 +51,12 @@ export default function TicketDetailsPage() {
     if (!ticket) return
     const updated = await updateTicket(ticket.id, update)
     setTicket(updated)
+  }
+
+  async function handleDelete() {
+    if (!ticket) return
+    await deleteTicket(ticket.id)
+    navigate('/tickets')
   }
 
   function handleAnalyzed(result: AnalysisResult) {
@@ -127,15 +133,18 @@ export default function TicketDetailsPage() {
           />
         </div>
 
-        {/* Right: properties */}
-        <div className="lg:col-span-1 space-y-6">
+        {/* Right: properties + timeline — sticky scrollable sidebar */}
+        <div className="lg:col-span-1">
+          <div className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto space-y-6 pr-1">
           <TicketPropertiesPanel
             ticket={ticket}
             categories={categories}
             priorities={priorities}
             onUpdate={handleUpdate}
+            onDelete={handleDelete}
           />
           <TicketTimeline ticket={ticket} />
+          </div>
         </div>
       </div>
     </div>

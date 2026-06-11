@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { analyzeTicket } from '../api/analysis'
+import { getTicketAiResponses } from '../api/aiResponses'
 import type { Ticket } from '../types/ticket'
 import type { AnalysisResult } from '../types/analysis'
 import AIResponseHistory from './AIResponseHistory'
@@ -15,6 +16,13 @@ export default function TicketAiSection({ ticket, onAnalyzed, onSavedAsMessage }
   const [analyzing, setAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState<string | null>(null)
   const [aiHistoryKey, setAiHistoryKey] = useState(0)
+  const [hasExistingAnalysis, setHasExistingAnalysis] = useState(false)
+
+  useEffect(() => {
+    getTicketAiResponses(ticket.id)
+      .then(data => setHasExistingAnalysis(data.length > 0))
+      .catch(() => {})
+  }, [ticket.id])
 
   async function handleAnalyze() {
     setAnalysisError(null)
@@ -37,11 +45,12 @@ export default function TicketAiSection({ ticket, onAnalyzed, onSavedAsMessage }
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-sm font-semibold text-gray-300">Analiza AI</h3>
         <button
-          className="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 bg-violet-600 hover:bg-violet-500 disabled:opacity-40 disabled:cursor-not-allowed text-white text-sm font-medium px-3 py-1.5 rounded-lg transition-colors"
           onClick={handleAnalyze}
-          disabled={analyzing}
+          disabled={analyzing || hasExistingAnalysis}
+          title={hasExistingAnalysis ? 'Analiza AI została już przeprowadzona dla tego zgłoszenia' : undefined}
         >
-          {analyzing ? 'Analizowanie…' : 'Uruchom analizę AI'}
+          {hasExistingAnalysis ? 'Analiza wykonana' : analyzing ? 'Analizowanie…' : 'Uruchom analizę AI'}
         </button>
       </div>
 

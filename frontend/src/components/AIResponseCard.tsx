@@ -4,12 +4,9 @@ import { createTicketMessage } from '../api/ticketMessages'
 import { useAuth } from '../auth/AuthContext'
 import { useToast } from '../context/ToastContext'
 import type { AIResponse } from '../types/aiResponse'
-import type { Feedback } from '../types/feedback'
 import { getProviderDisplay } from '../utils/aiProvider'
 import { parseSourcesUsed } from '../utils/ragSources'
 import { formatDateTime } from '../utils/dateFormat'
-import FeedbackForm from './FeedbackForm'
-import FeedbackSummary from './FeedbackSummary'
 
 interface Props {
   ticketId: number
@@ -28,8 +25,6 @@ export default function AIResponseCard({
   aiResponse,
   onSavedAsMessage,
 }: Props) {
-  const [feedback, setFeedback] = useState<Feedback | null>(aiResponse.feedback ?? null)
-  const [showForm, setShowForm] = useState(false)
   const [copying, setCopying] = useState(false)
   const [savingAsAgent, setSavingAsAgent] = useState(false)
   const { role, currentUser } = useAuth()
@@ -38,11 +33,6 @@ export default function AIResponseCard({
   const providerDisplay = getProviderDisplay(aiResponse.provider_name)
   const parsedSources = parseSourcesUsed(aiResponse.sources_used)
   const canSaveAsAgent = role === 'agent'
-
-  function handleFeedbackSaved(saved: Feedback) {
-    setFeedback(saved)
-    setShowForm(false)
-  }
 
   async function handleCopyResponse() {
     if (!navigator.clipboard?.writeText) {
@@ -197,41 +187,6 @@ export default function AIResponseCard({
         )}
       </div>
 
-      <div className="border-t border-white/8 pt-3">
-        <div className="text-xs font-medium uppercase tracking-[0.18em] text-gray-500 mb-3">
-          Feedback
-        </div>
-
-        <div className="space-y-3">
-          {feedback ? (
-            <>
-              <FeedbackSummary feedback={feedback} />
-              <button
-                className="btn btn--ghost btn--sm"
-                onClick={() => setShowForm(prev => !prev)}
-              >
-                {showForm ? 'Anuluj' : 'Zmień ocenę'}
-              </button>
-            </>
-          ) : (
-            <button
-              className="btn btn--ghost btn--sm"
-              onClick={() => setShowForm(prev => !prev)}
-            >
-              {showForm ? 'Anuluj' : '+ Dodaj ocenę'}
-            </button>
-          )}
-
-          {showForm && (
-            <FeedbackForm
-              ticketId={ticketId}
-              aiResponseId={aiResponse.id}
-              existingFeedback={feedback}
-              onSaved={handleFeedbackSaved}
-            />
-          )}
-        </div>
-      </div>
     </div>
   )
 }
