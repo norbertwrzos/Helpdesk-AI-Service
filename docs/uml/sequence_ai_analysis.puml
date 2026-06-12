@@ -1,0 +1,50 @@
+@startuml
+skinparam sequenceMessageAlign center
+
+actor "Agent" as agent
+participant "Frontend\n(React/TS)" as fe
+participant "FastAPI\nPOST /tickets/{id}/analyze" as api
+participant "AnalysisPipeline" as pipeline
+participant "ClassificationService" as cls
+participant "PriorityAnalysisService" as pri
+participant "RagRetriever" as rag
+participant "AIResponseProvider\n(openai/mock)" as aip
+database "PostgreSQL\n+ pgvector" as db
+
+agent -> fe : Kliknięcie "Uruchom analizę AI"
+fe -> api : POST /tickets/{ticket_id}/analyze
+
+api -> pipeline : analyze_ticket(ticket_id, db)
+pipeline -> db : SELECT * FROM tickets WHERE id=ticket_id
+db --> pipeline : Ticket
+
+pipeline -> db : SELECT * FROM ai_responses WHERE ticket_id=ticket_id
+db --> pipeline : (puste)
+
+pipeline -> db : SELECT categories, priorities, knowledge_articles
+db --> pipeline : dane pomocnicze
+
+pipeline -> cls : classify(title, description, categories)
+cls --> pipeline : ClassificationResult\n(category_id, confidence, explanation)
+
+pipeline -> pri : analyze(title, description, priorities)
+pri --> pipeline : PriorityResult\n(priority_id, confidence, explanation)
+
+pipeline -> db : UPDATE tickets SET category_id, priority_id, ...
+
+pipeline -> rag : retrieve_for_ticket(db, ticket)
+rag -> db : SELECT embeddings (pgvector cosine similarity)\nlub bag-of-words fallback
+db --> rag : lista artykułów
+rag --> pipeline : list[RagRetrievedArticle]
+
+pipeline -> aip : generate_ticket_response(TicketResponseGenerationInput)
+aip --> pipeline : TicketResponseGenerationResult\n(email_body, subject, model_name, sources)
+
+pipeline -> db : INSERT INTO ai_responses (response_text, model_name,\nprovider_name, sources_used)
+pipeline -> db : UPDATE tickets SET status='ai_reviewed'
+pipeline -> db : COMMIT
+
+pipeline --> api : AnalysisResult
+api --> fe : 200 OK + JSON
+fe --> agent : Karta AI (treść maila,\nźródła RAG, provider, model, data)
+@enduml

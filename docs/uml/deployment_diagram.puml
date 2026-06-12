@@ -1,0 +1,48 @@
+@startuml
+skinparam nodeStyle rectangle
+
+node "Stacja robocza dewelopera / serwer" {
+
+  node "Docker Host" {
+
+    node "Kontener: helpdesk_postgres\n(pgvector/pgvector:pg16)" <<container>> {
+      component "PostgreSQL 16" as pg
+      component "pgvector extension" as pgvec
+      database "Volume: postgres_data\n(/var/lib/postgresql/data)" as vol
+    }
+
+    node "Proces: uvicorn\n(Python 3.12 venv)" <<process>> {
+      component "FastAPI Application\napp.main:app\n:8000" as fastapi
+    }
+
+    node "Proces: Vite Dev Server\n(Node.js)" <<process>> {
+      component "React Frontend\n:5173" as frontend
+    }
+
+  }
+
+  node "Przeglądarka użytkownika" {
+    component "React SPA" as browser
+  }
+
+}
+
+cloud "OpenAI Cloud" {
+  component "OpenAI Responses API\n(gpt-4o-mini)" as openai_chat
+  component "OpenAI Embeddings API\n(text-embedding-3-small)" as openai_embed
+}
+
+browser --> frontend : HTTP :5173
+frontend --> fastapi : HTTP /api/* (Vite proxy)\n-> localhost:8000
+fastapi --> pg : TCP :5432\n(DATABASE_URL)
+pg --> pgvec : rozszerzenie vector
+pg --> vol : persystencja danych
+fastapi --> openai_chat : HTTPS\n(AI_GENERATION_PROVIDER=openai)
+fastapi --> openai_embed : HTTPS\n(RAG_EMBEDDING_PROVIDER=openai)
+
+note bottom of fastapi
+  Fallback: gdy brak OPENAI_API_KEY
+  lub błąd API -> MockAIResponseProvider
+  (brak połączenia z OpenAI)
+end note
+@enduml

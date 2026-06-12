@@ -1,0 +1,50 @@
+@startuml
+skinparam activityFontSize 13
+start
+
+:Agent otwiera szczegóły zgłoszenia;
+:Kliknięcie "Uruchom analizę AI";
+:POST /tickets/{ticket_id}/analyze;
+
+:Pobierz zgłoszenie z bazy (Ticket);
+
+if (Zgłoszenie istnieje?) then (NIE)
+  :Zwróć 404 Not Found;
+  stop
+else (TAK)
+endif
+
+if (AIResponse dla tego ticket_id już istnieje?) then (TAK)
+  :Zwróć 409 Conflict;
+  :Zablokuj przycisk "Uruchom analizę AI" w UI;
+  stop
+else (NIE)
+endif
+
+:Pobierz kategorie, priorytety, artykuły KB;
+
+:ClassificationService.classify()\n(rule-based);
+:PriorityAnalysisService.analyze()\n(rule-based);
+
+:Zaktualizuj ticket:\ncategory_id, priority_id,\nconfidence, explanation;
+
+:RagRetriever.retrieve_for_ticket()\n(embeddingi pgvector LUB bag-of-words fallback);
+
+:Zbuduj TicketResponseGenerationInput;
+
+:Wywołaj AI provider (openai / mock);
+
+if (Wywołanie OpenAI zakończone sukcesem?) then (NIE)
+  :Fallback: MockAIResponseProvider;
+else (TAK)
+endif
+
+:Zapisz AIResponse w bazie\n(response_text, model_name, provider_name, sources_used);
+:Ustaw ticket.status = ai_reviewed;
+:db.commit();
+
+:Zwróć AnalysisResult do frontendu;
+:Frontend wyświetla kartę AI\n(treść maila, źródła RAG, provider/model/data);
+
+stop
+@enduml

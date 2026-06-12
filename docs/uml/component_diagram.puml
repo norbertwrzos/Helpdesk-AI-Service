@@ -1,0 +1,75 @@
+@startuml
+skinparam componentStyle rectangle
+
+package "Frontend (Vite + React + TypeScript)" {
+  [LoginPage]
+  [DashboardPage]
+  [TicketsPage / TicketDetailsPage]
+  [KnowledgePage / KnowledgeArticlePage]
+  [AIPage]
+  [SettingsPage]
+  [portal/MyTicketsPage]
+  [portal/NewTicketPage]
+  [AuthContext (mock localStorage)]
+}
+
+package "Backend (FastAPI / Python 3.12)" {
+  package "API Routes" {
+    [tickets.py]
+    [ai.py]
+    [knowledge.py]
+    [categories.py]
+    [priorities.py]
+    [ticket_messages.py]
+    [health.py]
+  }
+  package "Services" {
+    [AnalysisPipeline]
+    [ClassificationService]
+    [PriorityAnalysisService]
+    [RagRetriever]
+    [KnowledgeEmbeddingService]
+    [SimilarityService]
+    [TicketService]
+    [KnowledgeService]
+    [TicketMessageService]
+    [AIResponseService]
+  }
+  package "AI Generation" {
+    [MockAIResponseProvider]
+    [OpenAIResponseProvider]
+  }
+  package "Modele (SQLAlchemy)" {
+    [Ticket]
+    [TicketMessage]
+    [AIResponse]
+    [KnowledgeArticle]
+    [KnowledgeArticleEmbedding]
+    [Category]
+    [Priority]
+  }
+}
+
+database "PostgreSQL 16 + pgvector" {
+  [tickets]
+  [ticket_messages]
+  [ai_responses]
+  [knowledge_articles]
+  [knowledge_article_embeddings]
+  [categories]
+  [priorities]
+}
+
+cloud "OpenAI API" {
+  [text-embedding-3-small]
+  [gpt-4o-mini]
+}
+
+[Frontend (Vite + React + TypeScript)] --> [API Routes] : REST /api/*\n(Vite proxy → :8000)
+[API Routes] --> [Services]
+[Services] --> [Modele (SQLAlchemy)]
+[Modele (SQLAlchemy)] --> [PostgreSQL 16 + pgvector]
+[KnowledgeEmbeddingService] --> [text-embedding-3-small] : HTTPS (embeddingi)
+[OpenAIResponseProvider] --> [gpt-4o-mini] : HTTPS (generowanie odpowiedzi)
+[RagRetriever] ..> [SimilarityService] : fallback (bag-of-words)
+@enduml
