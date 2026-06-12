@@ -1,0 +1,26 @@
+@startuml
+[*] --> open : Utworzenie zgłoszenia\n(agent / end_user)
+
+open --> ai_reviewed : POST /tickets/{id}/analyze\n[AnalysisPipeline sukces]
+
+open --> pending : Agent zmienia status manualnie
+
+ai_reviewed --> pending : Agent analizuje propozycję AI\ni czeka na więcej informacji
+
+ai_reviewed --> resolved : Agent akceptuje\nodpowiedź AI i rozwiązuje
+
+pending --> resolved : Problem rozwiązany
+
+pending --> rejected : Zgłoszenie nieaktualne\n/ poza zakresem
+
+open --> rejected : Natychmiastowe odrzucenie
+
+resolved --> [*]
+rejected --> [*]
+
+note right of ai_reviewed
+  Jednorazowa tranzycja —
+  ponowna analiza AI
+  zwraca 409 Conflict
+end note
+@enduml

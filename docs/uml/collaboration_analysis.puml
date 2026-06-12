@@ -1,0 +1,22 @@
+@startuml
+object "TicketRouter\n(routes/ai.py)" as router
+object "AnalysisPipeline" as pipeline
+object "ClassificationService" as classifier
+object "PriorityAnalysisService" as priority
+object "RagRetriever" as rag
+object "SimilarityService" as similarity
+object "AIResponseProvider\n(mock / openai)" as ai_provider
+object "MockAIResponseProvider\n(fallback)" as mock_provider
+object "Database\n(SQLAlchemy Session)" as db
+
+router "1: analyze_ticket(ticket_id, db)" --> pipeline
+pipeline "2: query(Ticket, Category, Priority,\nKnowledgeArticle)" --> db
+pipeline "3: classify(title, description, categories)" --> classifier
+pipeline "4: analyze(title, description, priorities)" --> priority
+pipeline "5: retrieve_for_ticket(db, ticket)" --> rag
+rag "5a: (fallback) find_similar(text, articles)" --> similarity
+pipeline "6: generate_ticket_response(input)" --> ai_provider
+ai_provider "6a: (on error) generate_ticket_response(input)" --> mock_provider
+pipeline "7: add(AIResponse)" --> db
+pipeline "8: commit()" --> db
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Agent IT" as agent
+actor "Użytkownik końcowy" as enduser
+
+rectangle "TicketService.ai" {
+  usecase "Zaloguj się" as UC_LOGIN
+  usecase "Przeglądaj dashboard" as UC_DASH
+  usecase "Przeglądaj zgłoszenia" as UC_TICKETS
+  usecase "Utwórz zgłoszenie (agent)" as UC_CREATE_A
+  usecase "Otwórz szczegóły zgłoszenia" as UC_DETAILS
+  usecase "Uruchom analizę AI" as UC_AI
+  usecase "Skopiuj odpowiedź AI" as UC_COPY
+  usecase "Dodaj odpowiedź AI jako wiadomość" as UC_ADD_MSG
+  usecase "Przeglądaj historię konwersacji" as UC_CONV
+  usecase "Wyślij wiadomość do użytkownika" as UC_SEND_MSG
+  usecase "Zarządzaj bazą wiedzy" as UC_KB
+  usecase "Przeglądaj artykuł bazy wiedzy" as UC_KB_ARTICLE
+  usecase "Edytuj kategorie i priorytety" as UC_SETTINGS
+  usecase "Przeglądaj metryki AI" as UC_METRICS
+
+  usecase "Utwórz zgłoszenie (portal)" as UC_CREATE_EU
+  usecase "Przeglądaj własne zgłoszenia" as UC_MY_TICKETS
+  usecase "Wyślij wiadomość w zgłoszeniu" as UC_SEND_EU
+  usecase "Przeglądaj profil" as UC_PROFILE
+
+  agent --> UC_LOGIN
+  agent --> UC_DASH
+  agent --> UC_TICKETS
+  agent --> UC_CREATE_A
+  agent --> UC_DETAILS
+  agent --> UC_AI
+  agent --> UC_COPY
+  agent --> UC_ADD_MSG
+  agent --> UC_CONV
+  agent --> UC_SEND_MSG
+  agent --> UC_KB
+  agent --> UC_KB_ARTICLE
+  agent --> UC_SETTINGS
+  agent --> UC_METRICS
+
+  enduser --> UC_LOGIN
+  enduser --> UC_CREATE_EU
+  enduser --> UC_MY_TICKETS
+  enduser --> UC_SEND_EU
+  enduser --> UC_PROFILE
+
+  UC_AI ..> UC_DETAILS : <<include>>
+  UC_COPY ..> UC_AI : <<extend>>
+  UC_ADD_MSG ..> UC_AI : <<extend>>
+}
+@enduml

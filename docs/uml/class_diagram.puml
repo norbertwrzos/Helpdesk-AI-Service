@@ -1,0 +1,145 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+enum TicketStatus {
+  open
+  ai_reviewed
+  pending
+  resolved
+  rejected
+}
+
+enum TicketSource {
+  manual
+  csv
+}
+
+class Ticket {
+  + id: int
+  + title: str
+  + description: str
+  + status: TicketStatus
+  + source: TicketSource
+  + category_id: int
+  + priority_id: int
+  + requester_email: str
+  + requester_name: str
+  + assigned_agent_name: str
+  + classification_confidence: float
+  + priority_confidence: float
+  + classification_explanation: str
+  + priority_explanation: str
+  + created_at: datetime
+  + updated_at: datetime
+}
+
+class TicketMessage {
+  + id: int
+  + ticket_id: int
+  + author_role: str
+  + author_name: str
+  + author_email: str
+  + message_text: str
+  + message_type: str
+  + created_at: datetime
+  + updated_at: datetime
+}
+
+class AIResponse {
+  + id: int
+  + ticket_id: int
+  + response_text: str
+  + model_name: str
+  + provider_name: str
+  + sources_used: str
+  + created_at: datetime
+}
+
+class KnowledgeArticle {
+  + id: int
+  + title: str
+  + content: str
+  + category_id: int
+  + tags: str
+  + created_at: datetime
+  + updated_at: datetime
+}
+
+class KnowledgeArticleEmbedding {
+  + id: int
+  + article_id: int
+  + embedding: vector(1536)
+  + embedding_model: str
+  + content_hash: str
+  + created_at: datetime
+  + updated_at: datetime
+}
+
+class Category {
+  + id: int
+  + name: str
+  + description: str
+}
+
+class Priority {
+  + id: int
+  + name: str
+  + level: int
+  + description: str
+}
+
+class AnalysisPipeline {
+  - classifier: ClassificationService
+  - priority_analyzer: PriorityAnalysisService
+  - similarity: SimilarityService
+  - rag_retriever: RagRetriever
+  - ai_response_provider: BaseAIResponseProvider
+  - fallback_ai_response_provider: MockAIResponseProvider
+  + analyze_ticket(ticket_id, db): AnalysisResult
+  - _build_generation_input(...): TicketResponseGenerationInput
+  - _generate_response(input): TicketResponseGenerationResult
+}
+
+class RagRetriever {
+  - similarity_service: SimilarityService
+  + retrieve_for_ticket(db, ticket): list[RagRetrievedArticle]
+}
+
+class ClassificationService {
+  + classify(title, description, categories): ClassificationResult
+}
+
+class PriorityAnalysisService {
+  + analyze(title, description, priorities): PriorityResult
+}
+
+abstract class BaseAIResponseProvider {
+  + {abstract} generate_ticket_response(input): TicketResponseGenerationResult
+  + provider_name: str
+}
+
+class MockAIResponseProvider {
+  + generate_ticket_response(input): TicketResponseGenerationResult
+}
+
+class OpenAIResponseProvider {
+  + generate_ticket_response(input): TicketResponseGenerationResult
+}
+
+MockAIResponseProvider --|> BaseAIResponseProvider
+OpenAIResponseProvider --|> BaseAIResponseProvider
+
+Ticket "1" *-- "0..*" TicketMessage : messages
+Ticket "1" *-- "0..*" AIResponse : ai_responses
+Ticket "0..*" --> "0..1" Category : category_id
+Ticket "0..*" --> "0..1" Priority : priority_id
+KnowledgeArticle "0..*" --> "0..1" Category : category_id
+KnowledgeArticle "1" *-- "0..1" KnowledgeArticleEmbedding : embedding
+
+AnalysisPipeline --> ClassificationService
+AnalysisPipeline --> PriorityAnalysisService
+AnalysisPipeline --> RagRetriever
+AnalysisPipeline --> BaseAIResponseProvider
+RagRetriever --> KnowledgeArticle
+RagRetriever --> KnowledgeArticleEmbedding
+@enduml
